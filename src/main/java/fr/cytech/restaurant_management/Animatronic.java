@@ -3,6 +3,7 @@ package fr.cytech.restaurant_management;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,7 +12,16 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Animatronic {
 	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String name;
+	
+	@Enumerated
+	private AnimatronicType type;
+	
+	@ManyToOne
+	private Restaurant restaurant;
 	
 	@Override
 	public int hashCode() {
@@ -30,11 +40,21 @@ public class Animatronic {
 		return Objects.equals(name, other.name) && type == other.type;
 	}
 
-	private String name;
-	
-	private AnimatronicType type;
-	
-	private Restaurant restaurant;
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
 	
 	
 	
