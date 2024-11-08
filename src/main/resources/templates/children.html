@@ -9,13 +9,13 @@
   <body>
     <h1>Inscrits :</h1>
     <p>
-      Ici, tu trouveras la liste de tous les adhérants à notre chaîne de
+      Ici, tu trouveras la liste de tous les adhérents à notre chaîne de
       restaurants !
     </p>
 
     <div th:if="${#lists.isEmpty(children)}">
       <p>
-        Aucun adhérants. Commencez à en ajouter en pressant le bouton
+        Aucun adhérents. Commencez à en ajouter en pressant le bouton
         correspondant.
       </p>
     </div>
@@ -25,5 +25,7 @@
         <span th:text="${child.toString()}">XXXX</span>
       </li>
     </ul>
+
+    <a href="childForm.html"><button>Ajouter un adhérents</button></a>
   </body>
 </html>
