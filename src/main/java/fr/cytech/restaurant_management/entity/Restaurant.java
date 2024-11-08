@@ -1,4 +1,4 @@
-package fr.cytech.restaurant_management;
+package fr.cytech.restaurant_management.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

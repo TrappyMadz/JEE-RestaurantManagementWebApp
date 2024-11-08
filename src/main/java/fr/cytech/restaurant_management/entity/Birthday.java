@@ -1,4 +1,4 @@
-package fr.cytech.restaurant_management;
+package fr.cytech.restaurant_management.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
