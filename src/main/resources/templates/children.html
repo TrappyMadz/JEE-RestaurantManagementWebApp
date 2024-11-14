@@ -4,28 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freddy's Organizer - Adhérants</title>
+    <script src="/js/header.js" defer></script>
   </head>
 
   <body>
-    <h1>Inscrits :</h1>
-    <p>
-      Ici, tu trouveras la liste de tous les adhérents à notre chaîne de
-      restaurants !
-    </p>
-
-    <div th:if="${#lists.isEmpty(children)}">
+    <header id="header"></header>
+    <main>
+      <h2>Inscrits :</h2>
       <p>
-        Aucun adhérents. Commencez à en ajouter en pressant le bouton
-        correspondant.
+        Ici, tu trouveras la liste de tous les adhérents à notre chaîne de
+        restaurants !
       </p>
-    </div>
 
-    <ul th:unless="${#lists.isEmpty(children)}">
-      <li th:each="child : ${children}">
-        <span th:text="${child.toString()}">XXXX</span>
-      </li>
-    </ul>
+      <div th:if="${#lists.isEmpty(children)}">
+        <p>
+          Aucun adhérents. Commencez à en ajouter en pressant le bouton
+          correspondant.
+        </p>
+      </div>
 
-    <a href="childForm.html"><button>Ajouter un adhérents</button></a>
+      <ul th:unless="${#lists.isEmpty(children)}">
+        <li th:each="child : ${children}">
+          <span th:text="${child.toString()}">XXXX</span>
+        </li>
+      </ul>
+
+      <a href="/children/add"><button>Ajouter un adhérents</button></a>
+    </main>
   </body>
 </html>

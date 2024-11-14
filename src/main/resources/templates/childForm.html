@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Ajouter un adhérent</title>
+    <script src="/js/header.js" defer></script>
+  </head>
+  <body>
+    <form action="/children/show" method="post">
+      <header id="header"></header>
+      <main>
+      <h2>Ajout d'un adhérent :</h2>
+
+      <h3>Nom :</h3>
+      <input type="text" name="lastName" id="lastName" required />
+
+      <h3>Prénom :</h3>
+      <input type="text" name="name" id="name" required />
+
+      <h3>Âge :</h3>
+      <input type="number" name="age" id="age" required />
+
+      <button type="submit">Valider</button>
+    </form>
+  </main>
+  </body>
+</html>
