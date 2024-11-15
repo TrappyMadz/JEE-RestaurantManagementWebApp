@@ -42,24 +42,24 @@ public class AnimatronicController {
 	}
 		
 	@PostMapping("/show")
-	public String newChildrenResult(@ModelAttribute Animatronic animatronic, Model model) {
+	public String newAnimatronicResult(@ModelAttribute Animatronic animatronic, Model model) {
 		if (animatronic.getName() == "") {
 			model.addAttribute("animatronic",animatronic);
 			model.addAttribute("error","Completez toutes les informations.");
-			return "childForm";
+			return "createAnimatronicForm";
 		}
 		animatronicRepository.save(animatronic);
 		return "redirect:/animatronic/show";
 	}
 	
 	@PostMapping("/delete/{id}")
-	public String killChild(@PathVariable("id") Long id) {
+	public String DismantleAnimatronic(@PathVariable("id") Long id) {
 		animatronicRepository.deleteById(id);
 		return "redirect:/animatronic/show";
 	}
 	
 	@GetMapping("/modify/{id}")
-	public String changeChild(@PathVariable("id") Long id,Model model) {
+	public String changeAnimatronic(@PathVariable("id") Long id,Model model) {
 		Optional<Animatronic> optionalAnimatronic = animatronicRepository.findById(id);
 		
 		if (optionalAnimatronic.isEmpty()) {

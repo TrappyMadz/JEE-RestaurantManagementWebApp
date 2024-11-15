@@ -20,10 +20,10 @@
       <input type="text" name="name" id="name" required th:value="${animatronic.name}"/>
 
       <h3>Type d'animatronic :</h3>
-      <select name="type" id="type" required th:value="${animatronic.type}">
+      <select name="type" id="type" required>
         
             <option value="">--Please choose an option--</option>
-            <option th:each="animatronictype : ${AnimatronicType}" value="animatronictype">${animatronictype}</option>
+            <option th:each="type : ${AnimatronicType}" value="type" th:text="${type}">${type} lol</option>
       </select>
 
       <button type="submit">Valider</button>
