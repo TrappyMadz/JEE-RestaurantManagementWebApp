@@ -3,7 +3,7 @@ document.getElementById("searchQuery").addEventListener("input", setup);
 function setup() {
   let query = this.value;
 
-  if (query.length === 0) {
+  if (query.length < 3) {
     document.getElementById("searchResults").innerHTML = "";
     document.getElementById("childrenList").style.display = "flex";
   } else {

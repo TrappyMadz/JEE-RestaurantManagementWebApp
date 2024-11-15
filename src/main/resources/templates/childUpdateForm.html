@@ -10,6 +10,9 @@
     <form action="/children/update" method="POST">
       <header id="header"></header>
       <main>
+        <div th:if="${error}">
+          <p th:text="${error}">error</p>
+        </div>
       <h2>Ajout d'un adhérent :</h2>
 
       <input type="hidden" th:value="${child.id}" name="id">

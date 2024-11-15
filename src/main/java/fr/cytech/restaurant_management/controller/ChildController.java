@@ -68,29 +68,44 @@ public class ChildController {
 		Optional<Child> optionalChild = childRepository.findById(id);
 		
 		if (optionalChild.isEmpty()) {
+			model.addAttribute("error","L'enfant séléctionné n'existe pas.");
 			return "redirect:/children/show";
 		}
 		else {
 			model.addAttribute("child",optionalChild.get());
 			return "childUpdateForm";
 		}
+		
 	}
 	
 	@PostMapping("/update")
-	public String changeChildResult(@ModelAttribute Child child) {
+	public String changeChildResult(@ModelAttribute Child child,Model model) {
 		Optional<Child> optionalChild = childRepository.findById(child.getId());
 		
 		if (optionalChild.isEmpty()) {
+			model.addAttribute("error","L'enfant séléctionné n'existe pas.");
 			return "redirect:/children/show";
 		}
 		else {
 			Child existingChild = optionalChild.get();
-			
+			model.addAttribute("child",existingChild);
 			existingChild.setLastName(child.getLastName());
 			existingChild.setName(child.getName());
 			existingChild.setAge(child.getAge());
-			childRepository.save(existingChild);
-			return "redirect:/children/show";
+			if (existingChild.getAge() <= 0) {
+				model.addAttribute("error","Entrez un âge valide.");
+				model.addAttribute("child",existingChild);
+				return "childUpdateForm";
+			}
+			else if (existingChild.getLastName() == "" || existingChild.getName() == "") {
+				model.addAttribute("error","Completez toutes les informations.");
+				model.addAttribute("child",existingChild);
+				return "childUpdateForm";
+			}
+			else {
+				childRepository.save(existingChild);
+				return "redirect:/children/show";
+			}
 		}
 	}
 	

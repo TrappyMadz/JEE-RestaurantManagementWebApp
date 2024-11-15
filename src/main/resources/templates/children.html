@@ -11,6 +11,9 @@
   <body>
     <header id="header"></header>
     <main>
+      <div th:if="${error}">
+        <p th:text="${error}">error</p>
+      </div>
       <h2>Inscrits :</h2>
       <p>
         Ici, tu trouveras la liste de tous les adhérents à notre chaîne de
