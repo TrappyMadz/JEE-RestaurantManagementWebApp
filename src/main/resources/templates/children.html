@@ -5,16 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freddy's Organizer - Adhérants</title>
     <script src="/js/header.js" defer></script>
+    <script src="/js/searchChild.js" defer></script>
   </head>
 
   <body>
     <header id="header"></header>
     <main>
+      <div th:if="${error}">
+        <p th:text="${error}">error</p>
+      </div>
       <h2>Inscrits :</h2>
       <p>
         Ici, tu trouveras la liste de tous les adhérents à notre chaîne de
         restaurants !
       </p>
+
+      <input
+        type="text"
+        id="searchQuery"
+        placeholder="Rechercher un enfant"
+        autocomplete="off"
+      />
+
+      <a href="/children/add"><button>Ajouter un adhérents</button></a>
+
+      <div id="searchResults"></div>
 
       <div th:if="${#lists.isEmpty(children)}">
         <p>
@@ -23,13 +38,23 @@
         </p>
       </div>
 
-      <ul th:unless="${#lists.isEmpty(children)}">
+      <ul id="childrenList" th:unless="${#lists.isEmpty(children)}">
         <li th:each="child : ${children}">
           <span th:text="${child.toString()}">XXXX</span>
+          <form
+            th:action="@{/children/modify/{id}(id=${child.id})}"
+            method="get"
+          >
+            <button type="submit">Modifier</button>
+          </form>
+          <form
+            th:action="@{/children/delete/{id}(id=${child.id})}"
+            method="post"
+          >
+            <button type="submit">Supprimer</button>
+          </form>
         </li>
       </ul>
-
-      <a href="/children/add"><button>Ajouter un adhérents</button></a>
     </main>
   </body>
 </html>

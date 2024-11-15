@@ -19,7 +19,7 @@ public class Child {
 	
 	@Override
 	public String toString() {
-		return "Nom : " + lastName + " Prénom : " + name + " Âge : " + age;
+		return name + " " + " " + lastName + " " + age + "ans";
 	}
 	
 	public boolean equals(Object obj) {
@@ -55,6 +55,14 @@ public class Child {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

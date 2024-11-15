@@ -7,25 +7,26 @@
     <script src="/js/header.js" defer></script>
   </head>
   <body>
-    <form action="/children/show" method="post">
+    <form action="/children/update" method="POST">
       <header id="header"></header>
       <main>
         <div th:if="${error}">
           <p th:text="${error}">error</p>
         </div>
-
       <h2>Ajout d'un adhérent :</h2>
 
+      <input type="hidden" th:value="${child.id}" name="id">
+
       <h3>Nom :</h3>
-      <input type="text" name="lastName" id="lastName" th:value="${child.lastName}" required />
+      <input type="text" name="lastName" required th:value="${child.lastName}"/>
 
       <h3>Prénom :</h3>
-      <input type="text" name="name" id="name" required th:value="${child.name}"/>
+      <input type="text" name="name" required th:value="${child.name}"/>
 
       <h3>Âge :</h3>
-      <input type="number" name="age" id="age" required th:value="${child.age}"/>
+      <input type="number" name="age" required th:value="${child.age}"/>
 
-      <button type="submit">Valider</button>
+      <button type="submit">Modifier</button>
     </form>
   </main>
   </body>
