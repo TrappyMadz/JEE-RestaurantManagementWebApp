@@ -32,12 +32,27 @@ public class ChildController {
 	}
 	
 	@GetMapping("/add")
-	public String newChildren() {
+	public String newChildren(Model model) {
+		Child child = new Child();
+		child.setAge(0);
+		child.setName("");
+		child.setLastName("");
+		model.addAttribute("child", child);
 		return "childForm";
 	}
 	
 	@PostMapping("/show")
-	public String newChildrenResult(@ModelAttribute Child child) {
+	public String newChildrenResult(@ModelAttribute Child child, Model model) {
+		if (child.getAge() <= 0) {
+			model.addAttribute("child",child);
+			model.addAttribute("error","Entrez un âge valide.");
+			return "childForm";
+		}
+		else if (child.getLastName() == "" || child.getName() == "") {
+			model.addAttribute("child",child);
+			model.addAttribute("error","Completez toutes les informations.");
+			return "childForm";
+		}
 		childRepository.save(child);
 		return "redirect:/children/show";
 	}

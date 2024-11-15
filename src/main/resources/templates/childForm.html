@@ -10,16 +10,20 @@
     <form action="/children/show" method="post">
       <header id="header"></header>
       <main>
+        <div th:if="${error}">
+          <p th:text="${error}">error</p>
+        </div>
+
       <h2>Ajout d'un adhérent :</h2>
 
       <h3>Nom :</h3>
-      <input type="text" name="lastName" id="lastName" required />
+      <input type="text" name="lastName" id="lastName" th:value="${child.lastName}" required />
 
       <h3>Prénom :</h3>
-      <input type="text" name="name" id="name" required />
+      <input type="text" name="name" id="name" required th:value="${child.name}"/>
 
       <h3>Âge :</h3>
-      <input type="number" name="age" id="age" required />
+      <input type="number" name="age" id="age" required th:value="${child.age}"/>
 
       <button type="submit">Valider</button>
     </form>
