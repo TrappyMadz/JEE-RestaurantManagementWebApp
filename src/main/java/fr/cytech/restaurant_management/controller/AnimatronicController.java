@@ -44,11 +44,12 @@ public class AnimatronicController {
 	@PostMapping("/show")
 	public String newAnimatronicResult(@ModelAttribute Animatronic animatronic, Model model) {
 		if (animatronic.getName() == "") {
-			model.addAttribute("animatronic",animatronic);
-			model.addAttribute("error","Completez toutes les informations.");
+			model.addAttribute("animatronic", animatronic);
+			model.addAttribute("error", "Completez toutes les informations.");
 			return "createAnimatronicForm";
 		}
-		List<Animatronic> searchIfEmpty = animatronicRepository.findByNameOrType(animatronic.getName(),animatronic.getType());
+		List<Animatronic> searchIfEmpty = animatronicRepository.findByNameOrType(animatronic.getName(),
+				animatronic.getType());
 		if (!searchIfEmpty.isEmpty()) {
 			model.addAttribute("animatronic", animatronic);
 			model.addAttribute("error", "Cet animatronic existe déjà.");
@@ -66,7 +67,7 @@ public class AnimatronicController {
 	}
 
 	@GetMapping("/modify/{id}")
-	public String changeAnimatronic(@PathVariable("id") Long id,Model model) {
+	public String changeAnimatronic(@PathVariable("id") Long id, Model model) {
 		Optional<Animatronic> optionalAnimatronic = animatronicRepository.findById(id);
 
 		if (optionalAnimatronic.isEmpty()) {
