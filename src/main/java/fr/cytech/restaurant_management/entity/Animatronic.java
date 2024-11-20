@@ -20,8 +20,6 @@ public class Animatronic {
 	@Enumerated
 	private AnimatronicType type;
 	
-	@ManyToOne
-	private Restaurant restaurant;
 	
 	@Override
 	public int hashCode() {
@@ -56,13 +54,6 @@ public class Animatronic {
 		this.name = name;
 	}
 
-	public Restaurant getRestaurant() {
-		return restaurant;
-	}
-
-	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
-	}
 	
 	
 	
