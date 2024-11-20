@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+/**
+ * Table pizzas
+ */
 @Entity
 public class Pizza {
 	
@@ -19,6 +22,7 @@ public class Pizza {
 	
 	private double price;
 	
+	// Chemin vers l'image de la forme /img/pizzas/idImage_nomOriginalImage.formatImage
 	private String imagePath;
 
 	public String getName() {
@@ -54,7 +58,7 @@ public class Pizza {
 	}
 	
 	public String toString() {
-		return name + "\n" + composition + "\n" + price;
+		return name + "\n" + composition + "\n" + price + "€";
 	}
 
 	public Long getId() {
