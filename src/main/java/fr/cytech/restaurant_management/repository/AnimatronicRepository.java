@@ -9,5 +9,5 @@ import fr.cytech.restaurant_management.entity.AnimatronicType;
 
 public interface AnimatronicRepository extends JpaRepository<Animatronic, Long> {
 	List<Animatronic> findByNameContainingIgnoreCase(String name);
-	List<Animatronic> findByNameOrType(String name,AnimatronicType type);
+	List<Animatronic> findByNameAndType(String name,AnimatronicType type);
 }

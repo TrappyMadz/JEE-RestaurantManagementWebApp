@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Freddy's Organizer - Ajouter un adhérent</title>
+    <title>Freddy's Organizer - Ajouter un animatronic</title>
     <script src="/js/header.js" defer></script>
   </head>
   <body>
@@ -14,7 +14,7 @@
           <p th:text="${error}">error</p>
         </div>
 
-      <h2>Ajout d'un adhérent :</h2>
+      <h2>Ajout d'un animatronic :</h2>
 
       <h3>Nom de l'animatronic :</h3>
       <input type="text" name="name" id="name" required th:value="${animatronic.name}"/>
@@ -23,7 +23,7 @@
       <select name="type" id="type" required>
         
             <option value="">--Please choose an option--</option>
-            <option th:each="type : ${AnimatronicType}" value="type" th:text="${type}">${type} lol</option>
+            <option th:each="type : ${AnimatronicType}" th:value=${type} th:text="${type}">${type} lol</option>
       </select>
 
       <button type="submit">Valider</button>

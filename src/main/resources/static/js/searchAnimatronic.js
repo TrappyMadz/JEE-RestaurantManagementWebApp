@@ -5,7 +5,7 @@ function setup() {
 
   if (query.length < 3) {
     document.getElementById("searchResults").innerHTML = "";
-    document.getElementById("AnimatronicList").style.display = "flex";
+    document.getElementById("AnimatronicList").style.display = "block";
   } else {
     fetch(`/animatronic/search?query=${encodeURIComponent(query)}`)
       .then((response) => response.json())

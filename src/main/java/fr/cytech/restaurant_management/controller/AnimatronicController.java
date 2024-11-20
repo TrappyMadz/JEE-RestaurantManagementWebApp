@@ -45,13 +45,15 @@ public class AnimatronicController {
 	public String newAnimatronicResult(@ModelAttribute Animatronic animatronic, Model model) {
 		if (animatronic.getName() == "") {
 			model.addAttribute("animatronic", animatronic);
+			model.addAttribute("AnimatronicType", AnimatronicType.values());
 			model.addAttribute("error", "Completez toutes les informations.");
 			return "createAnimatronicForm";
 		}
-		List<Animatronic> searchIfEmpty = animatronicRepository.findByNameOrType(animatronic.getName(),
+		List<Animatronic> searchIfEmpty = animatronicRepository.findByNameAndType(animatronic.getName(),
 				animatronic.getType());
 		if (!searchIfEmpty.isEmpty()) {
 			model.addAttribute("animatronic", animatronic);
+			model.addAttribute("AnimatronicType", AnimatronicType.values());
 			model.addAttribute("error", "Cet animatronic existe déjà.");
 			return "createAnimatronicForm";
 		}
@@ -75,13 +77,13 @@ public class AnimatronicController {
 			return "redirect:/animatronic/show";
 		} else {
 			model.addAttribute("animatronic", optionalAnimatronic.get());
+			model.addAttribute("AnimatronicType", AnimatronicType.values());
 			return "animatronicUpdateForm";
 		}
-
 	}
 
 	@PostMapping("/update")
-	public String changeChildResult(@ModelAttribute Animatronic animatronic, Model model) {
+	public String rebuildTheAnimatronic(@ModelAttribute Animatronic animatronic, Model model) {
 		Optional<Animatronic> optionalAnimatronic = animatronicRepository.findById(animatronic.getId());
 
 		if (optionalAnimatronic.isEmpty()) {
@@ -93,12 +95,20 @@ public class AnimatronicController {
 			existingAnimatronic.setName(animatronic.getName());
 			if (existingAnimatronic.getName() == "") {
 				model.addAttribute("error", "Completez toutes les informations.");
-				model.addAttribute("child", existingAnimatronic);
+				model.addAttribute("animatronic", existingAnimatronic);
+				model.addAttribute("AnimatronicType", AnimatronicType.values());
 				return "animatronicUpdateForm";
-			} else {
-				animatronicRepository.save(existingAnimatronic);
-				return "redirect:/animatronic/show";
 			}
+			List<Animatronic> searchIfEmpty = animatronicRepository.findByNameAndType(existingAnimatronic.getName(),
+					existingAnimatronic.getType());
+			if (!searchIfEmpty.isEmpty()) {
+				model.addAttribute("animatronic", existingAnimatronic);
+				model.addAttribute("AnimatronicType", AnimatronicType.values());
+				model.addAttribute("error", "Cet animatronic existe déjà.");
+				return "animatronicUpdateForm";
+			}
+			animatronicRepository.save(existingAnimatronic);
+			return "redirect:/animatronic/show";
 		}
 	}
 
