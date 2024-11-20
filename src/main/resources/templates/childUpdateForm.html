@@ -3,31 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Freddy's Organizer - Ajouter un adhérent</title>
+    <title>Freddy's Organizer - Modifier un adhérent</title>
     <script src="/js/header.js" defer></script>
   </head>
+
   <body>
-    <form action="/children/update" method="POST">
-      <header id="header"></header>
-      <main>
-        <div th:if="${error}">
-          <p th:text="${error}">error</p>
-        </div>
-      <h2>Ajout d'un adhérent :</h2>
+    <header id="header"><!--Le header est chargé ici--></header>
 
-      <input type="hidden" th:value="${child.id}" name="id">
+    <main>
+      <div th:if="${error}">
+        <!--Si des erreurs sont renvoyées par le controller, elles s'affichent ici-->
+        <p th:text="${error}">error</p>
+      </div>
 
-      <h3>Nom :</h3>
-      <input type="text" name="lastName" required th:value="${child.lastName}"/>
+      <form action="/children/update" method="POST">
+        <h2>Modification d'un adhérent :</h2>
 
-      <h3>Prénom :</h3>
-      <input type="text" name="name" required th:value="${child.name}"/>
+        <!--id caché pour pouvoir transmettre l'info-->
+        <input type="hidden" th:value="${child.id}" name="id" />
 
-      <h3>Âge :</h3>
-      <input type="number" name="age" required th:value="${child.age}"/>
+        <h3>Nom :</h3>
+        <input
+          type="text"
+          name="lastName"
+          required
+          th:value="${child.lastName}"
+        />
 
-      <button type="submit">Modifier</button>
-    </form>
-  </main>
+        <h3>Prénom :</h3>
+        <input type="text" name="name" required th:value="${child.name}" />
+
+        <h3>Âge :</h3>
+        <input type="number" name="age" required th:value="${child.age}" />
+
+        <button type="submit">Modifier</button>
+      </form>
+    </main>
   </body>
 </html>

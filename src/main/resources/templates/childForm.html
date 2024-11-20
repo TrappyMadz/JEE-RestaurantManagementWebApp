@@ -7,26 +7,49 @@
     <script src="/js/header.js" defer></script>
   </head>
   <body>
-    <form action="/children/show" method="post">
-      <header id="header"></header>
-      <main>
-        <div th:if="${error}">
-          <p th:text="${error}">error</p>
-        </div>
+    <header id="header"><!--C'est ici que le header est chargé--></header>
 
-      <h2>Ajout d'un adhérent :</h2>
+    <div th:if="${error}">
+      <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
+      <p th:text="${error}">error</p>
+    </div>
 
-      <h3>Nom :</h3>
-      <input type="text" name="lastName" id="lastName" th:value="${child.lastName}" required />
+    <main>
+      <!--Ces informations seront renvoyées au controller. Il est donc impératif que l'attribut "name" des input correspondent à la bdd
+      Les values servent à préremplir le form avec les infos précédentes si il y a une erreur, pour que l'utilisateur n'ait pas
+      à tout refaire.-->
+      <form action="/children/show" method="post">
+        <h2>Ajout d'un adhérent :</h2>
 
-      <h3>Prénom :</h3>
-      <input type="text" name="name" id="name" required th:value="${child.name}"/>
+        <h3>Nom :</h3>
+        <input
+          type="text"
+          name="lastName"
+          id="lastName"
+          th:value="${child.lastName}"
+          required
+        />
 
-      <h3>Âge :</h3>
-      <input type="number" name="age" id="age" required th:value="${child.age}"/>
+        <h3>Prénom :</h3>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          required
+          th:value="${child.name}"
+        />
 
-      <button type="submit">Valider</button>
-    </form>
-  </main>
+        <h3>Âge :</h3>
+        <input
+          type="number"
+          name="age"
+          id="age"
+          required
+          th:value="${child.age}"
+        />
+
+        <button type="submit">Valider</button>
+      </form>
+    </main>
   </body>
 </html>

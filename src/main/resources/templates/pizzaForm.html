@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Ajouter une pizza</title>
+    <script src="/js/header.js" defer></script>
+  </head>
+
+  <body>
+    <header id="header"><!--C'est ici que le header est chargé--></header>
+
+    <main>
+      <div th:if="${error}">
+        <!--Les erreurs du controller s'affichent ici-->
+        <p th:text="${error}">error</p>
+      </div>
+
+      <!--Ici, puisqu'on traite des images "multipart", on doit précisé que le form en contient pour le controller
+      Les values servent à préremplir le form avec les infos précédentes si il y a une erreur, pour que l'utilisateur n'ait pas
+      à tout refaire.-->
+      <form action="/pizza/show" method="post" enctype="multipart/form-data">
+        <h2>Ajout d'une pizza :</h2>
+
+        <h3>Image :</h3>
+        <input type="file" name="image" id="image" accept="image/*" required />
+
+        <h3>Nom :</h3>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          th:value="${pizza.name}"
+          required
+        />
+
+        <h3>Composition :</h3>
+        <input
+          type="text"
+          name="composition"
+          id="composition"
+          th:value="${pizza.composition}"
+          required
+        />
+
+        <h3>Prix :</h3>
+        <input
+          type="number"
+          name="price"
+          id="price"
+          step="0.01"
+          required
+          th:value="${pizza.price}"
+        />
+
+        <button type="submit">Valider</button>
+      </form>
+    </main>
+  </body>
+</html>
