@@ -10,18 +10,18 @@ import jakarta.persistence.Id;
  */
 @Entity
 public class Pizza {
-	
-	
+
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	
+
+
 	private String name;
-	
+
 	private String composition;
-	
+
 	private double price;
-	
+
 	// Chemin vers l'image de la forme /img/pizzas/idImage_nomOriginalImage.formatImage
 	private String imagePath;
 
@@ -56,7 +56,8 @@ public class Pizza {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	
+
+	@Override
 	public String toString() {
 		return name + "\n" + composition + "\n" + price + "€";
 	}

@@ -60,7 +60,7 @@ public class PizzaController {
 	 */
 	@GetMapping("/add")
 	public String newPizza(Model model) {
-		// On initialise une pizza vide pour que si l'utilisateur fait une erreur, il n'ait pas à tout recommencer. 
+		// On initialise une pizza vide pour que si l'utilisateur fait une erreur, il n'ait pas à tout recommencer.
 		// Ce système requiert qu'un enfant soit initialisé avant le début du form
 		Pizza pizza = new Pizza();
 		pizza.setImagePath("");
@@ -96,19 +96,19 @@ public class PizzaController {
 		try {
 			// On sauvegarde la pizza une première fois sans imagePath pour generer une id
 			pizzaRepository.save(pizza);
-			
+
 			// On récupère le nom du fichier et on concatène l'id de la pizza au début pour que chaque image soit distincte
 			String fileName = pizza.getId() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
-			
+
 			// On récupère l'endroit où on doit enregistrer l'image
 			Path path = Paths.get(uploadDir, fileName);
-			
+
 			// Si les dossiers n'existent pas, on les créer
 			Files.createDirectories(path.getParent());
-			
+
 			// On copie l'image au bon endroit
 			Files.copy(image.getInputStream(), path);
-			
+
 			// On attribut l'imagePath et on enregistre la pizza dans la bdd
 			String imageUrl = "img/pizzas/" + fileName;
 			pizza.setImagePath(imageUrl);
@@ -203,7 +203,7 @@ public class PizzaController {
 	/**
 	 * Applique la modification de la pizza dans la bdd
 	 * @param pizza pizza modifiée
-	 * @param model 
+	 * @param model
 	 * @param image nouvelle image
 	 * @param id id de la pizza à modifier
 	 * @return sur le form si il y a un problème, sur la liste des pizzas sinon
@@ -223,7 +223,7 @@ public class PizzaController {
 			existingPizza.setComposition(pizza.getComposition());
 			existingPizza.setName(pizza.getName());
 			existingPizza.setPrice(pizza.getPrice());
-			
+
 			// On vérifie si la pizza est valide. Si elle ne l'est pas, on renvoie sur le form
 			if (existingPizza.getComposition().isBlank() || existingPizza.getImagePath().isBlank()
 					|| existingPizza.getName().isBlank()) {

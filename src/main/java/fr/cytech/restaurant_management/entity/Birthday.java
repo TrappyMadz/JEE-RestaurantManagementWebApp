@@ -15,21 +15,21 @@ import jakarta.persistence.Transient;
 public class Birthday {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private Date date;
-	
+
 	@OneToOne
 	private Child birthdayBoy;
-	
+
 	@OneToMany
 	private ArrayList<Child> children;
-	
+
 	@Transient
 	private Pizza pizza;
-	
+
 	private int nbPizza;
-	
-	
+
+
 	public Child getBirthdayBoy() {
 		return birthdayBoy;
 	}
