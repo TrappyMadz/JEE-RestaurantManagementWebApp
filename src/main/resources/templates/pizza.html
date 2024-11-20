@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Pizzas</title>
+    <script src="/js/header.js" defer></script>
+    <script src="/js/searchPizza.js" defer></script>
+  </head>
+
+  <body>
+    <header id="header"><!--Ici sera chargée le contenu du header--></header>
+
+    <main>
+      <div th:if="${error}">
+        <!--Ici s'afficheront les erreurs renvoyées par le controller-->
+        <p th:text="${error}">error</p>
+      </div>
+
+      <h2>Pizzas :</h2>
+      <p>
+        Ici, tu trouveras la liste de toutes tes délicieuses pizzas disponible
+        dans notre chaîne de restaurants !
+      </p>
+
+      <!--Barre de recherche selon le nom de la pizza ou un élément de sa composition-->
+      <input
+        type="text"
+        id="searchQuery"
+        placeholder="Rechercher une pizza"
+        autocomplete="off"
+      />
+
+      <a href="/pizza/add"><button>Ajouter une pizza</button></a>
+
+      <div id="searchResults">
+        <!--Ici apparaissent les resultats de recherche des pizza si une recherch est faite-->
+      </div>
+
+      <div th:if="${#lists.isEmpty(pizzas)}">
+        <!--Ce message s'affiche si il n'y a aucune pizza dans la bdd-->
+        <p>
+          Aucune pizzas. Commencez à en ajouter en pressant le bouton
+          correspondant.
+        </p>
+      </div>
+
+      <ul id="pizzaList" th:unless="${#lists.isEmpty(pizzas)}">
+        <li th:each="pizza : ${pizzas}">
+          <img
+            th:src="@{{imgName}(imgName=${pizza.imagePath})}"
+            alt="Image de ${pizza.name}"
+          />
+          <span th:text="${pizza.name}">XXXX</span>
+          <span th:text="${pizza.composition}">XXXX</span>
+          <span th:text="${pizza.price}">XXXX</span>
+          <form th:action="@{/pizza/modify/{id}(id=${pizza.id})}" method="get">
+            <button type="submit">Modifier</button>
+          </form>
+          <form th:action="@{/pizza/delete/{id}(id=${pizza.id})}" method="post">
+            <button type="submit">Supprimer</button>
+          </form>
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>

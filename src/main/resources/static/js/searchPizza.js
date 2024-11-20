@@ -9,37 +9,37 @@ function setup() {
   if (query.length < 3) {
     // Tant que la barre de recherche est vide, on affiche tous les enfants
     document.getElementById("searchResults").innerHTML = "";
-    document.getElementById("childrenList").style.display = "block";
+    document.getElementById("pizzaList").style.display = "block";
   } else {
-    /* On appel le controller gerant la recherche d'enfants.
+    /* On appel le controller gerant la recherche de pizzas.
     Une fois la réponse obtenue, on la récupère en données consultables, on cache la liste entière et on affiche la div montrant les résultats.
-    
     */
-    fetch(`/children/search?query=${encodeURIComponent(query)}`)
+    fetch(`/pizza/search?query=${encodeURIComponent(query)}`)
       .then((response) => response.json())
       .then((data) => {
-        document.getElementById("childrenList").style.display = "none";
+        document.getElementById("pizzaList").style.display = "none";
         let resultContainer = document.getElementById("searchResults");
         resultContainer.innerHTML = "";
 
         // Si il y as des résultats, on les affiches dans la div
         if (data.length > 0) {
-          data.forEach((child) => {
-            let childElement = document.createElement("div");
-            childElement.innerHTML = `
+          data.forEach((pizza) => {
+            let pizzaElement = document.createElement("div");
+            pizzaElement.innerHTML = `
               <div>
                 <span>
-                  ${child.name} ${child.lastName} ${child.age}ans
+                <img src="${pizza.imagePath}" alt="Image de ${pizza.name}" />
+                  ${pizza.name} ${pizza.composition} ${pizza.price}€
                 </span>
-                <form action="/children/modify/${child.id}" method="get">
+                <form action="/pizza/modify/${pizza.id}" method="get">
                   <button type="submit">Modifier</button>
                 </form>
-                <form action="/children/delete/${child.id}" method="post">
+                <form action="/pizza/delete/${pizza.id}" method="post">
                   <button type="submit">Supprimer</button>
                 </form>
               </div>
             `;
-            resultContainer.appendChild(childElement);
+            resultContainer.appendChild(pizzaElement);
           });
         } else {
           // Si il n'y a aucun resultat, on affiche un message d'erreur
