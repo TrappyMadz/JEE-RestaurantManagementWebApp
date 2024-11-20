@@ -48,6 +48,13 @@ public class AnimatronicController {
 			model.addAttribute("error", "Completez toutes les informations.");
 			return "createAnimatronicForm";
 		}
+		List<Animatronic> searchIfEmpty = animatronicRepository.findByNameOrType(animatronic.getName(),animatronic.getType());
+		if (!searchIfEmpty.isEmpty()) {
+			model.addAttribute("animatronic", animatronic);
+			model.addAttribute("error", "Cet animatronic existe déjà.");
+			return "createAnimatronicForm";
+		}
+
 		animatronicRepository.save(animatronic);
 		return "redirect:/animatronic/show";
 	}

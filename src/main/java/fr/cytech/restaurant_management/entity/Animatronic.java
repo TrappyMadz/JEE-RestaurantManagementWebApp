@@ -54,7 +54,13 @@ public class Animatronic {
 		this.name = name;
 	}
 
-	
+	public AnimatronicType getType() {
+		return type;
+	}
+
+	public void setType(AnimatronicType type) {
+		this.type = type;
+	}
 	
 	
 	
