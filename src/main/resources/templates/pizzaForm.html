@@ -3,55 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Freddy's Organizer - Ajouter un adhérent</title>
+    <title>Freddy's Organizer - Ajouter une pizza</title>
     <script src="/js/header.js" defer></script>
   </head>
+
   <body>
     <header id="header"><!--C'est ici que le header est chargé--></header>
 
-    <div th:if="${error}">
-      <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
-      <p th:text="${error}">error</p>
-    </div>
-
     <main>
-      <!--Ces informations seront renvoyées au controller. Il est donc impératif que l'attribut "name" des input correspondent à la bdd
+      <div th:if="${error}">
+        <!--Les erreurs du controller s'affichent ici-->
+        <p th:text="${error}">error</p>
+      </div>
+
+      <!--Ici, puisqu'on traite des images "multipart", on doit précisé que le form en contient pour le controller
       Les values servent à préremplir le form avec les infos précédentes si il y a une erreur, pour que l'utilisateur n'ait pas
       à tout refaire.-->
-      <form action="/children/show" method="post">
-        <h2>Ajout d'un adhérent :</h2>
+      <form action="/pizza/show" method="post" enctype="multipart/form-data">
+        <h2>Ajout d'une pizza :</h2>
+
+        <h3>Image :</h3>
+        <input type="file" name="image" id="image" accept="image/*" required />
 
         <h3>Nom :</h3>
         <input
           type="text"
-          name="lastName"
-          id="lastName"
-          th:value="${child.lastName}"
-          required
-        />
-
-        <h3>Prénom :</h3>
-        <input
-          type="text"
           name="name"
           id="name"
+          th:value="${pizza.name}"
           required
-          th:value="${child.name}"
         />
 
-        <h3>Âge :</h3>
+        <h3>Composition :</h3>
+        <input
+          type="text"
+          name="composition"
+          id="composition"
+          th:value="${pizza.composition}"
+          required
+        />
+
+        <h3>Prix :</h3>
         <input
           type="number"
-          name="age"
-          id="age"
+          name="price"
+          id="price"
+          step="0.01"
           required
-          th:value="${child.age}"
+          th:value="${pizza.price}"
         />
 
         <button type="submit">Valider</button>
       </form>
     </main>
-
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
     </footer>

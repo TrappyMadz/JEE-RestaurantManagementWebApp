@@ -4,11 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freddy's Organizer - Accueil</title>
+
+    <!--L'attribut "defer" est là pour dire au code d'attendre le chargement complet de la page avant de charger le js
+    cela permet d'être sûr que la balise "header" existe déjà quand on charge le code-->
     <script src="/js/header.js" defer></script>
   </head>
 
   <body>
-    <header id="header"></header>
+
+    <header id="header">
+      <!-- C'est dans ce bloque que le fichier header.html est chargé -->
+    </header>
     <main>
       <h2>Bienvenue manager !</h2>
       <p>
@@ -16,5 +22,9 @@
         besoins pour gerer votre restaurant !
       </p>
     </main>
+    
+    <footer id="footer">
+      <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+    </footer>
   </body>
 </html>
