@@ -1,59 +1,58 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Freddy's Organizer - Animatronics</title>
-    <script src="/js/header.js" defer></script>
-    <script src="/js/searchAnimatronic.js" defer></script>
-  </head>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Freddy's Organizer - Animatronics</title>
+<script src="/js/header.js" defer></script>
+<script src="/js/searchAnimatronic.js" defer></script>
+</head>
 
-  <body>
-    <header id="header"></header>
-    <main>
-      <div th:if="${error}">
-        <p th:text="${error}">error</p>
-      </div>
-      <h2>Animatronics :</h2>
-      <p>
-        Ici, tu trouveras tous les animatronics de notre chaîne de restaurants !
-      </p>
+<body>
+	<header id="header"></header>
+	<main>
+		<div th:if="${error}">
+			<p th:text="${error}">error</p>
+		</div>
+		<h2>Animatronics :</h2>
+		<p>Ici, tu trouveras tous les animatronics de notre chaîne de
+			restaurants !</p>
 
-      <input
-        type="text"
-        id="searchQuery"
-        placeholder="Rechercher un animatronic"
-        autocomplete="off"
-      />
+		<input type="text" id="searchQuery"
+			placeholder="Rechercher un animatronic" autocomplete="off" />
+			<select id="searchType">
+   				<option value="">Sélectionner un type</option>
+    			<option th:each="type : ${AnimatronicType}" th:value=${type} th:text="${type}">${type} lol</option>
+			</select>
+			<a href="/animatronic/add"><button>Ajouter un Animatronic</button></a>
 
-      <a href="/animatronic/add"><button>Ajouter un Animatronic</button></a>
+		<div id="searchResults"></div>
 
-      <div id="searchResults"></div>
+		<div th:if="${#lists.isEmpty(animatronics)}">
+			<p>Aucun Animatronic. Commencez à en ajouter en pressant le
+				bouton correspondant.</p>
+		</div>
 
-      <div th:if="${#lists.isEmpty(animatronics)}">
-        <p>
-          Aucun Animatronic. Commencez à en ajouter en pressant le bouton
-          correspondant.
-        </p>
-      </div>
-
-      <ul id="AnimatronicList" th:unless="${#lists.isEmpty(animatronics)}">
-        <li th:each="animatronic : ${animatronics}">
-          <span th:text="${animatronic.toString()}">XXXX</span>
-          <form
-            th:action="@{/animatronic/modify/{id}(id=${animatronic.id})}"
-            method="get"
-          >
-            <button type="submit">Modifier</button>
-          </form>
-          <form
-            th:action="@{/animatronic/delete/{id}(id=${animatronic.id})}"
-            method="post"
-          >
-            <button type="submit">Supprimer</button>
-          </form>
-        </li>
-      </ul>
-    </main>
-  </body>
+		<ul id="AnimatronicList" th:unless="${#lists.isEmpty(animatronics)}">
+			<li th:each="animatronic : ${animatronics}">
+			<span th:text="${animatronic.toString()}">XXXX</span>
+			<img
+            th:src="@{{imgName}(imgName=${animatronic.imagePath})}"
+            alt="Image de ${animatronic.name}"
+          />
+			
+				<form th:action="@{/animatronic/modify/{id}(id=${animatronic.id})}"
+					method="get">
+					<button type="submit">Modifier</button>
+				</form>
+				<form th:action="@{/animatronic/delete/{id}(id=${animatronic.id})}"
+					method="post">
+					<button type="submit">Supprimer</button>
+				</form></li>
+		</ul>
+	</main>
+	<footer id="footer">
+		<!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+	</footer>
+</body>
 </html>

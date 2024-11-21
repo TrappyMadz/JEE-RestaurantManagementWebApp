@@ -259,7 +259,7 @@ public class PizzaController {
 				existingPizza.setImagePath(imageUrl);
 			} catch (Exception e) {
 				model.addAttribute("error", "Erreur de chargement d'image : " + e.getMessage());
-				return "pizzaForm";
+				return "pizzaUpdateForm";
 			}
 
 			pizzaRepository.save(existingPizza);
