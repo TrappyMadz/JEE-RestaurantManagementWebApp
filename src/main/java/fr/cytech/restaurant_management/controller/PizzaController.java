@@ -149,7 +149,7 @@ public class PizzaController {
 	 * @return retour à la liste des pizzas après suppression
 	 */
 	@PostMapping("/delete/{id}")
-	public String killPizza(@PathVariable("id") Long id) {
+	public String eatPizza(@PathVariable("id") Long id) {
 		// Si la pizza n'existe pas, Optional sera vide
 		Optional<Pizza> toDelete = pizzaRepository.findById(id);
 

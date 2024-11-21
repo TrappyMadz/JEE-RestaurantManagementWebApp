@@ -19,7 +19,8 @@ header {
 }
 
 header img {
-  height: 25dvh;
+  justify-self: flex-start;
+  height: 20dvh;
 }
 
 header nav {
@@ -27,6 +28,16 @@ header nav {
   top: 0;
   left: 0;
   width: 100%;
+}
+
+header nav li {
+  transform: skewx(-20deg);
+}
+
+nav span {
+  transform: skewX(20deg);
+  display: flex;
+  flex-direction: row;
 }
 
 header ul {
@@ -46,6 +57,47 @@ header a {
     0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
   color: #fff6a9;
   font-family: "Sacramento", cursive;
+  font-size: 35px;
+  display: flex;
+  flex-direction: row;
+  background: rgb(131, 58, 180);
+  background: linear-gradient(
+    229deg,
+    rgba(131, 58, 180, 1) 0%,
+    rgba(9, 9, 121, 1) 100%
+  );
+  padding: 0 10px 0 10px;
+  border: 2px white solid;
+}
+
+header a:hover {
+  text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+    0 0 40px #ff0000, 0 0 60px #ff8d00, 0 0 10px #ff0000, 0 0 98px #fff6a9;
+  color: white;
+}
+
+header a:hover .blink {
+  animation: none;
+  text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+    0 0 40px #ff0000, 0 0 60px #ff8d00, 0 0 10px #ff0000, 0 0 98px #fff6a9;
+  color: white;
+}
+
+.blink {
+  animation: blink 12s infinite;
+  -webkit-animation: blink 12s infinite;
+  margin: 0;
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px; /* Ajuste la hauteur pour correspondre à la taille souhaitée */
+  background: repeating-conic-gradient(#000000 0% 25%, white 0% 50%) 50% / 20px
+    20px;
 }
 
 main {
@@ -55,4 +107,54 @@ main {
 
 footer {
   background-color: #944361;
+}
+
+@-webkit-keyframes blink {
+  20%,
+  24%,
+  55% {
+    color: #111;
+    text-shadow: none;
+  }
+
+  0%,
+  19%,
+  20.2%,
+  23%,
+  24.2%,
+  54%,
+  55.2%,
+  100% {
+    /*     color: #fccaff;
+    text-shadow: 0 0 5px #f562ff, 0 0 15px #f562ff, 0 0 25px #f562ff,
+      0 0 20px #f562ff, 0 0 30px #890092, 0 0 80px #890092, 0 0 80px #890092; */
+    text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+      0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+    color: #fff6a9;
+  }
+}
+
+@keyframes blink {
+  20%,
+  24%,
+  55% {
+    color: #111;
+    text-shadow: none;
+  }
+
+  0%,
+  19%,
+  20.2%,
+  23%,
+  24.2%,
+  54%,
+  55.2%,
+  100% {
+    /*     color: #fccaff;
+    text-shadow: 0 0 5px #f562ff, 0 0 15px #f562ff, 0 0 25px #f562ff,
+      0 0 20px #f562ff, 0 0 30px #890092, 0 0 80px #890092, 0 0 80px #890092; */
+    text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+      0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+    color: #fff6a9;
+  }
 }
