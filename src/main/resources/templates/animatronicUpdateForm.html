@@ -7,7 +7,7 @@
 <script src="/js/header.js" defer></script>
 </head>
 <body>
-	<form action="/animatronic/update" method="POST">
+	<form action="/animatronic/update" method="POST" enctype="multipart/form-data">
 		<header id="header"></header>
 		<main>
 			<div th:if="${error}">
@@ -16,6 +16,9 @@
 			<h2>Modifier un animatronic :</h2>
 
 			<input type="hidden" th:value="${animatronic.id}" name="id">
+
+			<h3>Image :</h3>
+			<input type="file" name="image" id="image" accept="image/*" required />
 
 			<h3>Nom :</h3>
 			<input type="text" name="name" required

@@ -11,16 +11,18 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Animatronic {
-	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
 	
 	@Enumerated
 	private AnimatronicType type;
-	
-	
+
+	private String imagePath;
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(name, type);
@@ -61,12 +63,18 @@ public class Animatronic {
 	public void setType(AnimatronicType type) {
 		this.type = type;
 	}
-	
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
 	@Override
 	public String toString() {
 		return type + " " + name;
 	}
-	
-	
-	
+
 }

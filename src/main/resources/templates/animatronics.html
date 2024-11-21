@@ -19,9 +19,8 @@
 			restaurants !</p>
 
 		<input type="text" id="searchQuery"
-			placeholder="Rechercher un animatronic" autocomplete="off" />
-
-		<a href="/animatronic/add"><button>Ajouter un Animatronic</button></a>
+			placeholder="Rechercher un animatronic" autocomplete="off" /> <a
+			href="/animatronic/add"><button>Ajouter un Animatronic</button></a>
 
 		<div id="searchResults"></div>
 
@@ -31,8 +30,13 @@
 		</div>
 
 		<ul id="AnimatronicList" th:unless="${#lists.isEmpty(animatronics)}">
-			<li th:each="animatronic : ${animatronics}"><span
-				th:text="${animatronic.toString()}">XXXX</span>
+			<li th:each="animatronic : ${animatronics}">
+			<span th:text="${animatronic.toString()}">XXXX</span>
+			<img
+            th:src="@{{imgName}(imgName=${animatronic.imagePath})}"
+            alt="Image de ${animatronic.name}"
+          />
+			
 				<form th:action="@{/animatronic/modify/{id}(id=${animatronic.id})}"
 					method="get">
 					<button type="submit">Modifier</button>

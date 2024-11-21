@@ -7,7 +7,7 @@
 <script src="/js/header.js" defer></script>
 </head>
 <body>
-	<form action="/animatronic/show" method="post">
+	<form action="/animatronic/show" method="post" enctype="multipart/form-data">
 		<header id="header"></header>
 		<main>
 			<div th:if="${error}">
@@ -15,6 +15,9 @@
 			</div>
 
 			<h2>Ajout d'un animatronic :</h2>
+
+			<h3>Image :</h3>
+			<input type="file" name="image" id="image" accept="image/*" required />
 
 			<h3>Nom de l'animatronic :</h3>
 			<input type="text" name="name" id="name" required
