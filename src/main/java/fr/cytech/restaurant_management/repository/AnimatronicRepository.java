@@ -14,6 +14,8 @@ public interface AnimatronicRepository extends JpaRepository<Animatronic, Long> 
 	
 	@Query("SELECT a FROM Animatronic a WHERE a.name = :name AND a.type = :type AND a.id != :id")
 	List<Animatronic> findByNameAndTypeExcludingId(String name,AnimatronicType type,Long id);
-	
+
 	List<Animatronic> findByNameAndType(String name,AnimatronicType type);
+	
+	List<Animatronic> findByNameContainingIgnoreCaseAndType(String name,AnimatronicType type);
 }

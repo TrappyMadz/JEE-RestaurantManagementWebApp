@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import fr.cytech.restaurant_management.entity.Animatronic;
 import fr.cytech.restaurant_management.entity.AnimatronicType;
-import fr.cytech.restaurant_management.entity.Pizza;
 import fr.cytech.restaurant_management.repository.AnimatronicRepository;
 
 @Controller
@@ -43,6 +42,7 @@ public class AnimatronicController {
 	public String showAnimatronic(Model model) {
 		List<Animatronic> animatronics = animatronicRepository.findAll();
 		model.addAttribute("animatronics", animatronics);
+		model.addAttribute("AnimatronicType", AnimatronicType.values());
 		return "animatronics";
 	}
 
@@ -121,7 +121,7 @@ public class AnimatronicController {
 	public String DismantleAnimatronic(@PathVariable("id") Long id) {
 		Optional<Animatronic> toDelete = animatronicRepository.findById(id);
 		if (toDelete.isEmpty()) {
-			return "redirect:/pizza/show";
+			return "redirect:/animatronic/show";
 		}
 		try {
 			String imagePathString = toDelete.get().getImagePath();
@@ -163,8 +163,9 @@ public class AnimatronicController {
 			return "redirect:/animatronic/show";
 		} else {
 			Animatronic existingAnimatronic = optionalAnimatronic.get();
-			
+
 			existingAnimatronic.setName(animatronic.getName());
+			existingAnimatronic.setType(animatronic.getType());
 			if (existingAnimatronic.getName() == "") {
 				model.addAttribute("error", "Completez toutes les informations.");
 				model.addAttribute("animatronic", existingAnimatronic);
@@ -204,14 +205,21 @@ public class AnimatronicController {
 				return "animatronicUpdateForm";
 			}
 			animatronicRepository.save(existingAnimatronic);
+			model.addAttribute("AnimatronicType", AnimatronicType.values());
 			return "redirect:/animatronic/show";
 		}
 	}
 
 	@GetMapping("/search")
 	@ResponseBody
-	public List<Animatronic> searchAnimatronic(@RequestParam("query") String query) {
-		return animatronicRepository.findByNameContainingIgnoreCase(query);
+	public List<Animatronic> searchAnimatronic(@RequestParam("query") String query, @RequestParam(required = false) String type) {
+	    if (type != null && !type.isEmpty()) {
+	        // Recherche par nom et type
+	        AnimatronicType animatronicType = AnimatronicType.valueOf(type);
+	        return animatronicRepository.findByNameContainingIgnoreCaseAndType(query, animatronicType);
+	    } else {
+	        // Recherche uniquement par nom
+	        return animatronicRepository.findByNameContainingIgnoreCase(query);
+	    }
 	}
-
 }

@@ -19,8 +19,12 @@
 			restaurants !</p>
 
 		<input type="text" id="searchQuery"
-			placeholder="Rechercher un animatronic" autocomplete="off" /> <a
-			href="/animatronic/add"><button>Ajouter un Animatronic</button></a>
+			placeholder="Rechercher un animatronic" autocomplete="off" />
+			<select id="searchType">
+   				<option value="">Sélectionner un type</option>
+    			<option th:each="type : ${AnimatronicType}" th:value=${type} th:text="${type}">${type} lol</option>
+			</select>
+			<a href="/animatronic/add"><button>Ajouter un Animatronic</button></a>
 
 		<div id="searchResults"></div>
 
