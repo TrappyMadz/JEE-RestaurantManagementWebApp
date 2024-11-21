@@ -1,10 +1,16 @@
 @import url("https://fonts.googleapis.com/css?family=Sacramento&display=swap");
 
 body {
-  background-color: #b68f30;
-  margin: 0;
+  background-color: #e5bb52;
 }
 
+body,
+html {
+  height: 100%; /* Assurer que le body et le html occupent toute la hauteur */
+  margin: 0; /* Pas de marge autour du body */
+}
+
+/* Css pour le header */
 header {
   background-color: #47af9e;
   top: 0;
@@ -16,10 +22,10 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 99;
 }
 
 header img {
-  justify-self: flex-start;
   height: 20dvh;
 }
 
@@ -30,25 +36,26 @@ header nav {
   width: 100%;
 }
 
+/* Pour les contours des boutons */
 header nav li {
   transform: skewx(-20deg);
 }
 
-nav span {
+header nav span {
   transform: skewX(20deg);
   display: flex;
   flex-direction: row;
 }
 
+/* Définitions des liens de navigation */
 header ul {
   position: relative;
   top: 0;
   left: 0;
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
   list-style-type: none;
+  justify-content: space-around;
 }
 
 header a {
@@ -89,26 +96,70 @@ header a:hover .blink {
   margin: 0;
 }
 
+/*Damier*/
 header::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 20px; /* Ajuste la hauteur pour correspondre à la taille souhaitée */
-  background: repeating-conic-gradient(#000000 0% 25%, white 0% 50%) 50% / 20px
+  height: 20px;
+  background: repeating-conic-gradient(black 0% 25%, white 0% 50%) 50% / 20px
     20px;
 }
 
 main {
+  flex: 1 0 auto; /* Permet à main d'occuper tout l'espace disponible */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(
+    100vh - 20vh - 20px
+  ); /* Assurer que main prend l'espace restant en tenant compte du header et du motif */
+  min-height: calc(100dvh - 20dvh - 20px);
   margin-top: 20vh;
   margin-top: 20dvh;
 }
 
-footer {
-  background-color: #944361;
+.divider-pattern {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  background: repeating-conic-gradient(black 0% 25%, white 0% 50%) 50% / 20px
+    20px;
+  z-index: 1;
+  margin-top: 50px;
 }
 
+footer {
+  flex-shrink: 0;
+  background-color: #944361;
+  display: flex;
+  width: 100%;
+  position: relative;
+  flex-grow: 1;
+  justify-content: space-around;
+  color: white;
+}
+
+footer div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+
+footer a {
+  text-decoration: none;
+  color: white;
+}
+
+footer a:hover {
+  color: yellow;
+}
+
+/* Animation de clignotement des lettres */
 @-webkit-keyframes blink {
   20%,
   24%,
