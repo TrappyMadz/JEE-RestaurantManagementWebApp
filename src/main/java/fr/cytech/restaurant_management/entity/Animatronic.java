@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Animatronic {
-
+  
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -20,8 +20,7 @@ public class Animatronic {
 	@Enumerated
 	private AnimatronicType type;
 
-	@ManyToOne
-	private Restaurant restaurant;
+	private String imagePath;
 
 	@Override
 	public int hashCode() {
@@ -48,15 +47,32 @@ public class Animatronic {
 		this.id = id;
 	}
 
-	public Restaurant getRestaurant() {
-		return restaurant;
+	public String getName() {
+		return name;
 	}
 
-	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
+	public void setName(String name) {
+		this.name = name;
 	}
 
+	public AnimatronicType getType() {
+		return type;
+	}
 
+	public void setType(AnimatronicType type) {
+		this.type = type;
+	}
 
+	public String getImagePath() {
+		return imagePath;
+	}
 
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	@Override
+	public String toString() {
+		return type + " " + name;
+	}
 }
