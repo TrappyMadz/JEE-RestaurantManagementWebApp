@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -17,11 +18,15 @@ public class Animatronic {
 	private Long id;
 
 	private String name;
-	
+
 	@Enumerated
 	private AnimatronicType type;
 
 	private String imagePath;
+
+	@ManyToOne
+	@JoinColumn(name = "restaurant_id")
+	private Restaurant restaurant;
 
 	@Override
 	public int hashCode() {

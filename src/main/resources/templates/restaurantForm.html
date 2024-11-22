@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Ajouter un restaurant</title>
+    <script src="/js/header.js" defer></script>
+  </head>
+  <body>
+    <header id="header"><!--C'est ici que le header est chargé--></header>
+
+    <div th:if="${error}">
+      <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
+      <p th:text="${error}">error</p>
+    </div>
+
+    <main>
+      <!--Ces informations seront renvoyées au controller. Il est donc impératif que l'attribut "name" des input correspondent à la bdd
+      Les values servent à préremplir le form avec les infos précédentes si il y a une erreur, pour que l'utilisateur n'ait pas
+      à tout refaire.-->
+      <form action="/restaurant/show" method="post">
+        <h2>Ajout d'un restaurant :</h2>
+
+        <h3>Nom :</h3>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          th:value="${restaurant.name}"
+          required
+        />
+
+        <h3>adresse :</h3>
+        <input
+          type="text"
+          name="address"
+          id="address"
+          th:value="${restaurant.address}"
+          required
+        />
+
+        <button type="submit">Valider</button>
+      </form>
+    </main>
+
+    <footer id="footer">
+      <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+    </footer>
+  </body>
+</html>

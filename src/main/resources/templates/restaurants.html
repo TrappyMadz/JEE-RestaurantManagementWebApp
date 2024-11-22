@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Restaurants</title>
+    <script src="/js/header.js" defer></script>
+    <script src="/js/searchRestaurant.js" defer></script>
+  </head>
+
+  <body>
+    <header id="header">
+      <!-- C'est ici qu'est chargé le contenu de "header.html" -->
+    </header>
+
+    <main>
+      <div th:if="${error}">
+        <!-- Si il y a une erreur renvoyée par le controller, on l'affiche ici -->
+        <p th:text="${error}">error</p>
+      </div>
+
+      <h2>Restaurants :</h2>
+      <p>
+        Ici, tu trouveras la liste de tous les restaurants de notre chaîne !
+      </p>
+
+      <!-- Cet input permet de rechercher un restaurant en temps réel -->
+      <input
+        type="text"
+        id="searchQuery"
+        placeholder="Rechercher un restaurant"
+        autocomplete="off"
+      />
+
+      <!-- Renvoie sur le form pour ajouter un enfant-->
+      <a href="/restaurant/add"><button>Ajouter un restaurant</button></a>
+
+      <div id="searchResults">
+        <!--C'est ici que s'affiche les restaurants après une recherche. Sinon, la div est cachée -->
+      </div>
+
+      <div th:if="${#lists.isEmpty(restaurantList)}">
+        <!-- Si il n'y a aucun restaurant dans la bdd-->
+        <p>
+          Aucun Restaurant. Commencez à en ajouter en pressant le bouton
+          correspondant.
+        </p>
+      </div>
+
+      <ul id="restaurantList" th:unless="${#lists.isEmpty(restaurantList)}">
+        <!--Si il y a des restaurants, on les affiche en appelant la méthode "toString()"-->
+        <li th:each="restaurant : ${restaurantList}">
+          <span th:text="${restaurant.toString()}">XXXX</span>
+
+          <!--Ces deux boutons servent respectivement à envoyé sur le form de modification et à supprimer un restaurant-->
+          <form
+            th:action="@{/restaurant/modify/{id}(id=${restaurant.id})}"
+            method="get"
+          >
+            <button type="submit">Modifier</button>
+          </form>
+          <form
+            th:action="@{/restaurant/delete/{id}(id=${restaurant.id})}"
+            method="post"
+          >
+            <button type="submit">Supprimer</button>
+          </form>
+        </li>
+      </ul>
+    </main>
+
+    <footer id="footer">
+      <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Modifier un restaurant</title>
+    <script src="/js/header.js" defer></script>
+  </head>
+
+  <body>
+    <header id="header"><!--Le header est chargé ici--></header>
+
+    <main>
+      <div th:if="${error}">
+        <!--Si des erreurs sont renvoyées par le controller, elles s'affichent ici-->
+        <p th:text="${error}">error</p>
+      </div>
+
+      <form action="/restaurant/update" method="POST">
+        <h2>Modification d'un restaurant :</h2>
+
+        <!--id caché pour pouvoir transmettre l'info-->
+        <input type="hidden" th:value="${restaurant.id}" name="id" />
+
+        <h3>Nom :</h3>
+        <input
+          type="text"
+          name="name"
+          required
+          th:value="${restaurant.name}"
+        />
+
+        <h3>Adresse :</h3>
+        <input type="text" name="address" required th:value="${restaurant.address}" />
+
+        <button type="submit">Modifier</button>
+      </form>
+    </main>
+
+    <footer id="footer">
+      <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+    </footer>
+  </body>
+</html>
