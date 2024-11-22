@@ -27,11 +27,11 @@ function setup() {
           data.forEach((child) => {
             let childElement = document.createElement("li");
             childElement.innerHTML = `
-                <span>
-                  ${child.name}
-                </span>
                 <span> 
                   ${child.lastName}
+                </span>
+                <span>
+                  ${child.name}
                 </span>
                 <span> 
                   ${child.age} ans

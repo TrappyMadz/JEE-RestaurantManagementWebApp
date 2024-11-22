@@ -207,13 +207,31 @@ footer a:hover {
   justify-content: center;
 }
 
-.importantForm input {
+.importantForm .row {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+
+.importantForm input,
+.importantForm textarea {
   margin-bottom: 15px;
   background-color: #28aea7;
   color: white;
-  width: 100%;
+  width: 170px;
   border-radius: 5px;
   padding: 5px;
+  align-self: center;
+  resize: none;
+}
+
+.importantForm input[type="file"]:hover {
+  background-color: #1c7571;
+  cursor: url("/img/cursor.cur"), auto;
+}
+
+.importantForm input[type="file"]::file-selector-button {
+  display: none;
 }
 
 .importantForm button {
@@ -292,9 +310,11 @@ footer a:hover {
   padding: 25px 50px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: space-around;
   border-radius: 5%;
+  max-width: 140px;
+  max-height: 335px;
 }
 
 .list button {
@@ -309,6 +329,12 @@ footer a:hover {
 .list button:hover {
   cursor: url("/img/cursor.cur"), auto;
   background-color: #934c0d;
+}
+
+.list img {
+  width: 100%;
+  max-width: 140px;
+  max-height: 140px;
 }
 
 /* Animation de clignotement des lettres */

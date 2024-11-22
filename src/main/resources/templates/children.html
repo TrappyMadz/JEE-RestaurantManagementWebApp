@@ -15,7 +15,7 @@
     </header>
 
     <main>
-      <div th:if="${error}">
+      <div th:if="${error}" class="error">
         <!-- Si il y a une erreur renvoyée par le controller, on l'affiche ici -->
         <p th:text="${error}">error</p>
       </div>
