@@ -5,52 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freddy's Organizer - Ajouter un adhérent</title>
     <script src="/js/header.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <header id="header"><!--C'est ici que le header est chargé--></header>
-
-    <div th:if="${error}">
-      <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
-      <p th:text="${error}">error</p>
-    </div>
 
     <main>
       <!--Ces informations seront renvoyées au controller. Il est donc impératif que l'attribut "name" des input correspondent à la bdd
       Les values servent à préremplir le form avec les infos précédentes si il y a une erreur, pour que l'utilisateur n'ait pas
       à tout refaire.-->
-      <form action="/children/show" method="post">
+      <form action="/children/show" method="post" class="importantForm">
+        <div th:if="${error}" class="error">
+          <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
+          <p th:text="${error}">error</p>
+        </div>
         <h2>Ajout d'un adhérent :</h2>
 
-        <h3>Nom :</h3>
-        <input
-          type="text"
-          name="lastName"
-          id="lastName"
-          th:value="${child.lastName}"
-          required
-        />
+        <div>
+          <label for="lastName">Nom :</label>
+          <input
+            type="text"
+            name="lastName"
+            id="lastName"
+            th:value="${child.lastName}"
+            required
+          />
 
-        <h3>Prénom :</h3>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          required
-          th:value="${child.name}"
-        />
+          <label for="name">Prénom :</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            required
+            th:value="${child.name}"
+          />
 
-        <h3>Âge :</h3>
-        <input
-          type="number"
-          name="age"
-          id="age"
-          required
-          th:value="${child.age}"
-        />
+          <label for="age">Âge :</label>
+          <input
+            type="number"
+            name="age"
+            id="age"
+            required
+            th:value="${child.age}"
+          />
+        </div>
 
         <button type="submit">Valider</button>
       </form>
     </main>
+
+    <div class="divider-pattern"><!--Paterne damier--></div>
 
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->

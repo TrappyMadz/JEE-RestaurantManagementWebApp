@@ -1,0 +1,4 @@
+a:hover {
+  color: white;
+  cursor: url("/img/cursor.cur"), auto;
+}

@@ -6,6 +6,7 @@
     <title>Freddy's Organizer - Adhérents</title>
     <script src="/js/header.js" defer></script>
     <script src="/js/searchChild.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
 
   <body>
@@ -14,7 +15,7 @@
     </header>
 
     <main>
-      <div th:if="${error}">
+      <div th:if="${error}" class="error">
         <!-- Si il y a une erreur renvoyée par le controller, on l'affiche ici -->
         <p th:text="${error}">error</p>
       </div>
@@ -26,19 +27,22 @@
       </p>
 
       <!-- Cet input permet de rechercher un enfant en temps réel -->
-      <input
-        type="text"
-        id="searchQuery"
-        placeholder="Rechercher un adhérent"
-        autocomplete="off"
-      />
-
-      <!-- Renvoie sur le form pour ajouter un enfant-->
-      <a href="/children/add"><button>Ajouter un adhérents</button></a>
-
-      <div id="searchResults">
-        <!--C'est ici que s'affiche les enfants après une recherche. Sinon, la div est cachée -->
+      <div class="search">
+        <img src="/img/recherche.png" alt="Icône de recherche" />
+        <input
+          class="searchBar"
+          type="text"
+          id="searchQuery"
+          placeholder="Rechercher un adhérent"
+          autocomplete="off"
+        />
+        <!-- Renvoie sur le form pour ajouter un enfant-->
+        <a href="/children/add"><button>+</button></a>
       </div>
+
+      <ul id="searchResults" class="list">
+        <!--C'est ici que s'affiche les enfants après une recherche. Sinon, la div est cachée -->
+      </ul>
 
       <div th:if="${#lists.isEmpty(children)}">
         <!-- Si il n'y a aucun enfant dans la bdd-->
@@ -48,10 +52,16 @@
         </p>
       </div>
 
-      <ul id="childrenList" th:unless="${#lists.isEmpty(children)}">
+      <ul
+        id="childrenList"
+        th:unless="${#lists.isEmpty(children)}"
+        class="list"
+      >
         <!--Si il y a des enfants, on affiche leur noms et prénoms en appelant la méthode "toString()"-->
         <li th:each="child : ${children}">
-          <span th:text="${child.toString()}">XXXX</span>
+          <span th:text="${child.lastName}">XXXX</span>
+          <span th:text="${child.name}">XXXX</span>
+          <span th:text="${child.age} + ' ans'">XXXX</span>
 
           <!--Ces deux boutons servent respectivement à envoyé sur le form de modification et à supprimer un enfant-->
           <form
@@ -69,6 +79,8 @@
         </li>
       </ul>
     </main>
+
+    <div class="divider-pattern"><!--Paterne damier--></div>
 
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->

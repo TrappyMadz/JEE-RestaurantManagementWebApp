@@ -5,6 +5,26 @@ window.onload = function () {
     .then((response) => response.text())
     .then((data) => {
       document.getElementById("header").innerHTML = data;
+
+      // Lancement des animations après chargement du header
+      const blinkingElements = document.querySelectorAll(".blink");
+
+      // Initialise un délai de base
+      let baseDelay = 0;
+
+      blinkingElements.forEach((element, index) => {
+        // Génère une durée aléatoire entre 1 et 3 secondes
+        const duration = (Math.random() * 20 + 10).toFixed(2);
+        // Ajoute un décalage progressif en fonction de l'index
+        const delay = (baseDelay + index * 0.2).toFixed(2);
+
+        // Applique les styles en ligne pour personnaliser chaque élément
+        element.style.animationDuration = `${duration}s`;
+        element.style.animationDelay = `${delay}s`;
+
+        // Augmente légèrement le décalage de base aléatoirement
+        baseDelay += Math.random() * 0.6;
+      });
     })
     .catch((error) =>
       console.error("Erreur de chargement du header : ", error)

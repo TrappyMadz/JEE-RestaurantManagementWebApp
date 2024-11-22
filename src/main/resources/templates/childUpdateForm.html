@@ -5,40 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freddy's Organizer - Modifier un adhérent</title>
     <script src="/js/header.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
 
   <body>
     <header id="header"><!--Le header est chargé ici--></header>
 
     <main>
-      <div th:if="${error}">
-        <!--Si des erreurs sont renvoyées par le controller, elles s'affichent ici-->
-        <p th:text="${error}">error</p>
-      </div>
-
-      <form action="/children/update" method="POST">
+      <form action="/children/update" method="POST" class="importantForm">
+        <div th:if="${error}" class="error">
+          <!--Si des erreurs sont renvoyées par le controller, elles s'affichent ici-->
+          <p th:text="${error}">error</p>
+        </div>
         <h2>Modification d'un adhérent :</h2>
+        <div class="row">
+          <div>
+            <!--id caché pour pouvoir transmettre l'info-->
+            <input type="hidden" th:value="${child.id}" name="id" />
 
-        <!--id caché pour pouvoir transmettre l'info-->
-        <input type="hidden" th:value="${child.id}" name="id" />
+            <label for="lastName">Nom :</label>
+            <input
+              type="text"
+              name="lastName"
+              required
+              th:value="${child.lastName}"
+            />
 
-        <h3>Nom :</h3>
-        <input
-          type="text"
-          name="lastName"
-          required
-          th:value="${child.lastName}"
-        />
+            <label for="name">Prénom :</label>
+            <input type="text" name="name" required th:value="${child.name}" />
 
-        <h3>Prénom :</h3>
-        <input type="text" name="name" required th:value="${child.name}" />
-
-        <h3>Âge :</h3>
-        <input type="number" name="age" required th:value="${child.age}" />
-
+            <label for="age">Âge :</label>
+            <input type="number" name="age" required th:value="${child.age}" />
+          </div>
+        </div>
         <button type="submit">Modifier</button>
       </form>
     </main>
+
+    <div class="divider-pattern"><!--Paterne damier--></div>
 
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->

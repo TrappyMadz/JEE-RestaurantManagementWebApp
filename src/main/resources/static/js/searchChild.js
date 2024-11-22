@@ -9,7 +9,7 @@ function setup() {
   if (query.length < 3) {
     // Tant que la barre de recherche est vide, on affiche tous les enfants
     document.getElementById("searchResults").innerHTML = "";
-    document.getElementById("childrenList").style.display = "block";
+    document.getElementById("childrenList").style.display = "flex";
   } else {
     /* On appel le controller gerant la recherche d'enfants.
     Une fois la réponse obtenue, on la récupère en données consultables, on cache la liste entière et on affiche la div montrant les résultats.
@@ -25,11 +25,16 @@ function setup() {
         // Si il y as des résultats, on les affiches dans la div
         if (data.length > 0) {
           data.forEach((child) => {
-            let childElement = document.createElement("div");
+            let childElement = document.createElement("li");
             childElement.innerHTML = `
-              <div>
+                <span> 
+                  ${child.lastName}
+                </span>
                 <span>
-                  ${child.name} ${child.lastName} ${child.age}ans
+                  ${child.name}
+                </span>
+                <span> 
+                  ${child.age} ans
                 </span>
                 <form action="/children/modify/${child.id}" method="get">
                   <button type="submit">Modifier</button>
@@ -37,7 +42,6 @@ function setup() {
                 <form action="/children/delete/${child.id}" method="post">
                   <button type="submit">Supprimer</button>
                 </form>
-              </div>
             `;
             resultContainer.appendChild(childElement);
           });

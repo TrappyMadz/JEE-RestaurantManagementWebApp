@@ -1,0 +1,389 @@
+@import url("https://fonts.googleapis.com/css?family=Sacramento&display=swap");
+
+body {
+  background-color: #e5bb52;
+}
+
+body,
+html {
+  height: 100%; /* Assurer que le body et le html occupent toute la hauteur */
+  margin: 0; /* Pas de marge autour du body */
+}
+
+/* pour enlever les flèches dans les input number : */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Css pour le header */
+header {
+  background-color: #47af9e;
+  top: 0;
+  left: 0;
+  width: 100%;
+  position: fixed;
+  height: 20vh;
+  height: 20dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+
+header img {
+  height: 20dvh;
+}
+
+header nav {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+/* Pour les contours des boutons */
+header nav li {
+  transform: skewx(-20deg);
+}
+
+header nav span {
+  transform: skewX(20deg);
+  display: flex;
+  flex-direction: row;
+}
+
+/* Définitions des liens de navigation */
+header ul {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+header a {
+  text-decoration: none;
+  text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+    0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+  color: #fff6a9;
+  font-family: "Sacramento", cursive;
+  font-size: 35px;
+  display: flex;
+  flex-direction: row;
+  background: rgb(131, 58, 180);
+  background: linear-gradient(
+    229deg,
+    rgba(131, 58, 180, 1) 0%,
+    rgba(9, 9, 121, 1) 100%
+  );
+  padding: 0 10px 0 10px;
+  border: 2px white solid;
+}
+
+header a:hover {
+  text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+    0 0 40px #ff0000, 0 0 60px #ff8d00, 0 0 10px #ff0000, 0 0 98px #fff6a9;
+  color: white;
+  cursor: url("/img/cursor.cur"), auto;
+}
+
+header a:hover .blink {
+  animation: none;
+  text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+    0 0 40px #ff0000, 0 0 60px #ff8d00, 0 0 10px #ff0000, 0 0 98px #fff6a9;
+  color: white;
+  cursor: url("/img/cursor.cur"), auto;
+}
+
+.blink {
+  animation: blink 12s infinite;
+  -webkit-animation: blink 12s infinite;
+  margin: 0;
+}
+
+/*Damier*/
+header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: repeating-conic-gradient(black 0% 25%, white 0% 50%) 50% / 20px
+    20px;
+}
+
+main {
+  flex: 1 0 auto; /* Permet à main d'occuper tout l'espace disponible */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(
+    100vh - 20vh - 20px
+  ); /* Assurer que main prend l'espace restant en tenant compte du header et du motif */
+  min-height: calc(100dvh - 20dvh - 20px);
+  margin-top: 20vh;
+  margin-top: 20dvh;
+}
+
+main a {
+  color: black;
+}
+
+.divider-pattern {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  background: repeating-conic-gradient(black 0% 25%, white 0% 50%) 50% / 20px
+    20px;
+  z-index: 1;
+  margin-top: 50px;
+}
+
+footer {
+  flex-shrink: 0;
+  background-color: #944361;
+  display: flex;
+  width: 100%;
+  position: relative;
+  flex-grow: 1;
+  justify-content: space-around;
+  color: white;
+}
+
+footer div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+
+footer a {
+  text-decoration: none;
+  color: white;
+}
+
+footer a:hover {
+  color: yellow;
+  cursor: url("/img/cursor.cur"), auto;
+}
+
+#attr {
+  margin-top: 50px;
+}
+
+.importantForm {
+  margin-top: 50px;
+  background-color: #ffdaa6;
+  padding: 0 50px 50px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5%;
+}
+
+.importantForm div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.importantForm .row {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+
+.importantForm input,
+.importantForm textarea {
+  margin-bottom: 15px;
+  background-color: #28aea7;
+  color: white;
+  width: 170px;
+  border-radius: 5px;
+  padding: 5px;
+  align-self: center;
+  resize: none;
+}
+
+.importantForm input[type="file"]:hover {
+  background-color: #1c7571;
+  cursor: url("/img/cursor.cur"), auto;
+}
+
+.importantForm input[type="file"]::file-selector-button {
+  display: none;
+}
+
+.importantForm button {
+  background-color: #f27d14;
+  border-radius: 0;
+  border: none;
+  width: 100%;
+  color: white;
+  padding: 10px 0;
+}
+
+.importantForm button:hover {
+  background-color: #934c0d;
+  border-radius: 0;
+  cursor: url("/img/cursor.cur"), auto;
+}
+
+.importantForm .error {
+  margin-bottom: -30px;
+  color: red;
+}
+
+.importantForm label {
+  justify-self: left;
+}
+
+.searchBar {
+  margin-bottom: 15px;
+  background-color: #28aea7;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  padding: 5px;
+  border-color: #28aea7;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+}
+
+.search img {
+  width: 20px;
+  margin-top: -10%;
+  background-color: #28aea7;
+  padding: 5px;
+  border-radius: 5px 0 0 5px;
+}
+
+.search button {
+  background-color: #28aea7;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 10px;
+  border-color: #28aea7;
+}
+
+.search button:hover {
+  background-color: #1c7571;
+  cursor: url("/img/cursor.cur"), auto;
+}
+
+.search a {
+  margin-top: -6%;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  margin-left: 3.5%;
+}
+
+.list li {
+  background-color: #ffdaa6;
+  padding: 25px 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 5%;
+  max-width: 140px;
+  max-height: 335px;
+}
+
+.list button {
+  background-color: #f27d14;
+  border-radius: 0;
+  border: none;
+  color: white;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+.list button:hover {
+  cursor: url("/img/cursor.cur"), auto;
+  background-color: #934c0d;
+}
+
+.list img {
+  width: 100%;
+  max-width: 140px;
+  max-height: 140px;
+}
+
+/* Animation de clignotement des lettres */
+@-webkit-keyframes blink {
+  20%,
+  24%,
+  55% {
+    color: #111;
+    text-shadow: none;
+  }
+
+  0%,
+  19%,
+  20.2%,
+  23%,
+  24.2%,
+  54%,
+  55.2%,
+  100% {
+    /*     color: #fccaff;
+    text-shadow: 0 0 5px #f562ff, 0 0 15px #f562ff, 0 0 25px #f562ff,
+      0 0 20px #f562ff, 0 0 30px #890092, 0 0 80px #890092, 0 0 80px #890092; */
+    text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+      0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+    color: #fff6a9;
+  }
+}
+
+@keyframes blink {
+  20%,
+  24%,
+  55% {
+    color: #111;
+    text-shadow: none;
+  }
+
+  0%,
+  19%,
+  20.2%,
+  23%,
+  24.2%,
+  54%,
+  55.2%,
+  100% {
+    /*     color: #fccaff;
+    text-shadow: 0 0 5px #f562ff, 0 0 15px #f562ff, 0 0 25px #f562ff,
+      0 0 20px #f562ff, 0 0 30px #890092, 0 0 80px #890092, 0 0 80px #890092; */
+    text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+      0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+    color: #fff6a9;
+  }
+}

@@ -12,26 +12,27 @@ import jakarta.persistence.Id;
  */
 @Entity
 public class Child {
-	
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String lastName;
 	private String name;
 	private int age;
-	
+
 	@Override
 	public String toString() {
 		return name + " " + " " + lastName + " " + age + "ans";
 	}
-	
+
+	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if ((obj == null) || (getClass() != obj.getClass())) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Child other = (Child) obj;
 		return Objects.equals(id, other.id);
 	}

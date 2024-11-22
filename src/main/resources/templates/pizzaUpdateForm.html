@@ -5,57 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freddy's Organizer - Modifier une pizza</title>
     <script src="/js/header.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <header id="header"><!--Ici sera chargé le header--></header>
 
     <main>
-      <div th:if="${error}">
-        <!--Si il y a une erreur du controller, elle apparaitra ici-->
-        <p th:text="${error}">error</p>
-      </div>
-
-      <form action="/pizza/update" method="post" enctype="multipart/form-data">
+      <form
+        action="/pizza/update"
+        method="post"
+        enctype="multipart/form-data"
+        class="importantForm"
+      >
+        <div th:if="${error}" class="error">
+          <!--Si il y a une erreur du controller, elle apparaitra ici-->
+          <p th:text="${error}">error</p>
+        </div>
         <h2>Modification d'une pizza :</h2>
+        <div class="row">
+          <div>
+            <!--Id de la pizza pour pouvoir la retransmettre-->
+            <input type="hidden" th:value="${pizza.id}" name="id" />
 
-        <!--Id de la pizza pour pouvoir la retransmettre-->
-        <input type="hidden" th:value="${pizza.id}" name="id" />
+            <label for="image">Image :</label>
 
-        <h3>Image :</h3>
+            <input
+              type="file"
+              name="image"
+              id="image"
+              accept="image/*"
+              required
+            />
 
-        <input type="file" name="image" id="image" accept="image/*" required />
-
-        <h3>Nom :</h3>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          th:value="${pizza.name}"
-          required
-        />
-
-        <h3>Composition :</h3>
-        <input
-          type="text"
-          name="composition"
-          id="composition"
-          th:value="${pizza.composition}"
-          required
-        />
-
-        <h3>Prix :</h3>
-        <input
-          type="number"
-          name="price"
-          id="price"
-          step="0.01"
-          required
-          th:value="${pizza.price}"
-        />
-
+            <label for="name">Nom :</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              th:value="${pizza.name}"
+              required
+            />
+            <label for="price">Prix :</label>
+            <input
+              type="number"
+              name="price"
+              id="price"
+              step="0.01"
+              required
+              th:value="${pizza.price}"
+            />
+          </div>
+          <div>
+            <label for="composition">Composition :</label>
+            <textarea
+              name="composition"
+              id="composition"
+              th:text="${pizza.composition}"
+              required
+              rows="9"
+            ></textarea>
+          </div>
+        </div>
         <button type="submit">Modifier</button>
       </form>
     </main>
+    <div class="divider-pattern"><!--Paterne damier--></div>
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
     </footer>
