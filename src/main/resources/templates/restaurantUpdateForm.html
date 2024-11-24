@@ -32,6 +32,16 @@
 
         <h3>Adresse :</h3>
         <input type="text" name="address" required th:value="${restaurant.address}" />
+        
+        <h3>Animatronics :</h3>
+        <ul>
+            <li th:each="animatronic : ${animatronics}">
+                <input type="checkbox" 
+                       th:value="${animatronic.id}" 
+                       th:name="animatronicIds[]" /> 
+                <span th:text="${animatronic.type} + ${animatronic.name}"></span>
+            </li>
+        </ul>
 
         <button type="submit">Modifier</button>
       </form>

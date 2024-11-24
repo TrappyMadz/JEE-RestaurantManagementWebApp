@@ -28,6 +28,14 @@ public class Animatronic {
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(name, type);

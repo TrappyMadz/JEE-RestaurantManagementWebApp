@@ -30,7 +30,7 @@
           required
         />
 
-        <h3>adresse :</h3>
+        <h3>Adresse :</h3>
         <input
           type="text"
           name="address"
@@ -38,6 +38,14 @@
           th:value="${restaurant.address}"
           required
         />
+        
+        <h3>Animatronics :</h3>
+        <ul>
+        	<li th:each="animatronic : ${animatronics}">
+            	<input type="checkbox" th:value="${animatronic.id}" th:name="animatronicIds" />
+            	<span th:text="${animatronic.type} + ' ' + ${animatronic.name}"></span>
+        	</li>
+    	</ul>
 
         <button type="submit">Valider</button>
       </form>

@@ -1,5 +1,6 @@
 package fr.cytech.restaurant_management.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import fr.cytech.restaurant_management.entity.Animatronic;
 import fr.cytech.restaurant_management.entity.Restaurant;
+import fr.cytech.restaurant_management.repository.AnimatronicRepository;
 import fr.cytech.restaurant_management.repository.RestaurantRepository;
 
 /**
@@ -26,6 +29,8 @@ public class RestaurantController {
 
 	@Autowired
 	RestaurantRepository restaurantRepository;
+	@Autowired
+	AnimatronicRepository animatronicRepository;
 
 	/**
 	 * Permet de montrer la liste des restaurants
@@ -53,6 +58,7 @@ public class RestaurantController {
 		restaurant.setName("");
 		restaurant.setAddress("");
 		model.addAttribute("restaurant", restaurant);
+		model.addAttribute("animatronics", animatronicRepository.findAll());
 		return "restaurantForm";
 	}
 
@@ -65,11 +71,22 @@ public class RestaurantController {
 	 *         des restaurants après avoir geré l'ajout
 	 */
 	@PostMapping("/show")
-	public String openRestaurantResult(@ModelAttribute Restaurant restaurant, Model model) {
+	public String openRestaurantResult(@ModelAttribute Restaurant restaurant,  Model model, 
+            @RequestParam(required = false) List<Long> animatronicIds) {
 		// Vérification du nom et de l'adresse
+		if (animatronicIds != null && !animatronicIds.isEmpty()) {
+	        List<Animatronic> selectedAnimatronics = animatronicRepository.findAllById(animatronicIds);
+	        restaurant.setAnimatronics(selectedAnimatronics);
+	        
+	        // Il est important de définir le restaurant pour chaque animatronique sélectionné
+	        for (Animatronic animatronic : selectedAnimatronics) {
+	            animatronic.setRestaurant(restaurant);
+	        }
+	    }
 		if (restaurant.getName() == "" || restaurant.getAddress() == "") {
 			model.addAttribute("restaurant", restaurant);
 			model.addAttribute("error", "Completez toutes les informations.");
+			model.addAttribute("animatronics", animatronicRepository.findAll());
 			return "restaurantForm";
 		}
 		restaurantRepository.save(restaurant);
@@ -107,6 +124,7 @@ public class RestaurantController {
 			return "redirect:/restaurant/show";
 		} else {
 			model.addAttribute("restaurant", optionalRestaurant.get());
+			model.addAttribute("animatronics", animatronicRepository.findAll());
 			return "restaurantUpdateForm";
 		}
 
@@ -140,6 +158,7 @@ public class RestaurantController {
 			if (existingRestaurant.getName() == "" || existingRestaurant.getAddress() == "") {
 				model.addAttribute("error", "Completez toutes les informations.");
 				model.addAttribute("restaurant", existingRestaurant);
+				model.addAttribute("animatronics", animatronicRepository.findAll());
 				return "restaurantUpdateForm";
 			} else {
 				restaurantRepository.save(existingRestaurant);
