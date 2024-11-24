@@ -23,12 +23,13 @@ import fr.cytech.restaurant_management.repository.RestaurantRepository;
 @Controller
 @RequestMapping("/restaurant")
 public class RestaurantController {
-	
+
 	@Autowired
 	RestaurantRepository restaurantRepository;
-	
+
 	/**
 	 * Permet de montrer la liste des restaurants
+	 * 
 	 * @param model
 	 * @return la page permettant de lister les restaurants
 	 */
@@ -36,12 +37,13 @@ public class RestaurantController {
 	public String showRestaurant(Model model) {
 		// On récupère les restaurants pour les afficher
 		List<Restaurant> restaurantList = restaurantRepository.findAll();
-		model.addAttribute("restaurantList",restaurantList);
-		return "restaurant";
+		model.addAttribute("restaurantList", restaurantList);
+		return "restaurants";
 	}
-	
+
 	/**
 	 * Fonction permettant d'initialiser la page d'ajout de restaurant
+	 * 
 	 * @param model
 	 * @return le formulaire d'ajout de restaurant
 	 */
@@ -53,27 +55,30 @@ public class RestaurantController {
 		model.addAttribute("restaurant", restaurant);
 		return "restaurantForm";
 	}
-	
+
 	/**
 	 * Gère l'ajout du restaurant dans la bdd
+	 * 
 	 * @param restaurant Le restaurant à ajouter
 	 * @param model
-	 * @return retour au formulaire si il y a un problème, sinon retour à la liste des restaurants après avoir geré l'ajout
+	 * @return retour au formulaire si il y a un problème, sinon retour à la liste
+	 *         des restaurants après avoir geré l'ajout
 	 */
 	@PostMapping("/show")
 	public String openRestaurantResult(@ModelAttribute Restaurant restaurant, Model model) {
 		// Vérification du nom et de l'adresse
 		if (restaurant.getName() == "" || restaurant.getAddress() == "") {
-			model.addAttribute("restaurant",restaurant);
-			model.addAttribute("error","Completez toutes les informations.");
+			model.addAttribute("restaurant", restaurant);
+			model.addAttribute("error", "Completez toutes les informations.");
 			return "restaurantForm";
 		}
 		restaurantRepository.save(restaurant);
 		return "redirect:/restaurant/show";
 	}
-	
+
 	/**
 	 * Fonction permettant de supprimer un restaurant
+	 * 
 	 * @param id id du restaurant à supprimer
 	 * @return retour à la liste des restaurants
 	 */
@@ -82,76 +87,77 @@ public class RestaurantController {
 		restaurantRepository.deleteById(id);
 		return "redirect:/restaurant/show";
 	}
-	
+
 	/**
 	 * Fonction permettant d'initialiser les modifications d'un restaurant
-	 * @param id id du restaurant choisis
-	 * @param model 
-	 * @return liste des restaurants si le restaurant n'existe pas, le formulaire de modifications sinon
+	 * 
+	 * @param id    id du restaurant choisis
+	 * @param model
+	 * @return liste des restaurants si le restaurant n'existe pas, le formulaire de
+	 *         modifications sinon
 	 */
 	@GetMapping("/modify/{id}")
-	public String relocateRestaurant(@PathVariable("id") Long id,Model model) {
+	public String relocateRestaurant(@PathVariable("id") Long id, Model model) {
 		// Le type optionnel est là car on n'est pas sûr que le restaurant existe
 		Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(id);
-		
+
 		// Si le restaurant n'existe pas
 		if (optionalRestaurant.isEmpty()) {
-			model.addAttribute("error","Le restaurant séléctionné n'existe pas.");
+			model.addAttribute("error", "Le restaurant séléctionné n'existe pas.");
 			return "redirect:/restaurant/show";
-		}
-		else {
-			model.addAttribute("restaurant",optionalRestaurant.get());
+		} else {
+			model.addAttribute("restaurant", optionalRestaurant.get());
 			return "restaurantUpdateForm";
 		}
-		
+
 	}
-	
+
 	/**
 	 * Mise à jour de la bdd après avoir modifié le restaurant
+	 * 
 	 * @param restaurant le restaurant modifié
 	 * @param model
-	 * @return liste des restaurants si tout s'est bien passé, retour sur le form sinon
+	 * @return liste des restaurants si tout s'est bien passé, retour sur le form
+	 *         sinon
 	 */
 	@PostMapping("/update")
-	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant,Model model) {
+	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant, Model model) {
 		// On récupère le restaurant non-modifié
 		Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurant.getId());
-		
+
 		// On gère toujours l'erreur de "si le restaurant n'existe pas..."
 		if (optionalRestaurant.isEmpty()) {
-			model.addAttribute("error","Le restaurant séléctionné n'existe pas.");
+			model.addAttribute("error", "Le restaurant séléctionné n'existe pas.");
 			return "redirect:/restaurant/show";
-		}
-		else {
+		} else {
 			// On récupère les infos du form
 			Restaurant existingRestaurant = optionalRestaurant.get();
-			model.addAttribute("restaurant",existingRestaurant);
+			model.addAttribute("restaurant", existingRestaurant);
 			existingRestaurant.setAddress(restaurant.getAddress());
 			existingRestaurant.setName(restaurant.getName());
-			
+
 			// On vérifie le nom et l'adresse
 			if (existingRestaurant.getName() == "" || existingRestaurant.getAddress() == "") {
-				model.addAttribute("error","Completez toutes les informations.");
-				model.addAttribute("restaurant",existingRestaurant);
+				model.addAttribute("error", "Completez toutes les informations.");
+				model.addAttribute("restaurant", existingRestaurant);
 				return "restaurantUpdateForm";
-			}
-			else {
+			} else {
 				restaurantRepository.save(existingRestaurant);
 				return "redirect:/restaurant/show";
 			}
 		}
 	}
-	
+
 	/**
 	 * Fonction permettant de chercher les restaurants
+	 * 
 	 * @param query la phrase recherchée par l'utilisateur
 	 * @return La liste des restaurants concernés par la recherche
 	 */
 	@GetMapping("/search")
 	@ResponseBody
 	public List<Restaurant> searchRestaurant(@RequestParam("query") String query) {
-		return restaurantRepository.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(query,query);
+		return restaurantRepository.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(query, query);
 	}
-	
-	
+
 }

@@ -1,6 +1,6 @@
 package fr.cytech.restaurant_management.entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +20,7 @@ public class Restaurant {
 	private String address;
 
 	@OneToMany(mappedBy = "restaurant")
-	private ArrayList<Animatronic> animatronics;
+	private List<Animatronic> animatronics;
 
 	public Long getId() {
 		return id;
@@ -46,12 +46,19 @@ public class Restaurant {
 		this.address = address;
 	}
 
-	public ArrayList<Animatronic> getAnimatronics() {
+	public List<Animatronic> getAnimatronics() {
 		return animatronics;
 	}
 
-	public void setAnimatronics(ArrayList<Animatronic> animatronics) {
+	public void setAnimatronics(List<Animatronic> animatronics) {
 		this.animatronics = animatronics;
 	}
+
+	@Override
+	public String toString() {
+		return "Restaurant " + name + ", " + address + ", animatronics=" + animatronics;
+	}
+	
+	
 
 }
