@@ -12,9 +12,8 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Animatronic {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+  
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
@@ -43,12 +42,12 @@ public class Animatronic {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if ((obj == null) || (getClass() != obj.getClass())) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Animatronic other = (Animatronic) obj;
 		return Objects.equals(name, other.name) && type == other.type;
 	}
@@ -89,5 +88,4 @@ public class Animatronic {
 	public String toString() {
 		return type + " " + name;
 	}
-
 }

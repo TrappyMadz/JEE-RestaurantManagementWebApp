@@ -9,7 +9,7 @@ function setup() {
   if (query.length < 3) {
     // Tant que la barre de recherche est vide, on affiche tous les enfants
     document.getElementById("searchResults").innerHTML = "";
-    document.getElementById("pizzaList").style.display = "block";
+    document.getElementById("pizzaList").style.display = "flex";
   } else {
     /* On appel le controller gerant la recherche de pizzas.
     Une fois la réponse obtenue, on la récupère en données consultables, on cache la liste entière et on affiche la div montrant les résultats.
@@ -24,12 +24,19 @@ function setup() {
         // Si il y as des résultats, on les affiches dans la div
         if (data.length > 0) {
           data.forEach((pizza) => {
-            let pizzaElement = document.createElement("div");
+            let pizzaElement = document.createElement("li");
             pizzaElement.innerHTML = `
-              <div>
                 <span>
-                <img src="${pizza.imagePath}" alt="Image de ${pizza.name}" />
-                  ${pizza.name} ${pizza.composition} ${pizza.price}€
+                  <img src="${pizza.imagePath}" alt="Image de ${pizza.name}" />
+                </span>
+                <span>
+                   ${pizza.name}
+                </span>
+                <span>
+                  ${pizza.composition}
+                </span>
+                <span>
+                  ${pizza.price}€
                 </span>
                 <form action="/pizza/modify/${pizza.id}" method="get">
                   <button type="submit">Modifier</button>
@@ -37,7 +44,6 @@ function setup() {
                 <form action="/pizza/delete/${pizza.id}" method="post">
                   <button type="submit">Supprimer</button>
                 </form>
-              </div>
             `;
             resultContainer.appendChild(pizzaElement);
           });

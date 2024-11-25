@@ -23,10 +23,10 @@ import fr.cytech.restaurant_management.repository.ChildRepository;
 @Controller
 @RequestMapping("/children")
 public class ChildController {
-	
+
 	@Autowired
 	ChildRepository childRepository;
-	
+
 	/**
 	 * Permet de montrer la liste des enfants
 	 * @param model
@@ -39,7 +39,7 @@ public class ChildController {
 		model.addAttribute("children",children);
 		return "children";
 	}
-	
+
 	/**
 	 * Fonction permettant d'initialiser la page d'ajout d'enfant
 	 * @param model
@@ -47,8 +47,8 @@ public class ChildController {
 	 */
 	@GetMapping("/add")
 	public String newChildren(Model model) {
-		/* On créer un enfant "vide" pour pouvoir initialiser le formulaire. 
-		Il sera prérempli en cas d'erreur utilisateur (pour ne pas avoir à tout refaire en cas d'erreurs) 
+		/* On créer un enfant "vide" pour pouvoir initialiser le formulaire.
+		Il sera prérempli en cas d'erreur utilisateur (pour ne pas avoir à tout refaire en cas d'erreurs)
 		*/
 		Child child = new Child();
 		child.setAge(0);
@@ -57,7 +57,7 @@ public class ChildController {
 		model.addAttribute("child", child);
 		return "childForm";
 	}
-	
+
 	/**
 	 * Gère l'ajout d'enfants dans la bdd
 	 * @param child L'enfant à ajouter
@@ -66,7 +66,7 @@ public class ChildController {
 	 */
 	@PostMapping("/show")
 	public String newChildrenResult(@ModelAttribute Child child, Model model) {
-		
+
 		// Vérification de l'age
 		if (child.getAge() <= 0) {
 			model.addAttribute("child",child);
@@ -82,7 +82,7 @@ public class ChildController {
 		childRepository.save(child);
 		return "redirect:/children/show";
 	}
-	
+
 	/**
 	 * Fonction permettant de supprimer un enfant
 	 * @param id id de l'enfant à supprimer
@@ -93,18 +93,18 @@ public class ChildController {
 		childRepository.deleteById(id);
 		return "redirect:/children/show";
 	}
-	
+
 	/**
 	 * Fonction permettant d'initialiser les modifications d'un enfant
 	 * @param id id de l'enfant choisis
-	 * @param model 
+	 * @param model
 	 * @return liste des enfants si l'enfant n'existe pas, le formulaire de modifications sinon
 	 */
 	@GetMapping("/modify/{id}")
 	public String changeChild(@PathVariable("id") Long id,Model model) {
 		// Le type optionnel est là car on n'est pas sûr que l'enfant existe
 		Optional<Child> optionalChild = childRepository.findById(id);
-		
+
 		// Si l'enfant n'existe pas
 		if (optionalChild.isEmpty()) {
 			model.addAttribute("error","L'enfant séléctionné n'existe pas.");
@@ -114,9 +114,9 @@ public class ChildController {
 			model.addAttribute("child",optionalChild.get());
 			return "childUpdateForm";
 		}
-		
+
 	}
-	
+
 	/**
 	 * Mise à jour de la bdd après avoir modifié l'enfant
 	 * @param child l'enfant modifié
@@ -127,7 +127,7 @@ public class ChildController {
 	public String changeChildResult(@ModelAttribute Child child,Model model) {
 		// On récupère l'enfant non-modifié
 		Optional<Child> optionalChild = childRepository.findById(child.getId());
-		
+
 		// On gère toujours l'erreur de "si l'enfant n'existe pas..."
 		if (optionalChild.isEmpty()) {
 			model.addAttribute("error","L'enfant séléctionné n'existe pas.");
@@ -140,7 +140,7 @@ public class ChildController {
 			existingChild.setLastName(child.getLastName());
 			existingChild.setName(child.getName());
 			existingChild.setAge(child.getAge());
-			
+
 			// On vérifie l'âge, le nom et le prénom
 			if (existingChild.getAge() <= 0) {
 				model.addAttribute("error","Entrez un âge valide.");
@@ -158,7 +158,7 @@ public class ChildController {
 			}
 		}
 	}
-	
+
 	/**
 	 * Fonction permettant de chercher les enfants
 	 * @param query la phrase recherchée par l'utilisateur
@@ -169,6 +169,6 @@ public class ChildController {
 	public List<Child> searchChildren(@RequestParam("query") String query) {
 		return childRepository.findByNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(query,query);
 	}
-	
-	
+
+
 }

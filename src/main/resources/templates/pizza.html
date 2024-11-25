@@ -6,34 +6,39 @@
     <title>Freddy's Organizer - Pizzas</title>
     <script src="/js/header.js" defer></script>
     <script src="/js/searchPizza.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/pizza.css" />
   </head>
 
   <body>
     <header id="header"><!--Ici sera chargée le contenu du header--></header>
 
     <main>
-      <div th:if="${error}">
+      <div th:if="${error}" class="error">
         <!--Ici s'afficheront les erreurs renvoyées par le controller-->
         <p th:text="${error}">error</p>
       </div>
 
       <h2>Pizzas :</h2>
       <p>
-        Ici, tu trouveras la liste de toutes tes délicieuses pizzas disponible
+        Ici, tu trouveras la liste de toutes les délicieuses pizzas disponible
         dans notre chaîne de restaurants !
       </p>
 
       <!--Barre de recherche selon le nom de la pizza ou un élément de sa composition-->
-      <input
-        type="text"
-        id="searchQuery"
-        placeholder="Rechercher une pizza"
-        autocomplete="off"
-      />
+      <div class="search">
+        <img src="/img/recherche.png" alt="Icône de recherche" />
+        <input
+          class="searchBar"
+          type="text"
+          id="searchQuery"
+          placeholder="Rechercher une pizza"
+          autocomplete="off"
+        />
+        <a href="/pizza/add"><button>+</button></a>
+      </div>
 
-      <a href="/pizza/add"><button>Ajouter une pizza</button></a>
-
-      <div id="searchResults">
+      <div id="searchResults" class="list">
         <!--Ici apparaissent les resultats de recherche des pizza si une recherch est faite-->
       </div>
 
@@ -45,7 +50,7 @@
         </p>
       </div>
 
-      <ul id="pizzaList" th:unless="${#lists.isEmpty(pizzas)}">
+      <ul id="pizzaList" th:unless="${#lists.isEmpty(pizzas)}" class="list">
         <li th:each="pizza : ${pizzas}">
           <img
             th:src="@{{imgName}(imgName=${pizza.imagePath})}"
@@ -53,7 +58,7 @@
           />
           <span th:text="${pizza.name}">XXXX</span>
           <span th:text="${pizza.composition}">XXXX</span>
-          <span th:text="${pizza.price}">XXXX</span>
+          <span th:text="${pizza.price} + '€'">XXXX</span>
           <form th:action="@{/pizza/modify/{id}(id=${pizza.id})}" method="get">
             <button type="submit">Modifier</button>
           </form>
@@ -63,6 +68,8 @@
         </li>
       </ul>
     </main>
+
+    <div class="divider-pattern"><!--Paterne damier--></div>
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
     </footer>
