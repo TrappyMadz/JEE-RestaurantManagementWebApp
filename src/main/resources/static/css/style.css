@@ -214,7 +214,8 @@ footer a:hover {
 }
 
 .importantForm input,
-.importantForm textarea {
+.importantForm textarea,
+.importantForm select {
   margin-bottom: 15px;
   background-color: #28aea7;
   color: white;
@@ -225,7 +226,8 @@ footer a:hover {
   resize: none;
 }
 
-.importantForm input[type="file"]:hover {
+.importantForm input[type="file"]:hover,
+.importantForm select:hover {
   background-color: #1c7571;
   cursor: url("/img/cursor.cur"), auto;
 }
@@ -274,7 +276,7 @@ footer a:hover {
 
 .search img {
   width: 20px;
-  margin-top: -10%;
+
   background-color: #28aea7;
   padding: 5px;
   border-radius: 5px 0 0 5px;
@@ -289,7 +291,8 @@ footer a:hover {
   border-color: #28aea7;
 }
 
-.search button:hover {
+.search button:hover,
+.search select:hover {
   background-color: #1c7571;
   cursor: url("/img/cursor.cur"), auto;
 }
@@ -335,6 +338,10 @@ footer a:hover {
   width: 100%;
   max-width: 140px;
   max-height: 140px;
+}
+
+.list span {
+  text-align: center;
 }
 
 /* Animation de clignotement des lettres */

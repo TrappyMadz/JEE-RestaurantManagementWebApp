@@ -144,7 +144,7 @@ public class AnimatronicController {
 		Optional<Animatronic> optionalAnimatronic = animatronicRepository.findById(id);
 
 		if (optionalAnimatronic.isEmpty()) {
-			model.addAttribute("error", "L'animatronic séléctionné n'existe pas.");
+			model.addAttribute("error", "L'animatronique séléctionné n'existe pas.");
 			return "redirect:/animatronic/show";
 		} else {
 			model.addAttribute("animatronic", optionalAnimatronic.get());
@@ -159,7 +159,7 @@ public class AnimatronicController {
 		Optional<Animatronic> optionalAnimatronic = animatronicRepository.findById(animatronic.getId());
 
 		if (optionalAnimatronic.isEmpty()) {
-			model.addAttribute("error", "L'animatronic séléctionné n'existe pas.");
+			model.addAttribute("error", "L'animatronique séléctionné n'existe pas.");
 			return "redirect:/animatronic/show";
 		} else {
 			Animatronic existingAnimatronic = optionalAnimatronic.get();
@@ -177,7 +177,7 @@ public class AnimatronicController {
 			if (!searchIfEmpty.isEmpty()) {
 				model.addAttribute("animatronic", existingAnimatronic);
 				model.addAttribute("AnimatronicType", AnimatronicType.values());
-				model.addAttribute("error", "Cet animatronic existe déjà.");
+				model.addAttribute("error", "Cet animatronique existe déjà.");
 				return "animatronicUpdateForm";
 			}
 			try {
