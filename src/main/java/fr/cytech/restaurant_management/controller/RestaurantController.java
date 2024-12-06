@@ -58,7 +58,7 @@ public class RestaurantController {
 		restaurant.setName("");
 		restaurant.setAddress("");
 		model.addAttribute("restaurant", restaurant);
-		model.addAttribute("animatronics", animatronicRepository.findAll());
+		model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurant());
 		return "restaurantForm";
 	}
 
@@ -86,7 +86,7 @@ public class RestaurantController {
 		if (restaurant.getName() == "" || restaurant.getAddress() == "") {
 			model.addAttribute("restaurant", restaurant);
 			model.addAttribute("error", "Completez toutes les informations.");
-			model.addAttribute("animatronics", animatronicRepository.findAll());
+			model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurant());
 			return "restaurantForm";
 		}
 		restaurantRepository.save(restaurant);
@@ -124,7 +124,7 @@ public class RestaurantController {
 			return "redirect:/restaurant/show";
 		} else {
 			model.addAttribute("restaurant", optionalRestaurant.get());
-			model.addAttribute("animatronics", animatronicRepository.findAll());
+			model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(optionalRestaurant.get()));
 			return "restaurantUpdateForm";
 		}
 
@@ -158,7 +158,7 @@ public class RestaurantController {
 			if (existingRestaurant.getName() == "" || existingRestaurant.getAddress() == "") {
 				model.addAttribute("error", "Completez toutes les informations.");
 				model.addAttribute("restaurant", existingRestaurant);
-				model.addAttribute("animatronics", animatronicRepository.findAll());
+				model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant));
 				return "restaurantUpdateForm";
 			} else {
 				restaurantRepository.save(existingRestaurant);
