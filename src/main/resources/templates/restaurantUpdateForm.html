@@ -39,7 +39,7 @@
             <li th:each="animatronic : ${animatronics}">
                 <input type="checkbox" 
                        th:value="${animatronic.id}" 
-                       th:name="animatronicIds[]"
+                       th:name="animatronicIds"
                        th:checked="${animatronic.restaurant != null and animatronic.restaurant.id == restaurant.id}" /> 
                 <span th:text="${animatronic.type} + ${animatronic.name}"></span>
             </li>

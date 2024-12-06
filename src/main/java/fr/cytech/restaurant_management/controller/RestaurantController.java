@@ -139,7 +139,8 @@ public class RestaurantController {
 	 *         sinon
 	 */
 	@PostMapping("/update")
-	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant, Model model) {
+	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant, Model model, 
+            @RequestParam(required = false) List<Long> animatronicIds) {
 		// On récupère le restaurant non-modifié
 		Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurant.getId());
 
@@ -161,6 +162,18 @@ public class RestaurantController {
 				model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant));
 				return "restaurantUpdateForm";
 			} else {
+				for (Animatronic animatronic : animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant)) {
+					animatronic.setRestaurant(null);
+				}
+				if (animatronicIds != null && !animatronicIds.isEmpty()) {
+			        List<Animatronic> selectedAnimatronics = animatronicRepository.findAllById(animatronicIds);
+			        restaurant.setAnimatronics(selectedAnimatronics);
+			        
+			        // Il est important de définir le restaurant pour chaque animatronique sélectionné
+			        for (Animatronic animatronic : selectedAnimatronics) {
+			            animatronic.setRestaurant(restaurant);
+			        }
+			    }
 				restaurantRepository.save(existingRestaurant);
 				return "redirect:/restaurant/show";
 			}
