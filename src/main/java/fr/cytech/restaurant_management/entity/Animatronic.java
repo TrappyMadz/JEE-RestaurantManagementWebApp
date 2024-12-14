@@ -1,5 +1,6 @@
 package fr.cytech.restaurant_management.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Animatronic {
@@ -26,6 +28,9 @@ public class Animatronic {
 	@ManyToOne
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
+	
+	@OneToMany(mappedBy = "restaurant")
+	private List<Birthday> birthdays;
 
 	public Restaurant getRestaurant() {
 		return restaurant;
@@ -87,5 +92,13 @@ public class Animatronic {
 	@Override
 	public String toString() {
 		return type + " " + name;
+	}
+
+	public List<Birthday> getBirthdays() {
+		return birthdays;
+	}
+
+	public void setBirthdays(List<Birthday> birthdays) {
+		this.birthdays = birthdays;
 	}
 }

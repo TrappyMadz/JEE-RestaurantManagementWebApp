@@ -26,9 +26,10 @@ public class Birthday {
 
 	@OneToOne(mappedBy = "birthday")
 	private Child birthdayBoy;
-
+	
 	@ManyToMany
 	private Set<Child> children = new HashSet<>();
+
 
 	@OneToMany(mappedBy = "birthday", cascade = CascadeType.ALL)
 	private List<PizzaOrder> pizzaOrders;
@@ -50,13 +51,7 @@ public class Birthday {
 		this.birthdayBoy = birthdayBoy;
 	}
 
-	public Set<Child> getChildren() {
-		return children;
-	}
 
-	public void setChildren(Set<Child> children) {
-		this.children = children;
-	}
 
 
 	public Long getId() {
@@ -105,6 +100,14 @@ public class Birthday {
 
 	public LocalDate getDate() {
 		return date;
+	}
+
+	public Set<Child> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<Child> children) {
+		this.children = children;
 	}
 
 

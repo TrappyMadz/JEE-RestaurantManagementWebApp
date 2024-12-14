@@ -19,6 +19,14 @@ public class PizzaOrder {
 	private Pizza pizza;
 	
 	private int nbPizza;
+	
+	public PizzaOrder() {}
+	
+	public PizzaOrder(Birthday birthday, Pizza pizza, int nbPizza) {
+		this.birthday = birthday;
+		this.pizza = pizza;
+		this.nbPizza = nbPizza;
+	}
 
 	public Long getId() {
 		return id;

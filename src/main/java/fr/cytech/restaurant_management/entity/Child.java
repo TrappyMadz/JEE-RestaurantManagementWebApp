@@ -36,6 +36,17 @@ public class Child {
 	private String lastName;
 	private String name;
 	private int age;
+	
+	@OneToOne
+    @JoinColumn(name = "birthday_id")
+    private Birthday birthday;
+	
+	@ManyToMany
+    @JoinTable(
+            name="child_birthday",
+            joinColumns = @JoinColumn(name = "child_id"),
+            inverseJoinColumns = @JoinColumn(name = "birthday_id"))
+    private Set<Birthday> birthdays = new HashSet<>();
 
 	@Override
 	public String toString() {
@@ -92,6 +103,22 @@ public class Child {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Birthday getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Birthday birthday) {
+		this.birthday = birthday;
+	}
+
+	public Set<Birthday> getBirthdays() {
+		return birthdays;
+	}
+
+	public void setBirthdays(Set<Birthday> birthdays) {
+		this.birthdays = birthdays;
 	}
 
 }
