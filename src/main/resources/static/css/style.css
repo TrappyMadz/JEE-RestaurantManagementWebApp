@@ -191,7 +191,6 @@ footer a:hover {
 }
 
 .importantForm {
-  margin-top: -50px;
   background-color: #ffdaa6;
   padding: 0 50px 50px 50px;
   display: flex;
@@ -199,6 +198,10 @@ footer a:hover {
   justify-content: center;
   align-items: center;
   border-radius: 5%;
+}
+
+#toUp {
+  margin-top: -50px;
 }
 
 .importantForm div {
@@ -403,6 +406,35 @@ footer a:hover {
   width: 4px;
   z-index: -1;
   top: 0;
+}
+
+#circleLabel1 {
+  width: 200px;
+  position: absolute;
+  top: -9px;
+  left: 40px;
+  text-align: left;
+}
+#circleLabel2 {
+  width: 200px;
+  position: absolute;
+  top: 57px;
+  left: 40px;
+  text-align: left;
+}
+#circleLabel3 {
+  width: 200px;
+  position: absolute;
+  top: 122px;
+  left: 40px;
+  text-align: left;
+}
+#circleLabel4 {
+  width: 200px;
+  position: absolute;
+  top: 189px;
+  left: 40px;
+  text-align: left;
 }
 
 /* Animation de clignotement des lettres */
