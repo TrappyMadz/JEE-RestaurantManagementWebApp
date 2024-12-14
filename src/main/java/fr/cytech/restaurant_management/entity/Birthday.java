@@ -1,8 +1,9 @@
 package fr.cytech.restaurant_management.entity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,11 +24,11 @@ public class Birthday {
 
 	private LocalDate date;
 
-	@OneToOne
+	@OneToOne(mappedBy = "birthday")
 	private Child birthdayBoy;
-
+	
 	@ManyToMany
-	private ArrayList<Child> children;
+    private Set<Child> children = new HashSet<>();
 
 	@OneToMany(mappedBy = "birthday", cascade = CascadeType.ALL)
 	private List<PizzaOrder> pizzaOrders;
@@ -49,13 +50,9 @@ public class Birthday {
 		this.birthdayBoy = birthdayBoy;
 	}
 
-	public ArrayList<Child> getChildren() {
-		return children;
-	}
+	
 
-	public void setChildren(ArrayList<Child> children) {
-		this.children = children;
-	}
+
 
 
 	public Long getId() {
@@ -104,6 +101,14 @@ public class Birthday {
 
 	public LocalDate getDate() {
 		return date;
+	}
+
+	public Set<Child> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<Child> children) {
+		this.children = children;
 	}
 
 

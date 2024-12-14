@@ -1,7 +1,9 @@
 package fr.cytech.restaurant_management.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,14 +12,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.cytech.restaurant_management.entity.Animatronic;
 import fr.cytech.restaurant_management.entity.Birthday;
 import fr.cytech.restaurant_management.entity.Child;
+import fr.cytech.restaurant_management.entity.Pizza;
+import fr.cytech.restaurant_management.entity.PizzaOrder;
 import fr.cytech.restaurant_management.entity.Restaurant;
 import fr.cytech.restaurant_management.repository.AnimatronicRepository;
 import fr.cytech.restaurant_management.repository.BirthdayRepository;
 import fr.cytech.restaurant_management.repository.ChildRepository;
+import fr.cytech.restaurant_management.repository.PizzaRepository;
 import fr.cytech.restaurant_management.repository.RestaurantRepository;
 
 @Controller
@@ -32,6 +38,8 @@ public class BirthdayController {
 	BirthdayRepository birthdayRepository;
 	@Autowired
 	ChildRepository childRepository;
+	@Autowired
+	PizzaRepository pizzaRepository;
 	
 	
 	@GetMapping("/add")
@@ -79,6 +87,50 @@ public class BirthdayController {
 		List<Child> enfants = childRepository.findAll();
 		model.addAttribute("children", enfants);
 		return "birthdayForm2";
+	}
+	
+	@PostMapping("/finish")
+	public String finishBirthday(Model model, @ModelAttribute Birthday birthday, @RequestParam Map<String, String> pizzasWithQty) {
+		List<PizzaOrder> orders = new ArrayList<>();
+		
+		for (Map.Entry<String, String> e : pizzasWithQty.entrySet()) {
+			String pizzaIdStr = e.getKey();
+			String quantityStr = e.getValue();
+			
+			if (pizzaIdStr == null || pizzaIdStr == "" || quantityStr.isEmpty()) {
+				model.addAttribute("error", "Pizza invalide ou quantité vide");
+				model.addAttribute("birthday", birthday);
+				List<Pizza> pizzas = pizzaRepository.findAll();
+				model.addAttribute("pizzas", pizzas);
+				return "birthdayForm3";
+			}
+			try {
+				int qty = Integer.parseInt(quantityStr);
+				if (qty <= 0) {
+					model.addAttribute("error", "Veuillez entrer des quantités positives");
+					model.addAttribute("birthday", birthday);
+					List<Pizza> pizzas = pizzaRepository.findAll();
+					model.addAttribute("pizzas", pizzas);
+					return "birthdayForm3";
+				}
+				Long pizzaId = Long.parseLong(pizzaIdStr);
+				Pizza pizza = pizzaRepository.findById(pizzaId).orElseThrow(() -> new RuntimeException("Pizza non trouvée"));
+				
+				orders.add(new PizzaOrder(birthday, pizza, qty));
+			}
+			catch(Error err) {
+			}
+		}
+		birthday.setPizzaOrders(orders);
+		birthday.getRestaurant().getBirthdays().add(birthday);
+		birthday.getAnimatronic1().getBirthdays().add(birthday);
+		birthday.getAnimatronic2().getBirthdays().add(birthday);
+		birthday.getBirthdayBoy().setBirthday(birthday);
+		for (Child child : birthday.getChildren()) {
+			child.getBirthdays().add(birthday);
+		}
+		birthdayRepository.save(birthday);
+		return "redirect:/";
 	}
 
 }
