@@ -1,35 +1,40 @@
-// On ajoute un écouteur d'évènement à la barre de recherche
 document.getElementById("searchQuery").addEventListener("input", setup);
+document.getElementById("searchAnimatronic").addEventListener("change", setup);
 
 function setup() {
-  // On récupère le contenu de la barre de recherche
-  let query = this.value;
+	let query = document.getElementById("searchQuery").value;
+	let animatronic = document.getElementById("searchAnimatronic").value;
 
-  // On attend que l'utilisateur ai tapé au moins 3 caractères. Sinon, pour une lettre il pourrait y avoir beaucoup trop de résultats
-  if (query.length < 3) {
-    // Tant que la barre de recherche est vide, on affiche tous les enfants
-    document.getElementById("searchResults").innerHTML = "";
-    document.getElementById("restaurantList").style.display = "block";
-  } else {
-    /* On appel le controller gerant la recherche d'enfants.
-    Une fois la réponse obtenue, on la récupère en données consultables, on cache la liste entière et on affiche la div montrant les résultats.
-    
-    */
-    fetch(`/restaurant/search?query=${encodeURIComponent(query)}`)
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("restaurantList").style.display = "none";
-        let resultContainer = document.getElementById("searchResults");
-        resultContainer.innerHTML = "";
+	if (query.trim().length < 3 && animatronic === "") {
+		document.getElementById("searchResults").innerHTML = "";
+		document.getElementById("restaurantList").style.display = "flex";
+	} else if (animatronic != "") {
+		searchAndShow("", animatronic);
+	} else {
+		searchAndShow(query, animatronic);
+	}
+}
 
-        // Si il y as des résultats, on les affiches dans la div
-        if (data.length > 0) {
-          data.forEach((restaurant) => {
-            let childElement = document.createElement("div");
-            childElement.innerHTML = `
+function searchAndShow(query, animatronic) {
+	fetch(`/restaurant/search?query=${encodeURIComponent(query)}&animatronic=${encodeURIComponent(animatronic)}`)
+		.then((response) => response.json())
+		.then((data) => {
+			console.log(data);
+			document.getElementById("restaurantList").style.display = "none";
+			let resultContainer = document.getElementById("searchResults");
+			resultContainer.innerHTML = "";
+
+			// Si il y as des résultats, on les affiches dans la div
+			if (data.length > 0) {
+				data.forEach((restaurant) => {
+					let animatronicsList = restaurant.animatronics
+						.map((animatronic) => animatronic.type + ' ' + animatronic.name) // Extraire uniquement les noms
+						.join(", "); // Les séparer par des virgules
+					let childElement = document.createElement("div");
+					childElement.innerHTML = `
               <div>
                 <span>
-                  Restaurant ${restaurant.name}, ${restaurant.address}, ${restaurant.animatronics}
+                  Restaurant ${restaurant.name}, ${restaurant.address}, animatronics=[${animatronicsList}]
                 </span>
                 <form action="/restaurant/modify/${restaurant.id}" method="get">
                   <button type="submit">Modifier</button>
@@ -39,14 +44,14 @@ function setup() {
                 </form>
               </div>
             `;
-            resultContainer.appendChild(childElement);
-          });
-        } else {
-          // Si il n'y a aucun resultat, on affiche un message d'erreur
-          resultContainer.innerHTML = "<p>Aucun résultat trouvé.</p>";
-        }
-      })
-      // Si il y a un problème lors du fetch (l'appel au controller) on affiche l'erreur
-      .catch((error) => console.error("Erreur de recherche : ", error));
-  }
+					resultContainer.appendChild(childElement);
+				});
+			} else {
+				// Si il n'y a aucun resultat, on affiche un message d'erreur
+				resultContainer.innerHTML = "<p>Aucun résultat trouvé.</p>";
+			}
+		})
+		// Si il y a un problème lors du fetch (l'appel au controller) on affiche l'erreur
+		.catch((error) => console.error("Erreur de recherche : ", error));
+
 }

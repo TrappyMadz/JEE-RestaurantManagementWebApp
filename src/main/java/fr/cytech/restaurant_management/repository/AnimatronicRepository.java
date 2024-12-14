@@ -1,12 +1,15 @@
 package fr.cytech.restaurant_management.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import fr.cytech.restaurant_management.entity.Animatronic;
 import fr.cytech.restaurant_management.entity.AnimatronicType;
+import fr.cytech.restaurant_management.entity.Restaurant;
 
 public interface AnimatronicRepository extends JpaRepository<Animatronic, Long> {
 	
@@ -17,5 +20,15 @@ public interface AnimatronicRepository extends JpaRepository<Animatronic, Long> 
 
 	List<Animatronic> findByNameAndType(String name,AnimatronicType type);
 	
+	Optional<Animatronic> findById(Long id);
+	
 	List<Animatronic> findByNameContainingIgnoreCaseAndType(String name,AnimatronicType type);
+	
+	@Query("SELECT a FROM Animatronic a WHERE a.restaurant IS NULL")
+	List<Animatronic> findThoseWithoutRestaurant();
+	
+	@Query("SELECT a FROM Animatronic a WHERE a.restaurant IS NULL OR a.restaurant=:restaurant")
+	List<Animatronic> findThoseWithoutRestaurantOrSameRestaurant(Restaurant restaurant);
+	
+	
 }

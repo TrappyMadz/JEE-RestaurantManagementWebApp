@@ -1,6 +1,5 @@
 package fr.cytech.restaurant_management.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +42,7 @@ public class RestaurantController {
 		// On récupère les restaurants pour les afficher
 		List<Restaurant> restaurantList = restaurantRepository.findAll();
 		model.addAttribute("restaurantList", restaurantList);
+		model.addAttribute("ChooseAnimatronic", animatronicRepository.findAll());
 		return "restaurants";
 	}
 
@@ -58,7 +58,7 @@ public class RestaurantController {
 		restaurant.setName("");
 		restaurant.setAddress("");
 		model.addAttribute("restaurant", restaurant);
-		model.addAttribute("animatronics", animatronicRepository.findAll());
+		model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurant());
 		return "restaurantForm";
 	}
 
@@ -86,7 +86,7 @@ public class RestaurantController {
 		if (restaurant.getName() == "" || restaurant.getAddress() == "") {
 			model.addAttribute("restaurant", restaurant);
 			model.addAttribute("error", "Completez toutes les informations.");
-			model.addAttribute("animatronics", animatronicRepository.findAll());
+			model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurant());
 			return "restaurantForm";
 		}
 		restaurantRepository.save(restaurant);
@@ -124,7 +124,7 @@ public class RestaurantController {
 			return "redirect:/restaurant/show";
 		} else {
 			model.addAttribute("restaurant", optionalRestaurant.get());
-			model.addAttribute("animatronics", animatronicRepository.findAll());
+			model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(optionalRestaurant.get()));
 			return "restaurantUpdateForm";
 		}
 
@@ -139,7 +139,8 @@ public class RestaurantController {
 	 *         sinon
 	 */
 	@PostMapping("/update")
-	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant, Model model) {
+	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant, Model model, 
+            @RequestParam(required = false) List<Long> animatronicIds) {
 		// On récupère le restaurant non-modifié
 		Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurant.getId());
 
@@ -158,9 +159,21 @@ public class RestaurantController {
 			if (existingRestaurant.getName() == "" || existingRestaurant.getAddress() == "") {
 				model.addAttribute("error", "Completez toutes les informations.");
 				model.addAttribute("restaurant", existingRestaurant);
-				model.addAttribute("animatronics", animatronicRepository.findAll());
+				model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant));
 				return "restaurantUpdateForm";
 			} else {
+				for (Animatronic animatronic : animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant)) {
+					animatronic.setRestaurant(null);
+				}
+				if (animatronicIds != null && !animatronicIds.isEmpty()) {
+			        List<Animatronic> selectedAnimatronics = animatronicRepository.findAllById(animatronicIds);
+			        restaurant.setAnimatronics(selectedAnimatronics);
+			        
+			        // Il est important de définir le restaurant pour chaque animatronique sélectionné
+			        for (Animatronic animatronic : selectedAnimatronics) {
+			            animatronic.setRestaurant(restaurant);
+			        }
+			    }
 				restaurantRepository.save(existingRestaurant);
 				return "redirect:/restaurant/show";
 			}
@@ -175,8 +188,15 @@ public class RestaurantController {
 	 */
 	@GetMapping("/search")
 	@ResponseBody
-	public List<Restaurant> searchRestaurant(@RequestParam("query") String query) {
-		return restaurantRepository.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(query, query);
+	public List<Restaurant> searchRestaurant(@RequestParam(required = false) String query, @RequestParam(required = false) Long animatronic) {
+		if (animatronic != null) {
+			Animatronic ExistingAnimatronic = animatronicRepository.findById(animatronic)
+	                .orElseThrow(() -> new IllegalArgumentException("Animatronic non trouvé pour l'ID : " + animatronic));
+	        return List.of(ExistingAnimatronic.getRestaurant());
+	    } else {
+	        // Recherche uniquement par nom
+	    	return restaurantRepository.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(query, query);
+	    }
 	}
 
 }
