@@ -89,6 +89,33 @@ public class BirthdayController {
 		return "birthdayForm2";
 	}
 	
+	@PostMapping("/add2")
+	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday, 
+            @RequestParam(required = false) List<Long> childrenIds) {
+		List<Restaurant> restaurants = restaurantRepository.findAll();
+		List<Animatronic> animatronics = animatronicRepository.findAll();
+		List<Child> enfants = childRepository.findAll();
+		
+		if (childrenIds == null || childrenIds.isEmpty()) {
+	    	model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
+			model.addAttribute("birthday", birthday);
+			return "birthdayForm2";
+	    }
+		
+        List<Child> selectedChildren = childRepository.findAllById(childrenIds);
+        for (Child child : selectedChildren) {
+        	birthday.getChildren().add(child);
+        }
+		
+		
+		model.addAttribute("selectedChildren",selectedChildren);
+		model.addAttribute("restaurants",restaurants);
+		model.addAttribute("animatronics",animatronics);
+		model.addAttribute("birthday",birthday);
+		model.addAttribute("children", enfants);
+		return "birthdayForm3";
+
+    s
 	@PostMapping("/finish")
 	public String finishBirthday(Model model, @ModelAttribute Birthday birthday, @RequestParam Map<String, String> pizzasWithQty) {
 		List<PizzaOrder> orders = new ArrayList<>();
@@ -131,6 +158,7 @@ public class BirthdayController {
 		}
 		birthdayRepository.save(birthday);
 		return "redirect:/";
+
 	}
 
 }

@@ -28,7 +28,8 @@ public class Birthday {
 	private Child birthdayBoy;
 	
 	@ManyToMany
-    private Set<Child> children = new HashSet<>();
+	private Set<Child> children = new HashSet<>();
+
 
 	@OneToMany(mappedBy = "birthday", cascade = CascadeType.ALL)
 	private List<PizzaOrder> pizzaOrders;
@@ -49,8 +50,6 @@ public class Birthday {
 	public void setBirthdayBoy(Child birthdayBoy) {
 		this.birthdayBoy = birthdayBoy;
 	}
-
-	
 
 
 

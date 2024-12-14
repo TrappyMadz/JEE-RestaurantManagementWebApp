@@ -21,6 +21,17 @@ public class Child {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToMany
+	@JoinTable(
+			name="child_birthday",
+			joinColumns = @JoinColumn(name = "child_id"),
+			inverseJoinColumns = @JoinColumn(name = "birthday_id"))
+	private Set<Birthday> birthdays = new HashSet<>();
+	
+	@OneToOne
+	@JoinColumn(name = "birthday_id")
+	private Birthday birthday;
 
 	private String lastName;
 	private String name;
@@ -52,6 +63,14 @@ public class Child {
 		}
 		Child other = (Child) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public Set<Birthday> getBirthdays() {
+		return birthdays;
+	}
+
+	public void setBirthdays(Set<Birthday> birthdays) {
+		this.birthdays = birthdays;
 	}
 
 	public String getLastName() {
