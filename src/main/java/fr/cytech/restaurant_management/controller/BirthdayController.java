@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.cytech.restaurant_management.entity.Animatronic;
 import fr.cytech.restaurant_management.entity.Birthday;
@@ -79,6 +80,33 @@ public class BirthdayController {
 		List<Child> enfants = childRepository.findAll();
 		model.addAttribute("children", enfants);
 		return "birthdayForm2";
+	}
+	
+	@PostMapping("/add2")
+	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday, 
+            @RequestParam(required = false) List<Long> childrenIds) {
+		List<Restaurant> restaurants = restaurantRepository.findAll();
+		List<Animatronic> animatronics = animatronicRepository.findAll();
+		List<Child> enfants = childRepository.findAll();
+		
+		if (childrenIds == null || childrenIds.isEmpty()) {
+	    	model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
+			model.addAttribute("birthday", birthday);
+			return "birthdayForm2";
+	    }
+		
+        List<Child> selectedChildren = childRepository.findAllById(childrenIds);
+        for (Child child : selectedChildren) {
+        	birthday.getChildren().add(child);
+        }
+		
+		
+		model.addAttribute("selectedChildren",selectedChildren);
+		model.addAttribute("restaurants",restaurants);
+		model.addAttribute("animatronics",animatronics);
+		model.addAttribute("birthday",birthday);
+		model.addAttribute("children", enfants);
+		return "birthdayForm3";
 	}
 
 }

@@ -1,11 +1,17 @@
 package fr.cytech.restaurant_management.entity;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 
 /**
  * Table enfants
@@ -15,6 +21,17 @@ public class Child {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToMany
+	@JoinTable(
+			name="child_birthday",
+			joinColumns = @JoinColumn(name = "child_id"),
+			inverseJoinColumns = @JoinColumn(name = "birthday_id"))
+	private Set<Birthday> birthdays = new HashSet<>();
+	
+	@OneToOne
+	@JoinColumn(name = "birthday_id")
+	private Birthday birthday;
 
 	private String lastName;
 	private String name;
@@ -35,6 +52,14 @@ public class Child {
 		}
 		Child other = (Child) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public Set<Birthday> getBirthdays() {
+		return birthdays;
+	}
+
+	public void setBirthdays(Set<Birthday> birthdays) {
+		this.birthdays = birthdays;
 	}
 
 	public String getLastName() {
