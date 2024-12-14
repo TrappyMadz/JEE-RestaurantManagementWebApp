@@ -1,6 +1,7 @@
 package fr.cytech.restaurant_management.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,8 @@ public interface AnimatronicRepository extends JpaRepository<Animatronic, Long> 
 	List<Animatronic> findByNameAndTypeExcludingId(String name,AnimatronicType type,Long id);
 
 	List<Animatronic> findByNameAndType(String name,AnimatronicType type);
+	
+	Optional<Animatronic> findById(Long id);
 	
 	List<Animatronic> findByNameContainingIgnoreCaseAndType(String name,AnimatronicType type);
 	

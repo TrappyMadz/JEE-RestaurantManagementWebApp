@@ -32,6 +32,14 @@
         placeholder="Rechercher un restaurant"
         autocomplete="off"
       />
+      <select id="searchAnimatronic" class="searchBar">
+          <option value="">Choisir selon un animatronique</option>
+          <option
+            th:each="animatronic : ${ChooseAnimatronic}"
+            th:value="${animatronic.id}"
+            th:text="${animatronic}"
+          ></option>
+        </select>
 
       <!-- Renvoie sur le form pour ajouter un enfant-->
       <a href="/restaurant/add"><button>Ajouter un restaurant</button></a>
