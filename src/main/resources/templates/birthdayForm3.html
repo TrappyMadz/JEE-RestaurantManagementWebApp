@@ -34,17 +34,104 @@
         class="importantForm"
         id="toUp"
       >
+        <div style="display: none">
+          <label for="date">Date :</label>
+          <input
+            type="date"
+            name="date"
+            id="date"
+            th:value="${birthday.date}"
+            required
+          />
+          <label for="restaurant">Restaurant :</label>
+          <select name="restaurant" id="restaurant" required>
+            <option value="" th:selected="*{restaurantAct} == null">
+              Sélectionner un restaurant
+            </option>
+            <option
+              th:each="restaurant : ${restaurants}"
+              th:value="${restaurant.id}"
+              th:selected="${birthday.restaurant != null && birthday.restaurant.id == restaurant.id}"
+              th:text="${restaurant.name}"
+            ></option>
+          </select>
+          <label for="animatronics">Animatroniques :</label>
+          <div id="animatronics">
+            <select name="animatronic1" id="animatronic1" required>
+              <option value="" th:selected="*{animatronic1Act} == null">
+                Sélectionner un Animatronique
+              </option>
+              <option
+                th:each="animatronic : ${animatronics}"
+                th:value="${animatronic.id}"
+                th:selected="${birthday.animatronic1 != null && birthday.animatronic1.id == animatronic.id}"
+                th:text="${animatronic.toString}"
+              ></option>
+            </select>
+            <select name="animatronic2" id="animatronic2">
+              <option value="" th:selected="*{animatronic2Act} == null">
+                Sélectionner un Animatronique
+              </option>
+              <option
+                th:each="animatronic : ${animatronics}"
+                th:value="${animatronic.id}"
+                th:selected="${birthday.animatronic2 != null && birthday.animatronic2.id == animatronic.id}"
+                th:text="${animatronic.toString}"
+              ></option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: none">
+          <label for="birthdayBoy">Enfant Star : </label>
+          <select name="birthdayBoy" id="birthdayBoy" required>
+            <option value="" th:selected="*{birthday.birthdayBoy} == null">
+              Sélectionner un enfant
+            </option>
+            <option
+              th:each="child : ${children}"
+              th:value="${child.id}"
+              th:selected="${birthday.birthdayBoy != null && birthday.birthdayBoy.id == child.id}"
+              th:text="${child.name} + ' ' + ${child.lastName}"
+            ></option>
+          </select>
+          <label>Enfants participant :</label>
+          <ul>
+            <li th:each="child : ${children}">
+              <input
+                type="checkbox"
+                th:value="${child.id}"
+                th:name="childrenIds"
+              />
+              <span th:text="${child.name} + ' ' + ${child.lastName}"></span>
+            </li>
+          </ul>
+        </div>
+
         <div th:if="${error}" class="error">
           <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
           <p th:text="${error}">error</p>
         </div>
         <h2>Nouvel Évènement - Pizza :</h2>
-
+        <span th:text="${birthday.restaurant}"></span>
         <div>
           <div th:each="pizza : ${pizzas}">
-            <input type="checkbox" th:value="${pizza.id}" th:name="pizzaIds" />
-            <span th:text="${pizza.name}"></span>
-            <input type="number" th:field="*{pizzas[pizza.id]}" />
+            <input type="hidden" th:name="pizzaIds[]" th:value="${pizza.id}" />
+            <input
+              type="checkbox"
+              th:name="selectedPizzas[]"
+              th:value="${pizza.id}"
+              id="pizzaCheckbox${pizza.id}"
+            />
+            <label
+              th:for="'pizzaCheckbox' + ${pizza.id}"
+              th:text="${pizza.name}"
+            ></label>
+            <input
+              type="number"
+              th:name="quantities[]"
+              placeholder="Quantité"
+            />
           </div>
         </div>
 

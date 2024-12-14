@@ -18,6 +18,7 @@ public class PizzaOrder {
 	@ManyToOne @JoinColumn(name = "pizza_id")
 	private Pizza pizza;
 	
+	
 	private int nbPizza;
 	
 	public PizzaOrder() {}

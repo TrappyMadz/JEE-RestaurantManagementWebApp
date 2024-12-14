@@ -29,8 +29,11 @@ public class Animatronic {
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 	
-	@OneToMany(mappedBy = "restaurant")
-	private List<Birthday> birthdays;
+	@OneToMany(mappedBy = "animatronic1")
+	private List<Birthday> birthdays1;
+	
+	@OneToMany(mappedBy = "animatronic2")
+	private List<Birthday> birthdays2;
 
 	public Restaurant getRestaurant() {
 		return restaurant;
@@ -94,11 +97,22 @@ public class Animatronic {
 		return type + " " + name;
 	}
 
-	public List<Birthday> getBirthdays() {
-		return birthdays;
+	public List<Birthday> getBirthdays1() {
+		return birthdays1;
 	}
 
-	public void setBirthdays(List<Birthday> birthdays) {
-		this.birthdays = birthdays;
+	public void setBirthdays1(List<Birthday> birthdays1) {
+		this.birthdays1 = birthdays1;
 	}
+
+	public List<Birthday> getBirthdays2() {
+		return birthdays2;
+	}
+
+	public void setBirthdays2(List<Birthday> birthdays2) {
+		this.birthdays2 = birthdays2;
+	}
+
+
+
 }

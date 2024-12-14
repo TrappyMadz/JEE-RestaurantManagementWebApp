@@ -37,10 +37,10 @@ public class Birthday {
 	@ManyToOne @JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 	
-	@ManyToOne
+	@ManyToOne @JoinColumn(name = "animatronic1_id") 
 	private Animatronic animatronic1;
 	
-	@ManyToOne
+	@ManyToOne @JoinColumn(name = "animatronic2_id")
 	private Animatronic animatronic2;
 
 	public Child getBirthdayBoy() {

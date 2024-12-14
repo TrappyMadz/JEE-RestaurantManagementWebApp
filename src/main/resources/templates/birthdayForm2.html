@@ -1,103 +1,131 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Freddy's Organizer - Nouvel Anniversaire</title>
-<script src="/js/header.js" defer></script>
-<link rel="stylesheet" href="/css/style.css" />
-</head>
-<body>
-	<header id="header">
-		<!--C'est ici que le header est chargé-->
-	</header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Nouvel Anniversaire</title>
+    <script src="/js/header.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header id="header">
+      <!--C'est ici que le header est chargé-->
+    </header>
 
-	<main>
-		<!--Ces informations seront renvoyées au controller. Il est donc impératif que l'attribut "name" des input correspondent à la bdd
+    <main>
+      <!--Ces informations seront renvoyées au controller. Il est donc impératif que l'attribut "name" des input correspondent à la bdd
       Les values servent à préremplir le form avec les infos précédentes si il y a une erreur, pour que l'utilisateur n'ait pas
       à tout refaire.-->
-		<div class="contenerProgress">
-			<div class="menuProgress">
-				<div class="progress">
-					<div class="circle prev">1</div>
-					<p id="circleLabel1">Choix d'un restaurant</p>
-					<div class="circle act1">2</div>
-					<p id="circleLabel2">Choix des participants</p>
-					<div class="circle to">3</div>
-					<p id="circleLabel3">Commande du repas</p>
-					<div class="circle">4</div>
-					<p id="circleLabel4">Vérification</p>
-				</div>
-			</div>
-		</div>
-		<form action="/birthday/add2" method="post" class="importantForm"
-			id="toUp">
-			<div th:if="${error}" class="error">
-				<!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
-				<p th:text="${error}">error</p>
-			</div>
-			<h2>Nouvel Évènement - Participants :</h2>
+      <div class="contenerProgress">
+        <div class="menuProgress">
+          <div class="progress">
+            <div class="circle prev">1</div>
+            <p id="circleLabel1">Choix d'un restaurant</p>
+            <div class="circle act1">2</div>
+            <p id="circleLabel2">Choix des participants</p>
+            <div class="circle to">3</div>
+            <p id="circleLabel3">Commande du repas</p>
+            <div class="circle">4</div>
+            <p id="circleLabel4">Vérification</p>
+          </div>
+        </div>
+      </div>
+      <form
+        action="/birthday/add2"
+        method="post"
+        class="importantForm"
+        id="toUp"
+      >
+        <div th:if="${error}" class="error">
+          <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
+          <p th:text="${error}">error</p>
+        </div>
+        <h2>Nouvel Évènement - Participants :</h2>
 
-			<div style="display: none">
-				<label for="date">Date :</label> <input type="date" name="date"
-					id="date" th:value="${birthday.date}" required /> <label
-					for="restaurant">Restaurant :</label> <select name="restaurant"
-					id="restaurant" required>
-					<option value="" th:selected="*{restaurantAct} == null">
-						Sélectionner un restaurant</option>
-					<option th:each="restaurant : ${restaurants}"
-						th:value="${restaurant.id}"
-						th:selected="${birthday.restaurant != null && birthday.restaurant.id == restaurant.id}"
-						th:text="${restaurant.name}"></option>
-				</select> <label for="animatronics">Animatroniques :</label>
-				<div id="animatronics">
-					<select name="animatronic1" id="animatronic1" required>
-						<option value="" th:selected="*{animatronic1Act} == null">
-							Sélectionner un Animatronique</option>
-						<option th:each="animatronic : ${animatronics}"
-							th:value="${animatronic.id}"
-							th:selected="${birthday.animatronic1 != null && birthday.animatronic1.id == animatronic.id}"
-							th:text="${animatronic.toString}"></option>
-					</select> <select name="animatronic2" id="animatronic2">
-						<option value="" th:selected="*{animatronic2Act} == null">
-							Sélectionner un Animatronique</option>
-						<option th:each="animatronic : ${animatronics}"
-							th:value="${animatronic.id}"
-							th:selected="${birthday.animatronic2 != null && birthday.animatronic2.id == animatronic.id}"
-							th:text="${animatronic.toString}"></option>
-					</select>
-				</div>
-			</div>
+        <div style="display: none">
+          <label for="date">Date :</label>
+          <input
+            type="date"
+            name="date"
+            id="date"
+            th:value="${birthday.date}"
+            required
+          />
+          <label for="restaurant">Restaurant :</label>
+          <select name="restaurant" id="restaurant" required>
+            <option value="" th:selected="*{restaurantAct} == null">
+              Sélectionner un restaurant
+            </option>
+            <option
+              th:each="restaurant : ${restaurants}"
+              th:value="${restaurant.id}"
+              th:selected="${birthday.restaurant != null && birthday.restaurant.id == restaurant.id}"
+              th:text="${restaurant.name}"
+            ></option>
+          </select>
+          <label for="animatronics">Animatroniques :</label>
+          <div id="animatronics">
+            <select name="animatronic1" id="animatronic1" required>
+              <option value="" th:selected="*{animatronic1Act} == null">
+                Sélectionner un Animatronique
+              </option>
+              <option
+                th:each="animatronic : ${animatronics}"
+                th:value="${animatronic.id}"
+                th:selected="${birthday.animatronic1 != null && birthday.animatronic1.id == animatronic.id}"
+                th:text="${animatronic.toString}"
+              ></option>
+            </select>
+            <select name="animatronic2" id="animatronic2">
+              <option value="" th:selected="*{animatronic2Act} == null">
+                Sélectionner un Animatronique
+              </option>
+              <option
+                th:each="animatronic : ${animatronics}"
+                th:value="${animatronic.id}"
+                th:selected="${birthday.animatronic2 != null && birthday.animatronic2.id == animatronic.id}"
+                th:text="${animatronic.toString}"
+              ></option>
+            </select>
+          </div>
+        </div>
 
-			<div>
-				<label for="birthdayBoy">Enfant Star : </label>
-				<select
-					name="birthdayBoy" id="birthdayBoy" required>
-					<option value="" th:selected="*{birthday.birthdayBoy} == null">
-						Sélectionner un enfant</option>
-					<option th:each="child : ${children}" th:value="${child.id}"
-						th:selected="${birthday.birthdayBoy != null && birthday.birthdayBoy.id == child.id}"
-						th:text="${child.name} + ' ' + ${child.lastName}"></option>
-				</select>
-				<label>Enfants participant :</label>
-				<ul>
-					<li th:each="child : ${children}">
-						<input type="checkbox" th:value="${child.id}" th:name="childrenIds"/>
-						<span th:text="${child.name} + ' ' + ${child.lastName}"></span>
-					</li>
-				</ul>
-			</div>
+        <div>
+          <label for="birthdayBoy">Enfant Star : </label>
+          <select name="birthdayBoy" id="birthdayBoy" required>
+            <option value="" th:selected="*{birthday.birthdayBoy} == null">
+              Sélectionner un enfant
+            </option>
+            <option
+              th:each="child : ${children}"
+              th:value="${child.id}"
+              th:selected="${birthday.birthdayBoy != null && birthday.birthdayBoy.id == child.id}"
+              th:text="${child.name} + ' ' + ${child.lastName}"
+            ></option>
+          </select>
+          <label>Enfants participant :</label>
+          <ul>
+            <li th:each="child : ${children}">
+              <input
+                type="checkbox"
+                th:value="${child.id}"
+                th:name="childrenIds"
+              />
+              <span th:text="${child.name} + ' ' + ${child.lastName}"></span>
+            </li>
+          </ul>
+        </div>
 
-			<button type="submit">Valider</button>
-		</form>
-	</main>
+        <button type="submit">Valider</button>
+      </form>
+    </main>
 
-	<div class="divider-pattern">
-		<!--Paterne damier-->
-	</div>
+    <div class="divider-pattern">
+      <!--Paterne damier-->
+    </div>
 
-	<footer id="footer">
-		<!-- C'est dans ce bloque que le fichier footer.html est chargé -->
-	</footer>
-</body>
+    <footer id="footer">
+      <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+    </footer>
+  </body>
 </html>

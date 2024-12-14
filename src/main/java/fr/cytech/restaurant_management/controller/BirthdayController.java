@@ -3,7 +3,7 @@ package fr.cytech.restaurant_management.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +23,7 @@ import fr.cytech.restaurant_management.entity.Restaurant;
 import fr.cytech.restaurant_management.repository.AnimatronicRepository;
 import fr.cytech.restaurant_management.repository.BirthdayRepository;
 import fr.cytech.restaurant_management.repository.ChildRepository;
+import fr.cytech.restaurant_management.repository.PizzaOrderRepository;
 import fr.cytech.restaurant_management.repository.PizzaRepository;
 import fr.cytech.restaurant_management.repository.RestaurantRepository;
 
@@ -40,6 +41,8 @@ public class BirthdayController {
 	ChildRepository childRepository;
 	@Autowired
 	PizzaRepository pizzaRepository;
+	@Autowired
+	PizzaOrderRepository pizzaOrderRepository;
 	
 	
 	@GetMapping("/add")
@@ -83,6 +86,8 @@ public class BirthdayController {
 		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
 			birthday.setAnimatronic2(null);
 		}
+		
+		
 		model.addAttribute("birthday",birthday);
 		List<Child> enfants = childRepository.findAll();
 		model.addAttribute("children", enfants);
@@ -92,6 +97,7 @@ public class BirthdayController {
 	@PostMapping("/add2")
 	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday, 
             @RequestParam(required = false) List<Long> childrenIds) {
+		
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findAll();
 		List<Child> enfants = childRepository.findAll();
@@ -99,6 +105,7 @@ public class BirthdayController {
 		if (childrenIds == null || childrenIds.isEmpty()) {
 	    	model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
 			model.addAttribute("birthday", birthday);
+			model.addAttribute("children", enfants);
 			return "birthdayForm2";
 	    }
 		
@@ -107,56 +114,45 @@ public class BirthdayController {
         	birthday.getChildren().add(child);
         }
 		
-		
+		List<Pizza> pizzas = pizzaRepository.findAll();
 		model.addAttribute("selectedChildren",selectedChildren);
 		model.addAttribute("restaurants",restaurants);
 		model.addAttribute("animatronics",animatronics);
 		model.addAttribute("birthday",birthday);
 		model.addAttribute("children", enfants);
+		model.addAttribute("pizzas",pizzas);
 		return "birthdayForm3";
+	}
 
-    s
+    
 	@PostMapping("/finish")
-	public String finishBirthday(Model model, @ModelAttribute Birthday birthday, @RequestParam Map<String, String> pizzasWithQty) {
+	public String finishBirthday(Model model, @ModelAttribute Birthday birthday, @RequestParam("pizzaIds[]") List<Long> pizzaIds,
+			@RequestParam("quantities[]") List<Integer> quantities, @RequestParam("selectedPizzas[]") List<Long> selectedPizzas) {
+		
 		List<PizzaOrder> orders = new ArrayList<>();
 		
-		for (Map.Entry<String, String> e : pizzasWithQty.entrySet()) {
-			String pizzaIdStr = e.getKey();
-			String quantityStr = e.getValue();
-			
-			if (pizzaIdStr == null || pizzaIdStr == "" || quantityStr.isEmpty()) {
-				model.addAttribute("error", "Pizza invalide ou quantité vide");
-				model.addAttribute("birthday", birthday);
-				List<Pizza> pizzas = pizzaRepository.findAll();
-				model.addAttribute("pizzas", pizzas);
-				return "birthdayForm3";
-			}
-			try {
-				int qty = Integer.parseInt(quantityStr);
-				if (qty <= 0) {
-					model.addAttribute("error", "Veuillez entrer des quantités positives");
-					model.addAttribute("birthday", birthday);
-					List<Pizza> pizzas = pizzaRepository.findAll();
-					model.addAttribute("pizzas", pizzas);
-					return "birthdayForm3";
-				}
-				Long pizzaId = Long.parseLong(pizzaIdStr);
-				Pizza pizza = pizzaRepository.findById(pizzaId).orElseThrow(() -> new RuntimeException("Pizza non trouvée"));
-				
-				orders.add(new PizzaOrder(birthday, pizza, qty));
-			}
-			catch(Error err) {
+		for (int i = 0 ; i < pizzaIds.size() ; i++) {
+			Long pizzaId = pizzaIds.get(i);
+			Integer quantity = quantities.get(i);
+			if (selectedPizzas.contains(pizzaId) && quantity > 0) {
+				Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
+				PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(),quantity);
+				orders.add(order);
+				order.setBirthday(birthday);
 			}
 		}
+		
+		
 		birthday.setPizzaOrders(orders);
 		birthday.getRestaurant().getBirthdays().add(birthday);
-		birthday.getAnimatronic1().getBirthdays().add(birthday);
-		birthday.getAnimatronic2().getBirthdays().add(birthday);
+		birthday.getAnimatronic1().getBirthdays1().add(birthday);
+		birthday.getAnimatronic2().getBirthdays2().add(birthday);
 		birthday.getBirthdayBoy().setBirthday(birthday);
 		for (Child child : birthday.getChildren()) {
 			child.getBirthdays().add(birthday);
 		}
 		birthdayRepository.save(birthday);
+		pizzaOrderRepository.saveAll(orders);
 		return "redirect:/";
 
 	}
