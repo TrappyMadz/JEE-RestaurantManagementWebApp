@@ -21,6 +21,9 @@ public class Restaurant {
 
 	@OneToMany(mappedBy = "restaurant")
 	private List<Animatronic> animatronics;
+	
+	@OneToMany(mappedBy = "restaurant")
+	private List<Birthday> birthdays;
 
 	public Long getId() {
 		return id;
@@ -57,6 +60,14 @@ public class Restaurant {
 	@Override
 	public String toString() {
 		return "Restaurant " + name + ", " + address + ", animatronics=" + animatronics;
+	}
+
+	public List<Birthday> getBirthdays() {
+		return birthdays;
+	}
+
+	public void setBirthdays(List<Birthday> birthdays) {
+		this.birthdays = birthdays;
 	}
 	
 	

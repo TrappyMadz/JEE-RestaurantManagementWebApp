@@ -191,7 +191,7 @@ footer a:hover {
 }
 
 .importantForm {
-  margin-top: 50px;
+  margin-top: -50px;
   background-color: #ffdaa6;
   padding: 0 50px 50px 50px;
   display: flex;
@@ -215,7 +215,8 @@ footer a:hover {
 
 .importantForm input,
 .importantForm textarea,
-.importantForm select {
+.importantForm select,
+.normalButton {
   margin-bottom: 15px;
   background-color: #28aea7;
   color: white;
@@ -224,10 +225,12 @@ footer a:hover {
   padding: 5px;
   align-self: center;
   resize: none;
+  text-align: center;
 }
 
 .importantForm input[type="file"]:hover,
-.importantForm select:hover {
+.importantForm select:hover,
+.normalButton:hover {
   background-color: #1c7571;
   cursor: url("/img/cursor.cur"), auto;
 }
@@ -342,6 +345,64 @@ footer a:hover {
 
 .list span {
   text-align: center;
+}
+
+.menuProgress {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 100px;
+}
+
+.progress {
+  background-color: #28aea7;
+  position: absolute;
+  left: 30px;
+  height: 4px;
+  width: 0;
+  z-index: -1;
+  transition: 0.4s ease;
+}
+
+.circle {
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid rgb(160, 160, 160);
+  transition: 0.4s ease;
+  margin-bottom: 30px;
+}
+
+.to::after {
+  content: "";
+  background-color: rgb(160, 160, 160);
+  position: absolute;
+  height: 100px;
+  width: 4px;
+  z-index: -2;
+}
+
+.act,
+.prev,
+.act1 {
+  border-color: #28aea7;
+}
+
+.act1::before {
+  content: "";
+  background-color: #28aea7;
+  position: absolute;
+  height: 100px;
+  width: 4px;
+  z-index: -1;
+  top: 0;
 }
 
 /* Animation de clignotement des lettres */

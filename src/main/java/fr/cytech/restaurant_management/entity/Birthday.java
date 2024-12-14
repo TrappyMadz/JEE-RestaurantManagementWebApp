@@ -1,17 +1,19 @@
 package fr.cytech.restaurant_management.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
-import org.springframework.data.jpa.repository.Temporal;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Transient;
 
 @Entity
 public class Birthday {
@@ -19,18 +21,25 @@ public class Birthday {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Date date;
+	private LocalDate date;
 
 	@OneToOne
 	private Child birthdayBoy;
 
-	@OneToMany
+	@ManyToMany
 	private ArrayList<Child> children;
 
-	@Transient
-	private Pizza pizza;
-
-	private int nbPizza;
+	@OneToMany(mappedBy = "birthday", cascade = CascadeType.ALL)
+	private List<PizzaOrder> pizzaOrders;
+	
+	@ManyToOne @JoinColumn(name = "restaurant_id")
+	private Restaurant restaurant;
+	
+	@ManyToOne
+	private Animatronic animatronic1;
+	
+	@ManyToOne
+	private Animatronic animatronic2;
 
 	public Child getBirthdayBoy() {
 		return birthdayBoy;
@@ -48,28 +57,55 @@ public class Birthday {
 		this.children = children;
 	}
 
-	public Date getDate() {
-		return date;
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setDate(Date date) {
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<PizzaOrder> getPizzaOrders() {
+		return pizzaOrders;
+	}
+
+	public void setPizzaOrders(List<PizzaOrder> pizzaOrders) {
+		this.pizzaOrders = pizzaOrders;
+	}
+
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+
+	public Animatronic getAnimatronic1() {
+		return animatronic1;
+	}
+
+	public void setAnimatronic1(Animatronic animatronic1) {
+		this.animatronic1 = animatronic1;
+	}
+
+	public Animatronic getAnimatronic2() {
+		return animatronic2;
+	}
+
+	public void setAnimatronic2(Animatronic animatronic2) {
+		this.animatronic2 = animatronic2;
+	}
+
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
-	public int getNbPizza() {
-		return nbPizza;
+	public LocalDate getDate() {
+		return date;
 	}
 
-	public void setNbPizza(int nbPizza) {
-		this.nbPizza = nbPizza;
-	}
 
-	public Pizza getPizza() {
-		return pizza;
-	}
-
-	public void setPizza(Pizza pizza) {
-		this.pizza = pizza;
-	}
 
 }

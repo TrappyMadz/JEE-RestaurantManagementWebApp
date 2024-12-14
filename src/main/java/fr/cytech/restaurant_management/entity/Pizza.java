@@ -1,9 +1,12 @@
 package fr.cytech.restaurant_management.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 /**
  * Table pizzas
@@ -21,6 +24,9 @@ public class Pizza {
 	private String composition;
 
 	private double price;
+	
+	@OneToMany(mappedBy = "pizza")
+	private List<PizzaOrder> pizzaOrder;
 
 	// Chemin vers l'image de la forme /img/pizzas/idImage_nomOriginalImage.formatImage
 	private String imagePath;
@@ -64,5 +70,17 @@ public class Pizza {
 
 	public Long getId() {
 		return id;
+	}
+
+	public List<PizzaOrder> getPizzaOrder() {
+		return pizzaOrder;
+	}
+
+	public void setPizzaOrder(List<PizzaOrder> pizzaOrder) {
+		this.pizzaOrder = pizzaOrder;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }
