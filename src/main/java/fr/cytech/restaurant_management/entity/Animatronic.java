@@ -2,6 +2,8 @@ package fr.cytech.restaurant_management.entity;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,7 @@ public class Animatronic {
 
 	@ManyToOne
 	@JoinColumn(name = "restaurant_id")
+	@JsonIgnore
 	private Restaurant restaurant;
 
 	public Restaurant getRestaurant() {
