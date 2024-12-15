@@ -8,22 +8,41 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Commandes, contenant le type de pizza et leur nombre. Un anniversaire peut
+ * avoir plusieurs commandes de pizzas.
+ */
 @Entity
 public class PizzaOrder {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@ManyToOne @JoinColumn(name = "birthday_id")
+
+	// Anniversaire pour lequel est faite la commande
+	@ManyToOne
+	@JoinColumn(name = "birthday_id")
 	private Birthday birthday;
-	
-	@ManyToOne @JoinColumn(name = "pizza_id")
+
+	@ManyToOne
+	@JoinColumn(name = "pizza_id")
 	private Pizza pizza;
-	
+
 	@NotNull
 	private int nbPizza;
-	
-	public PizzaOrder() {}
-	
+
+	/**
+	 * Constructeur par défaut utilisé par JPA
+	 */
+	public PizzaOrder() {
+	}
+
+	/**
+	 * Constructeur utilisé lors de l'initialisation d'un anniversaire
+	 * 
+	 * @param birthday Anniversaire
+	 * @param pizza    Type de pizza
+	 * @param nbPizza  Nombre de ces pizzas
+	 */
 	public PizzaOrder(Birthday birthday, Pizza pizza, int nbPizza) {
 		this.birthday = birthday;
 		this.pizza = pizza;

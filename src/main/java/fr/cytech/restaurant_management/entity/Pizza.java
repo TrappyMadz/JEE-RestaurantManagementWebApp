@@ -14,21 +14,22 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Pizza {
 
-
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 
 	private String name;
 
 	private String composition;
 
 	private double price;
-	
+
+	// Commandes
 	@OneToMany(mappedBy = "pizza")
 	private List<PizzaOrder> pizzaOrder;
 
-	// Chemin vers l'image de la forme /img/pizzas/idImage_nomOriginalImage.formatImage
+	// Chemin vers l'image de la forme
+	// /img/pizzas/idImage_nomOriginalImage.formatImage
 	private String imagePath;
 
 	public String getName() {

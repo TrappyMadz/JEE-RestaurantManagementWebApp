@@ -2,13 +2,15 @@ package fr.cytech.restaurant_management.entity;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+/**
+ * Gestion des restaurants
+ */
 @Entity
 public class Restaurant {
 
@@ -20,9 +22,10 @@ public class Restaurant {
 
 	private String address;
 
+	// Liste des animatroniques appartenants au restaurant
 	@OneToMany(mappedBy = "restaurant")
 	private List<Animatronic> animatronics;
-	
+
 	@OneToMany(mappedBy = "restaurant")
 	private List<Birthday> birthdays;
 
@@ -70,7 +73,5 @@ public class Restaurant {
 	public void setBirthdays(List<Birthday> birthdays) {
 		this.birthdays = birthdays;
 	}
-	
-	
 
 }
