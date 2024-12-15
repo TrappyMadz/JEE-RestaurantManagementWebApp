@@ -166,19 +166,59 @@ public class BirthdayController {
 	@PostMapping("/finish")
 	public String finishBirthday(Model model, @ModelAttribute Birthday birthday,
 			@RequestParam("pizzaIds[]") List<Long> pizzaIds, @RequestParam("quantities[]") List<Integer> quantities,
-			@RequestParam("selectedPizzas[]") List<Long> selectedPizzas,
+			@RequestParam(value="selectedPizzas[]",required=false) List<Long> selectedPizzas,
 			@RequestParam("childrenIds") List<Child> selectedChildren) {
 
 		List<PizzaOrder> orders = new ArrayList<>();
 
+
+		if (selectedPizzas==null || selectedPizzas.isEmpty()) {
+			model.addAttribute("error", "Veuillez selectionner au moins une pizza.");
+
+			List<Restaurant> restaurants = restaurantRepository.findAll();
+			List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+			List<Child> enfants = childRepository.findAll();
+			model.addAttribute("children", enfants);
+			enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+			model.addAttribute("childrenList", enfants);
+			model.addAttribute("animatronics", animatronics);
+			model.addAttribute("restaurants", restaurants);
+			List<Pizza> pizzas = pizzaRepository.findAll();
+			model.addAttribute("birthday", birthday);
+			model.addAttribute("pizzas", pizzas);
+			model.addAttribute("selectedChildren", selectedChildren);
+			return "birthdayForm3";
+		}
+		if(quantities.isEmpty()) {
+			quantities.add(null);
+		}
 		for (int i = 0; i < pizzaIds.size(); i++) {
 			Long pizzaId = pizzaIds.get(i);
 			Integer quantity = quantities.get(i);
-			if (selectedPizzas.contains(pizzaId) && quantity > 0) {
-				Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
-				PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
-				orders.add(order);
-				order.setBirthday(birthday);
+			if (selectedPizzas.contains(pizzaId)) {
+				if (quantity==null || quantity <= 0) {
+
+					model.addAttribute("error", "Veuillez donner un nombre de pizza positif pour chaque pizza selectionnée.");
+
+					List<Restaurant> restaurants = restaurantRepository.findAll();
+					List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+					List<Child> enfants = childRepository.findAll();
+					model.addAttribute("children", enfants);
+					enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+					model.addAttribute("childrenList", enfants);
+					model.addAttribute("animatronics", animatronics);
+					model.addAttribute("restaurants", restaurants);
+					List<Pizza> pizzas = pizzaRepository.findAll();
+					model.addAttribute("birthday", birthday);
+					model.addAttribute("pizzas", pizzas);
+					model.addAttribute("selectedChildren", selectedChildren);
+					return "birthdayForm3";
+				} else {
+					Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
+					PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
+					orders.add(order);
+					order.setBirthday(birthday);
+				}
 			}
 		}
 
@@ -270,7 +310,7 @@ public class BirthdayController {
 			List<Child> enfants = childRepository.findAll();
 
 			if (birthday.getDate().compareTo(existingBirthday.getDate()) < 0) {
-				model.addAttribute("error", "Vous ne pouvez pas entrer un e date antérieure à l'anniversaire déjà enregistré.");
+				model.addAttribute("error", "Vous ne pouvez pas entrer une date antérieure à l'anniversaire déjà enregistré.");
 				model.addAttribute("birthday", birthday);
 				enfants = childRepository.findThoseWhithoutBirthdayOrThisOne(id);
 				model.addAttribute("children", enfants);
@@ -366,7 +406,7 @@ public class BirthdayController {
 	@PostMapping("/finishUpdate/{id}")
 	public String finishUpdatingBirthday(@PathVariable("id") Long id, Model model, @ModelAttribute Birthday birthday,
 	                                     @RequestParam("pizzaIds[]") List<Long> pizzaIds, @RequestParam("quantities[]") List<Integer> quantities,
-	                                     @RequestParam("selectedPizzas[]") List<Long> selectedPizzas,
+	                                     @RequestParam(value = "selectedPizzas[]", required = false) List<Long> selectedPizzas,
 	                                     @RequestParam("childrenIds") List<Child> selectedChildren) {
 	    Optional<Birthday> optionalBirthday = birthdayRepository.findById(birthday.getId());
 	    if (optionalBirthday.isEmpty()) {
@@ -374,19 +414,58 @@ public class BirthdayController {
 	        return "viewEvent";
 	    } else {
 			Birthday existingBirthday = optionalBirthday.get();
+			if (selectedPizzas==null || selectedPizzas.isEmpty()) {
+				model.addAttribute("error", "Veuillez selectionner au moins une pizza.");
+
+				List<Restaurant> restaurants = restaurantRepository.findAll();
+				List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+				List<Child> enfants = childRepository.findAll();
+				model.addAttribute("children", enfants);
+				enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+				model.addAttribute("childrenList", enfants);
+				model.addAttribute("animatronics", animatronics);
+				model.addAttribute("restaurants", restaurants);
+				List<Pizza> pizzas = pizzaRepository.findAll();
+				model.addAttribute("birthday", birthday);
+				model.addAttribute("pizzas", pizzas);
+				model.addAttribute("selectedChildren", selectedChildren);
+				return "birthdayUpdateForm3";
+			}
 	        List<PizzaOrder> orders = new ArrayList<>();
 	        for(PizzaOrder po : existingBirthday.getPizzaOrders()) {
 	        	po.setBirthday(null);
 	        	pizzaOrderRepository.save(po);
 	        }
+			if(quantities.isEmpty()) {
+				quantities.add(null);
+			}
 	        for (int i = 0; i < pizzaIds.size(); i++) {
 	            Long pizzaId = pizzaIds.get(i);
 	            Integer quantity = quantities.get(i);
-	            if (selectedPizzas.contains(pizzaId) && quantity > 0) {
-	                Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
-	                PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
-	                orders.add(order);
-	                order.setBirthday(birthday);
+	            if (selectedPizzas.contains(pizzaId)) {
+	            	if (quantity==null ||quantity <0) {
+						model.addAttribute("error", "Veuillez donner un nombre de pizza positif pour chaque pizza selectionnée.");
+
+	    				List<Restaurant> restaurants = restaurantRepository.findAll();
+	    				List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+	    				List<Child> enfants = childRepository.findAll();
+	    				model.addAttribute("children", enfants);
+	    				enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+	    				model.addAttribute("childrenList", enfants);
+	    				model.addAttribute("animatronics", animatronics);
+	    				model.addAttribute("restaurants", restaurants);
+	    				List<Pizza> pizzas = pizzaRepository.findAll();
+	    				model.addAttribute("birthday", birthday);
+	    				model.addAttribute("pizzas", pizzas);
+	    				model.addAttribute("selectedChildren", selectedChildren);
+	    				return "birthdayUpdateForm3";
+	            	} else {
+		                Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
+		                PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
+		                orders.add(order);
+		                order.setBirthday(birthday);
+	            		
+	            	}
 	            }
 	        }
 
