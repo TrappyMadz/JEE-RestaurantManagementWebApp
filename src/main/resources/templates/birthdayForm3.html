@@ -97,7 +97,7 @@
           </select>
           <label>Enfants participant :</label>
           <ul>
-            <li th:each="child : ${children}">
+            <li th:each="child : ${childrenList}">
               <input
                 type="checkbox"
                 th:value="${child.id}"
