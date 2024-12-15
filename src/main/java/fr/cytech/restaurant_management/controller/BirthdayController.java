@@ -403,9 +403,11 @@ public class BirthdayController {
 	        childrenRepository.save(birthday.getBirthdayBoy());
 
 	        
-	        for (Child child : selectedChildren) {
-	            // Vérifier si l'association entre l'enfant et l'anniversaire existe déjà
-	            if (!existingBirthday.getChildren().contains(child)) {
+	        for (Child child : childrenRepository.findAll()) {
+	        	if (child.getBirthdays().contains(existingBirthday)) {
+	        		child.getBirthdays().remove(existingBirthday);
+	        	}
+	            if (selectedChildren.contains(child)) {
 	                birthday.getChildren().add(child);
 	                child.getBirthdays().add(birthday);
 	            }
@@ -414,7 +416,7 @@ public class BirthdayController {
 	        // Sauvegarder les entités mises à jour
 	        birthdayRepository.save(birthday);
 	        pizzaOrderRepository.saveAll(orders);
-	        childrenRepository.saveAll(selectedChildren);
+	        childrenRepository.saveAll(childrenRepository.findAll());
 
 	        return "redirect:/";
 	    }
