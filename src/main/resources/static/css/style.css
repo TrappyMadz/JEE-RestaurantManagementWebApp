@@ -263,6 +263,10 @@ footer a:hover {
   color: red;
 }
 
+.error {
+  color: red;
+}
+
 .importantForm label {
   justify-self: left;
 }
