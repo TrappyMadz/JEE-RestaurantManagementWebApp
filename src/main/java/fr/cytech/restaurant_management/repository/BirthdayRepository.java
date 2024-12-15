@@ -11,6 +11,11 @@ import fr.cytech.restaurant_management.entity.Birthday;
  * Repository de la table enfant
  */
 public interface BirthdayRepository extends JpaRepository<Birthday, Long>{
+
 	List<Birthday> findByDateAfterOrderByDateAsc(LocalDate localDate);
 	List<Birthday> findAllByOrderByDateAsc();
+
+	
+	List<Birthday> findByDate(LocalDate localDate);
+
 }
