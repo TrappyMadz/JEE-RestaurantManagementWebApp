@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class PizzaOrder {
@@ -18,7 +19,7 @@ public class PizzaOrder {
 	@ManyToOne @JoinColumn(name = "pizza_id")
 	private Pizza pizza;
 	
-	
+	@NotNull
 	private int nbPizza;
 	
 	public PizzaOrder() {}

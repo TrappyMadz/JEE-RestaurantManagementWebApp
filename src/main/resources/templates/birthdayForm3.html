@@ -102,6 +102,7 @@
                 type="checkbox"
                 th:value="${child.id}"
                 th:name="childrenIds"
+                th:checked="${selectedChildren.contains(child)}"
               />
               <span th:text="${child.name} + ' ' + ${child.lastName}"></span>
             </li>

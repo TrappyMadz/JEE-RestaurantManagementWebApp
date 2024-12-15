@@ -24,6 +24,7 @@ public class Birthday {
 
 	private LocalDate date;
 
+	
 	@OneToOne(mappedBy = "birthday")
 	private Child birthdayBoy;
 	

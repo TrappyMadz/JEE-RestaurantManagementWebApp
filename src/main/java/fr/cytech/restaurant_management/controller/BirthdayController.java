@@ -43,6 +43,15 @@ public class BirthdayController {
 	PizzaRepository pizzaRepository;
 	@Autowired
 	PizzaOrderRepository pizzaOrderRepository;
+	@Autowired
+	ChildRepository childrenRepository;
+	
+	@GetMapping("/viewEvent")
+	public String thatsWhy(Model model) {
+		List<Birthday> birthdays = birthdayRepository.findAll();
+		model.addAttribute("birthdays", birthdays);
+		return "viewEvent";
+	}
 	
 	
 	@GetMapping("/add")
@@ -96,7 +105,7 @@ public class BirthdayController {
 	
 	@PostMapping("/add2")
 	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday, 
-            @RequestParam(required = false) List<Long> childrenIds) {
+            @RequestParam("childrenIds") List<Long> childrenIds) {
 		
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findAll();
@@ -110,9 +119,11 @@ public class BirthdayController {
 	    }
 		
         List<Child> selectedChildren = childRepository.findAllById(childrenIds);
+        System.out.println(selectedChildren);
         for (Child child : selectedChildren) {
         	birthday.getChildren().add(child);
         }
+        System.out.println("Updated children in birthday: " + birthday.getChildren());
 		
 		List<Pizza> pizzas = pizzaRepository.findAll();
 		model.addAttribute("selectedChildren",selectedChildren);
@@ -127,7 +138,8 @@ public class BirthdayController {
     
 	@PostMapping("/finish")
 	public String finishBirthday(Model model, @ModelAttribute Birthday birthday, @RequestParam("pizzaIds[]") List<Long> pizzaIds,
-			@RequestParam("quantities[]") List<Integer> quantities, @RequestParam("selectedPizzas[]") List<Long> selectedPizzas) {
+			@RequestParam("quantities[]") List<Integer> quantities, @RequestParam("selectedPizzas[]") List<Long> selectedPizzas, 
+			@RequestParam("childrenIds") List<Child> selectedChildren) {
 		
 		List<PizzaOrder> orders = new ArrayList<>();
 		
@@ -146,13 +158,19 @@ public class BirthdayController {
 		birthday.setPizzaOrders(orders);
 		birthday.getRestaurant().getBirthdays().add(birthday);
 		birthday.getAnimatronic1().getBirthdays1().add(birthday);
-		birthday.getAnimatronic2().getBirthdays2().add(birthday);
+		
+		if (birthday.getAnimatronic2() != null) {
+			birthday.getAnimatronic2().getBirthdays2().add(birthday);
+		}
+		
 		birthday.getBirthdayBoy().setBirthday(birthday);
-		for (Child child : birthday.getChildren()) {
+		for (Child child : selectedChildren) {
+			birthday.getChildren().add(child);
 			child.getBirthdays().add(birthday);
 		}
 		birthdayRepository.save(birthday);
 		pizzaOrderRepository.saveAll(orders);
+		childrenRepository.saveAll(selectedChildren);
 		return "redirect:/";
 
 	}
