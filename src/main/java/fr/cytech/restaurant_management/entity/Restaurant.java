@@ -59,7 +59,7 @@ public class Restaurant {
 
 	@Override
 	public String toString() {
-		return "Restaurant " + name + ", " + address + ", animatronics=" + animatronics;
+		return "Restaurant " + name + ", " + address + ", animatroniques=" + animatronics;
 	}
 
 	public List<Birthday> getBirthdays() {

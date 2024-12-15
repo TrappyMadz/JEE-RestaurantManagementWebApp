@@ -11,5 +11,7 @@ public class MainController {
 	public String showAttr(Model model) {
 		return "attribution";
 	}
+	
+	
 
 }

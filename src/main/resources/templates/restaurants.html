@@ -6,7 +6,9 @@
     <title>Freddy's Organizer - Restaurants</title>
     <script src="/js/header.js" defer></script>
     <script src="/js/searchRestaurant.js" defer></script>
+    <script src="/js/showAnimatronics.js" defer></script>
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/restaurant.css" />
   </head>
 
   <body>
@@ -15,7 +17,7 @@
     </header>
 
     <main>
-      <div th:if="${error}">
+      <div th:if="${error}" class="error">
         <!-- Si il y a une erreur renvoyée par le controller, on l'affiche ici -->
         <p th:text="${error}">error</p>
       </div>
@@ -26,13 +28,16 @@
       </p>
 
       <!-- Cet input permet de rechercher un restaurant en temps réel -->
-      <input
-        type="text"
-        id="searchQuery"
-        placeholder="Rechercher un restaurant"
-        autocomplete="off"
-      />
-      <select id="searchAnimatronic" class="searchBar">
+      <div class="search">
+        <img src="/img/recherche.png" alt="Icône de recherche" />
+        <input
+          class="searchBar"
+          type="text"
+          id="searchQuery"
+          placeholder="Rechercher un restaurant"
+          autocomplete="off"
+        />
+        <select id="searchAnimatronic" class="searchBar">
           <option value="">Choisir selon un animatronique</option>
           <option
             th:each="animatronic : ${ChooseAnimatronic}"
@@ -40,15 +45,15 @@
             th:text="${animatronic}"
           ></option>
         </select>
+        <!-- Renvoie sur le form pour ajouter un enfant-->
+        <a href="/restaurant/add"><button>+</button></a>
+      </div>
 
-      <!-- Renvoie sur le form pour ajouter un enfant-->
-      <a href="/restaurant/add"><button>Ajouter un restaurant</button></a>
-
-      <div id="searchResults">
+      <div id="searchResults" class="list">
         <!--C'est ici que s'affiche les restaurants après une recherche. Sinon, la div est cachée -->
       </div>
 
-      <div th:if="${#lists.isEmpty(restaurantList)}">
+      <div th:if="${#lists.isEmpty(restaurantList)}" class="list">
         <!-- Si il n'y a aucun restaurant dans la bdd-->
         <p>
           Aucun Restaurant. Commencez à en ajouter en pressant le bouton
@@ -56,10 +61,40 @@
         </p>
       </div>
 
-      <ul id="restaurantList" th:unless="${#lists.isEmpty(restaurantList)}">
+      <ul
+        id="restaurantList"
+        th:unless="${#lists.isEmpty(restaurantList)}"
+        class="list"
+      >
         <!--Si il y a des restaurants, on les affiche en appelant la méthode "toString()"-->
         <li th:each="restaurant : ${restaurantList}">
-          <span th:text="${restaurant.toString()}">XXXX</span>
+          <span th:text="${restaurant.name}">XXXX</span>
+          <span th:text="${restaurant.address}">XXXX</span>
+          <div
+            style="display: none"
+            th:id="'toDevoil-' + ${restaurant.id}"
+            class="toDevoil"
+          >
+            <button class="closeDetail">Fermer</button>
+            <h2>Animatroniques :</h2>
+            <ul
+              id="AnimatronicList"
+              th:unless="${#lists.isEmpty(restaurant.animatronics)}"
+              class="list"
+            >
+              <li th:each="animatronic : ${restaurant.animatronics}">
+                <span
+                  ><img
+                    th:src="@{/animatronic/{imageName}(imageName=${animatronic.imagePath})}"
+                    alt="Image de ${animatronic.name}"
+                  />
+                </span>
+                <span th:text="${animatronic.toString()}">XXXX</span>
+              </li>
+            </ul>
+          </div>
+
+          <button class="viewAnimatronics">Voir les animatroniques</button>
 
           <!--Ces deux boutons servent respectivement à envoyé sur le form de modification et à supprimer un restaurant-->
           <form
@@ -78,6 +113,7 @@
       </ul>
     </main>
 
+    <div class="divider-pattern"><!--Paterne damier--></div>
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
     </footer>
