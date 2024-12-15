@@ -26,7 +26,7 @@ public class Child {
 	
 	
 	@OneToOne
-	@JoinColumn(name = "birthday_id")
+	@JoinColumn(name = "birthday_id", unique = true)
 	private Birthday birthday;
 
 	private String lastName;

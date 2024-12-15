@@ -90,6 +90,8 @@ public class AnimatronicController {
 			return "redirect:/animatronic/show";
 		} catch (Exception e) {
 			model.addAttribute("error", "Erreur de chargement d'image : " + e.getMessage());
+			model.addAttribute("animatronic", animatronic);
+			model.addAttribute("AnimatronicType", AnimatronicType.values());
 			return "animatronicForm";
 		}
 	}

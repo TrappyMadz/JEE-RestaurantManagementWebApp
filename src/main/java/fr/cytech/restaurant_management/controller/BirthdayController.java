@@ -375,6 +375,10 @@ public class BirthdayController {
 	    } else {
 			Birthday existingBirthday = optionalBirthday.get();
 	        List<PizzaOrder> orders = new ArrayList<>();
+	        for(PizzaOrder po : existingBirthday.getPizzaOrders()) {
+	        	po.setBirthday(null);
+	        	pizzaOrderRepository.save(po);
+	        }
 	        for (int i = 0; i < pizzaIds.size(); i++) {
 	            Long pizzaId = pizzaIds.get(i);
 	            Integer quantity = quantities.get(i);
@@ -393,9 +397,12 @@ public class BirthdayController {
 	        if (birthday.getAnimatronic2() != null) {
 	            birthday.getAnimatronic2().getBirthdays2().add(birthday);
 	        }
-
+	        existingBirthday.getBirthdayBoy().setBirthday(null);
+	        childrenRepository.save(existingBirthday.getBirthdayBoy());
 	        birthday.getBirthdayBoy().setBirthday(birthday);
+	        childrenRepository.save(birthday.getBirthdayBoy());
 
+	        
 	        for (Child child : selectedChildren) {
 	            // Vérifier si l'association entre l'enfant et l'anniversaire existe déjà
 	            if (!existingBirthday.getChildren().contains(child)) {
