@@ -25,7 +25,7 @@ public class Child {
 
 	// Un enfant n'a qu'un anniversaire
 	@OneToOne
-	@JoinColumn(name = "birthday_id")
+	@JoinColumn(name = "birthday_id", unique = true)
 	private Birthday birthday;
 
 	private String lastName;

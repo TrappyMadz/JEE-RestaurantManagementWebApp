@@ -111,10 +111,9 @@ public class BirthdayController {
 	}
 
 	@PostMapping("/add2")
-
 	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday,
 			@RequestParam(required = false) List<Long> childrenIds) {
-
+    
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
 		List<Child> enfants = childRepository.findAll();
@@ -168,19 +167,59 @@ public class BirthdayController {
 	@PostMapping("/finish")
 	public String finishBirthday(Model model, @ModelAttribute Birthday birthday,
 			@RequestParam("pizzaIds[]") List<Long> pizzaIds, @RequestParam("quantities[]") List<Integer> quantities,
-			@RequestParam("selectedPizzas[]") List<Long> selectedPizzas,
+			@RequestParam(value="selectedPizzas[]",required=false) List<Long> selectedPizzas,
 			@RequestParam("childrenIds") List<Child> selectedChildren) {
 
 		List<PizzaOrder> orders = new ArrayList<>();
 
+
+		if (selectedPizzas==null || selectedPizzas.isEmpty()) {
+			model.addAttribute("error", "Veuillez selectionner au moins une pizza.");
+
+			List<Restaurant> restaurants = restaurantRepository.findAll();
+			List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+			List<Child> enfants = childRepository.findAll();
+			model.addAttribute("children", enfants);
+			enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+			model.addAttribute("childrenList", enfants);
+			model.addAttribute("animatronics", animatronics);
+			model.addAttribute("restaurants", restaurants);
+			List<Pizza> pizzas = pizzaRepository.findAll();
+			model.addAttribute("birthday", birthday);
+			model.addAttribute("pizzas", pizzas);
+			model.addAttribute("selectedChildren", selectedChildren);
+			return "birthdayForm3";
+		}
+		if(quantities.isEmpty()) {
+			quantities.add(null);
+		}
 		for (int i = 0; i < pizzaIds.size(); i++) {
 			Long pizzaId = pizzaIds.get(i);
 			Integer quantity = quantities.get(i);
-			if (selectedPizzas.contains(pizzaId) && quantity > 0) {
-				Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
-				PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
-				orders.add(order);
-				order.setBirthday(birthday);
+			if (selectedPizzas.contains(pizzaId)) {
+				if (quantity==null || quantity <= 0) {
+
+					model.addAttribute("error", "Veuillez donner un nombre de pizza positif pour chaque pizza selectionnée.");
+
+					List<Restaurant> restaurants = restaurantRepository.findAll();
+					List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+					List<Child> enfants = childRepository.findAll();
+					model.addAttribute("children", enfants);
+					enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+					model.addAttribute("childrenList", enfants);
+					model.addAttribute("animatronics", animatronics);
+					model.addAttribute("restaurants", restaurants);
+					List<Pizza> pizzas = pizzaRepository.findAll();
+					model.addAttribute("birthday", birthday);
+					model.addAttribute("pizzas", pizzas);
+					model.addAttribute("selectedChildren", selectedChildren);
+					return "birthdayForm3";
+				} else {
+					Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
+					PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
+					orders.add(order);
+					order.setBirthday(birthday);
+				}
 			}
 		}
 
@@ -240,6 +279,230 @@ public class BirthdayController {
 			birthdayRepository.delete(birthday);
 		}
 		return "redirect:/birthday/viewEvent";
+
 	}
 
+	@GetMapping("/update/{id}")
+	public String changeBirthday(@PathVariable("id") Long id, Model model) {
+		Optional<Birthday> optionalBirthday = birthdayRepository.findById(id);
+		if (optionalBirthday.isEmpty()) {
+			model.addAttribute("error", "L'anniversaire sélectionné n'existe pas.");
+			return "viewEvent";
+		} else {
+			List<Restaurant> restaurants = restaurantRepository.findAll();
+			model.addAttribute("restaurants", restaurants);
+			List<Child> enfants = childRepository.findThoseWhithoutBirthdayOrThisOne(id);
+			model.addAttribute("children", enfants);
+			model.addAttribute("birthday", optionalBirthday.get());
+			return "birthdayUpdateForm1";
+		}
+	}
+
+	@PostMapping("/update/{id}")
+	public String changeBirthday2(@PathVariable("id") Long id, Model model, @ModelAttribute Birthday birthday) {
+		Optional<Birthday> optionalBirthday = birthdayRepository.findById(birthday.getId());
+
+		if (optionalBirthday.isEmpty()) {
+			model.addAttribute("error", "L'anniversaire séléctionné n'existe pas.");
+			return "viewEvent";
+		} else {
+			Birthday existingBirthday = optionalBirthday.get();
+			List<Restaurant> restaurants = restaurantRepository.findAll();
+			model.addAttribute("restaurants", restaurants);
+			List<Child> enfants = childRepository.findAll();
+
+			if (birthday.getDate().compareTo(existingBirthday.getDate()) < 0) {
+				model.addAttribute("error", "Vous ne pouvez pas entrer une date antérieure à l'anniversaire déjà enregistré.");
+				model.addAttribute("birthday", birthday);
+				enfants = childRepository.findThoseWhithoutBirthdayOrThisOne(id);
+				model.addAttribute("children", enfants);
+				return "birthdayUpdateForm1";
+			}
+			if (birthday.getRestaurant() == null || birthday.getBirthdayBoy() == null) {
+				model.addAttribute("error", "Complétez tous les champs.");
+				model.addAttribute("birthday", birthday);
+				enfants = childRepository.findThoseWhithoutBirthdayOrThisOne(id);
+				model.addAttribute("children", enfants);
+				return "birthdayUpdateForm1";
+			}
+
+			model.addAttribute("children", enfants);
+			enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+			model.addAttribute("childrenList", enfants);
+			List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+			model.addAttribute("animatronics", animatronics);
+			model.addAttribute("birthday", birthday);
+			model.addAttribute("existingBirthday", existingBirthday);
+			model.addAttribute("selectedChildren",existingBirthday.getChildren());
+			return "birthdayUpdateForm2";
+		}
+	}
+	
+	
+	@PostMapping("/update2/{id}")
+	public String changeBirthday2(@PathVariable("id") Long id,Model model, @ModelAttribute Birthday birthday,
+			@RequestParam(required = false) List<Long> childrenIds) {
+		Optional<Birthday> optionalBirthday = birthdayRepository.findById(birthday.getId());
+		if (optionalBirthday.isEmpty()) {
+			model.addAttribute("error", "L'anniversaire séléctionné n'existe pas.");
+			return "viewEvent";
+		} else {
+			Birthday existingBirthday = optionalBirthday.get();
+			
+			List<Restaurant> restaurants = restaurantRepository.findAll();
+			List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+			List<Child> enfants = childRepository.findAll();
+			model.addAttribute("children", enfants);
+			enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+			model.addAttribute("childrenList", enfants);
+			model.addAttribute("animatronics", animatronics);
+			model.addAttribute("restaurants", restaurants);
+
+			if (childrenIds == null || childrenIds.isEmpty()) {
+				model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
+				model.addAttribute("birthday", birthday);
+				return "birthdayForm2";
+
+			}
+			List<Child> selectedChildren = childRepository.findAllById(childrenIds);
+			for (Child child : selectedChildren) {
+				birthday.getChildren().add(child);
+			}
+			model.addAttribute("selectedChildren", selectedChildren);
+
+			if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
+				birthday.setAnimatronic2(null);
+			}
+			List<Birthday> sameDayBirthday = birthdayRepository.findByDate(birthday.getDate());
+			for (Birthday b : sameDayBirthday) {
+				if (b.getId()==existingBirthday.getId()) {
+					continue;
+				}
+				if (b.getAnimatronic1().getId() == birthday.getAnimatronic1().getId() || (birthday.getAnimatronic2() != null
+						&& b.getAnimatronic1().getId() == birthday.getAnimatronic2().getId())) {
+					model.addAttribute("error", "Les animatroniques ne peuvent être utilisés plusieurs fois par jour. "
+							+ b.getAnimatronic1() + " doit se recharger cette journée.");
+					model.addAttribute("birthday", birthday);
+					return "birthdayForm2";
+				} else if (b.getAnimatronic2().getId() != null
+						&& (b.getAnimatronic2().getId() == birthday.getAnimatronic1().getId()
+								|| (birthday.getAnimatronic2() != null
+										&& b.getAnimatronic2().getId() == birthday.getAnimatronic2().getId()))) {
+					model.addAttribute("error", "Les animatroniques ne peuvent être utilisés plusieurs fois par jour. "
+							+ b.getAnimatronic2() + " doit se recharger cette journée.");
+					model.addAttribute("birthday", birthday);
+					return "birthdayForm2";
+				}
+			}
+
+			List<Pizza> pizzas = pizzaRepository.findAll();
+			model.addAttribute("birthday", birthday);
+			model.addAttribute("pizzas", pizzas);
+
+			return "birthdayUpdateForm3";
+		}
+	}
+	
+	
+
+	@PostMapping("/finishUpdate/{id}")
+	public String finishUpdatingBirthday(@PathVariable("id") Long id, Model model, @ModelAttribute Birthday birthday,
+	                                     @RequestParam("pizzaIds[]") List<Long> pizzaIds, @RequestParam("quantities[]") List<Integer> quantities,
+	                                     @RequestParam(value = "selectedPizzas[]", required = false) List<Long> selectedPizzas,
+	                                     @RequestParam("childrenIds") List<Child> selectedChildren) {
+	    Optional<Birthday> optionalBirthday = birthdayRepository.findById(birthday.getId());
+	    if (optionalBirthday.isEmpty()) {
+	        model.addAttribute("error", "L'anniversaire sélectionné n'existe pas.");
+	        return "viewEvent";
+	    } else {
+			Birthday existingBirthday = optionalBirthday.get();
+			if (selectedPizzas==null || selectedPizzas.isEmpty()) {
+				model.addAttribute("error", "Veuillez selectionner au moins une pizza.");
+
+				List<Restaurant> restaurants = restaurantRepository.findAll();
+				List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+				List<Child> enfants = childRepository.findAll();
+				model.addAttribute("children", enfants);
+				enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+				model.addAttribute("childrenList", enfants);
+				model.addAttribute("animatronics", animatronics);
+				model.addAttribute("restaurants", restaurants);
+				List<Pizza> pizzas = pizzaRepository.findAll();
+				model.addAttribute("birthday", birthday);
+				model.addAttribute("pizzas", pizzas);
+				model.addAttribute("selectedChildren", selectedChildren);
+				return "birthdayUpdateForm3";
+			}
+	        List<PizzaOrder> orders = new ArrayList<>();
+	        for(PizzaOrder po : existingBirthday.getPizzaOrders()) {
+	        	po.setBirthday(null);
+	        	pizzaOrderRepository.save(po);
+	        }
+			if(quantities.isEmpty()) {
+				quantities.add(null);
+			}
+	        for (int i = 0; i < pizzaIds.size(); i++) {
+	            Long pizzaId = pizzaIds.get(i);
+	            Integer quantity = quantities.get(i);
+	            if (selectedPizzas.contains(pizzaId)) {
+	            	if (quantity==null ||quantity <0) {
+						model.addAttribute("error", "Veuillez donner un nombre de pizza positif pour chaque pizza selectionnée.");
+
+	    				List<Restaurant> restaurants = restaurantRepository.findAll();
+	    				List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+	    				List<Child> enfants = childRepository.findAll();
+	    				model.addAttribute("children", enfants);
+	    				enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+	    				model.addAttribute("childrenList", enfants);
+	    				model.addAttribute("animatronics", animatronics);
+	    				model.addAttribute("restaurants", restaurants);
+	    				List<Pizza> pizzas = pizzaRepository.findAll();
+	    				model.addAttribute("birthday", birthday);
+	    				model.addAttribute("pizzas", pizzas);
+	    				model.addAttribute("selectedChildren", selectedChildren);
+	    				return "birthdayUpdateForm3";
+	            	} else {
+		                Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
+		                PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
+		                orders.add(order);
+		                order.setBirthday(birthday);
+	            		
+	            	}
+	            }
+	        }
+
+	        birthday.setPizzaOrders(orders);
+	        birthday.getRestaurant().getBirthdays().add(birthday);
+	        birthday.getAnimatronic1().getBirthdays1().add(birthday);
+
+	        if (birthday.getAnimatronic2() != null) {
+	            birthday.getAnimatronic2().getBirthdays2().add(birthday);
+	        }
+	        existingBirthday.getBirthdayBoy().setBirthday(null);
+	        childrenRepository.save(existingBirthday.getBirthdayBoy());
+	        birthday.getBirthdayBoy().setBirthday(birthday);
+	        childrenRepository.save(birthday.getBirthdayBoy());
+
+	        
+	        for (Child child : childrenRepository.findAll()) {
+	        	if (child.getBirthdays().contains(existingBirthday)) {
+	        		child.getBirthdays().remove(existingBirthday);
+	        	}
+	            if (selectedChildren.contains(child)) {
+	                birthday.getChildren().add(child);
+	                child.getBirthdays().add(birthday);
+	            }
+	        }
+
+	        // Sauvegarder les entités mises à jour
+	        birthdayRepository.save(birthday);
+	        pizzaOrderRepository.saveAll(orders);
+	        childrenRepository.saveAll(childrenRepository.findAll());
+
+	        return "redirect:/";
+	    }
+	}
+
+	
+	
 }

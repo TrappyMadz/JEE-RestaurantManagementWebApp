@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import fr.cytech.restaurant_management.entity.Pizza;
+import fr.cytech.restaurant_management.entity.PizzaOrder;
+import fr.cytech.restaurant_management.repository.PizzaOrderRepository;
 import fr.cytech.restaurant_management.repository.PizzaRepository;
 
 /**
@@ -41,6 +43,10 @@ public class PizzaController {
 
 	@Autowired
 	private PizzaRepository pizzaRepository;
+	@Autowired
+	private PizzaOrderRepository pizzaOrderRepository;
+	
+	
 
 	/**
 	 * Permet d'afficher la liste des pizza
@@ -159,38 +165,42 @@ public class PizzaController {
 	 * @return retour à la liste des pizzas après suppression
 	 */
 	@PostMapping("/delete/{id}")
-	public String eatPizza(@PathVariable("id") Long id) {
-		// Si la pizza n'existe pas, Optional sera vide
-		Optional<Pizza> toDelete = pizzaRepository.findById(id);
+	public String eatPizza(@PathVariable("id") Long id,Model model) {
+		List<PizzaOrder> pizzaOrder = pizzaOrderRepository.findbyPizzaId(id);
+		if (!pizzaOrder.isEmpty()) {
+			model.addAttribute("error","Impossible de supprimer une pizza tant qu'elle est utilisée dans au moins un anniversaire.");
+			List<Pizza> pizzas = pizzaRepository.findAll();
+			model.addAttribute("pizzas", pizzas);
+			return "pizza";
+		} else {
+			// Si la pizza n'existe pas, Optional sera vide
+			Optional<Pizza> toDelete = pizzaRepository.findById(id);
 
-		// Si l'objet Optional est vide, la pizza n'existe pas. On renvoi donc à la
-		// liste des pizzas
-		if (toDelete.isEmpty()) {
+			// Si l'objet Optional est vide, la pizza n'existe pas. On renvoi donc à la liste des pizzas
+			if (toDelete.isEmpty()) {
+				return "redirect:/pizza/show";
+			}
+			try {
+				// On veut supprimer l'image associée à la pizza. On récupère donc la variable imagePath
+				String imagePathString = toDelete.get().getImagePath();
+
+				// L'imagePath est enregistrée tel que imagePath = /img/pizzas/nomImage
+				// Pour la suite, on a besoin du nom de l'image, donc on retire ce qu'il y a avant
+				String fileName = imagePathString.replace("/img/pizzas/", "");
+
+				// On concatène le chemin "uploads" pour retrouver le fichier, et si une image existe à cet endroit, on la supprime.
+				Path imagePath = Paths.get("uploads/", fileName);
+				if (Files.exists(imagePath)) {
+					Files.deleteIfExists(imagePath);
+				}
+			} catch (IOException e) {
+				// En cas d'erreur lors de la suppression du fichier
+			}
+
+			// On supprime ensuite la pizza
+			pizzaRepository.delete(toDelete.get());
 			return "redirect:/pizza/show";
 		}
-		try {
-			// On veut supprimer l'image associée à la pizza. On récupère donc la variable
-			// imagePath
-			String imagePathString = toDelete.get().getImagePath();
-
-			// L'imagePath est enregistrée tel que imagePath = /img/pizzas/nomImage
-			// Pour la suite, on a besoin du nom de l'image, donc on retire ce qu'il y a
-			// avant
-			String fileName = imagePathString.replace("/img/pizzas/", "");
-
-			// On concatène le chemin "uploads" pour retrouver le fichier, et si une image
-			// existe à cet endroit, on la supprime.
-			Path imagePath = Paths.get("uploads/", fileName);
-			if (Files.exists(imagePath)) {
-				Files.deleteIfExists(imagePath);
-			}
-		} catch (IOException e) {
-			// En cas d'erreur lors de la suppression du fichier
-		}
-
-		// On supprime ensuite la pizza
-		pizzaRepository.delete(toDelete.get());
-		return "redirect:/pizza/show";
 	}
 
 	/**
