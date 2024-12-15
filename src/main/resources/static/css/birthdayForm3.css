@@ -1,0 +1,27 @@
+.importantForm {
+  max-width: 500px;
+}
+
+#titleEvent {
+  text-align: center;
+}
+
+.importantForm input[type="checkbox"] {
+  margin-right: 30px;
+  width: 15px;
+}
+
+.importantForm div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pizzaTime {
+  flex-direction: row !important;
+  display: flex;
+  width: 100%;
+}
+
+.pizzaTime p {
+  margin-right: 10px;
+}

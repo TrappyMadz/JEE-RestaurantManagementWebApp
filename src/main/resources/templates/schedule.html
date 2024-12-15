@@ -6,7 +6,7 @@
     <title>Freddy's Organizer - Adhérents</title>
     <script src="/js/header.js" defer></script>
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/children.css" />
+    <link rel="stylesheet" href="/css/schedule.css" />
   </head>
 
   <body>
@@ -30,6 +30,7 @@
           id="restaurantSelect"
           name="restaurantId"
           onchange="filterByRestaurant()"
+          class="normalButton"
         >
           <option value="">--Sélectionnez un restaurant--</option>
           <option
@@ -40,10 +41,10 @@
         </select>
       </div>
 
+      <h2>Animatroniques à préparer :</h2>
       <div id="animatronicList" class="list">
-        <h2>Animatroniques à préparer :</h2>
-        <ul th:if="${!#lists.isEmpty(animatronics)}">
-          <li th:each="a : ${animatronics}">
+        <ul th:if="${!#lists.isEmpty(animatronics)}" class="drawThings">
+          <li th:each="a : ${animatronics}" class="littleThings">
             <span
               ><img
                 th:src="@{/animatronic/{imageName}(imageName=${a.imagePath})}"
@@ -56,11 +57,10 @@
           Il n'y a aucun animatronique à préparer aujourd'hui.
         </p>
       </div>
-
+      <h2>Pizzas à préparer :</h2>
       <div id="pizzaList" class="list">
-        <h2>Pizzas à préparer :</h2>
-        <ul th:if="${!#lists.isEmpty(orders)}">
-          <li th:each="order : ${orders}">
+        <ul th:if="${!#lists.isEmpty(orders)}" class="drawThings">
+          <li th:each="order : ${orders}" class="littleThings">
             <img
               th:src="@{/pizza/{imgName}(imgName=${order.pizza.imagePath})}"
               alt="Image de ${order.pizza.name}"
@@ -83,7 +83,7 @@
         window.location.href = url; // Redirige vers la page avec le restaurant sélectionné
       }
     </script>
-
+    <div class="divider-pattern"><!--Paterne damier--></div>
     <footer id="footer">
       <!-- C'est dans ce bloc que le fichier footer.html est chargé -->
     </footer>

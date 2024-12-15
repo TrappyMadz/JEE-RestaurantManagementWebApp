@@ -1,0 +1,20 @@
+.importantForm label {
+  margin-left: 40px;
+}
+
+.marginUp {
+  margin-left: 146px !important;
+}
+
+.importantForm input[type="checkbox"] {
+  margin-right: 30px;
+  width: 15px;
+}
+.importantForm ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.importantForm li {
+  width: 100%;
+}

@@ -34,17 +34,6 @@ public class MainController {
 	PizzaOrderRepository pizzaOrderRepository;
 
 	/**
-	 * Envoi sur la page des attributions
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@GetMapping("/attribution")
-	public String showAttr(Model model) {
-		return "attribution";
-	}
-
-	/**
 	 * Voir la liste des choses à faire aujourd'hui
 	 * 
 	 * @param restaurantId id du restaurant auxquels les tâches sont associés

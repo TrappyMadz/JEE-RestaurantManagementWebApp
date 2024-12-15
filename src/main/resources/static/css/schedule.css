@@ -1,0 +1,10 @@
+.drawThings {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.littleThings {
+  max-width: 150px;
+}

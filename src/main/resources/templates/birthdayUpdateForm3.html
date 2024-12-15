@@ -6,6 +6,7 @@
     <title>Freddy's Organizer - Nouvel Anniversaire</title>
     <script src="/js/header.js" defer></script>
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/birthdayForm3.css" />
   </head>
   <body>
     <header id="header"><!--C'est ici que le header est chargé--></header>
@@ -21,10 +22,8 @@
             <p id="circleLabel1">Choix d'un restaurant</p>
             <div class="circle prev">2</div>
             <p id="circleLabel2">Choix des participants</p>
-            <div class="circle act">3</div>
+            <div class="circle act2">3</div>
             <p id="circleLabel3">Commande du repas</p>
-            <div class="circle">4</div>
-            <p id="circleLabel4">Vérification</p>
           </div>
         </div>
       </div>
@@ -113,10 +112,9 @@
           <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
           <p th:text="${error}">error</p>
         </div>
-        <h2>Nouvel Évènement - Pizza :</h2>
-        <span th:text="${birthday.restaurant}"></span>
+        <h2 id="titleEvent">Nouvel Évènement - Pizza :</h2>
         <div>
-          <div th:each="pizza : ${pizzas}">
+          <div th:each="pizza : ${pizzas}" class="pizzaTime">
             <input type="hidden" th:name="pizzaIds[]" th:value="${pizza.id}" />
             <input
               type="checkbox"
@@ -128,6 +126,7 @@
               th:for="'pizzaCheckbox' + ${pizza.id}"
               th:text="${pizza.name}"
             ></label>
+            <p th:text="${pizza.composition}"></p>
             <input
               type="number"
               th:name="quantities[]"
