@@ -72,8 +72,11 @@ public class BirthdayController {
 		model.addAttribute("birthday",birthday);
 		model.addAttribute("restaurants",restaurants);
 		model.addAttribute("animatronics",animatronics);
+		List<Child> enfants = childRepository.findAll();
+		model.addAttribute("children", enfants);
 		return "birthdayForm1";
 	}
+	
 	
 	@PostMapping("/add")
 	public String createBirthdayPhase1(Model model, @ModelAttribute Birthday birthday) {
@@ -87,21 +90,18 @@ public class BirthdayController {
 			model.addAttribute("birthday",birthday);
 			return "birthdayForm1";
 		}
-		if (birthday.getRestaurant() == null || birthday.getAnimatronic1() == null) {
+		if (birthday.getRestaurant() == null || birthday.getBirthdayBoy() == null) {
 			model.addAttribute("error", "Complétez tous les champs.");
 			model.addAttribute("birthday", birthday);
 			return "birthdayForm1";
 		}
-		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
-			birthday.setAnimatronic2(null);
-		}
-		
 		
 		model.addAttribute("birthday",birthday);
 		List<Child> enfants = childRepository.findAll();
 		model.addAttribute("children", enfants);
 		return "birthdayForm2";
 	}
+	
 	
 	@PostMapping("/add2")
 	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday, 
@@ -110,7 +110,10 @@ public class BirthdayController {
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findAll();
 		List<Child> enfants = childRepository.findAll();
-		
+
+		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
+			birthday.setAnimatronic2(null);
+		}
 		if (childrenIds == null || childrenIds.isEmpty()) {
 	    	model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
 			model.addAttribute("birthday", birthday);
@@ -119,11 +122,9 @@ public class BirthdayController {
 	    }
 		
         List<Child> selectedChildren = childRepository.findAllById(childrenIds);
-        System.out.println(selectedChildren);
         for (Child child : selectedChildren) {
         	birthday.getChildren().add(child);
         }
-        System.out.println("Updated children in birthday: " + birthday.getChildren());
 		
 		List<Pizza> pizzas = pizzaRepository.findAll();
 		model.addAttribute("selectedChildren",selectedChildren);

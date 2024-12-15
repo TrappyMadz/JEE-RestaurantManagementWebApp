@@ -62,33 +62,18 @@
               th:text="${restaurant.name}"
             ></option>
           </select>
-
-          <label for="animatronics">Animatroniques :</label>
-          <div id="animatronics">
-            <select name="animatronic1" id="animatronic1" required>
-              <option value="" th:selected="*{animatronic1Act} == null">
-                Sélectionner un Animatronique
-              </option>
-              <option
-                th:each="animatronic : ${animatronics}"
-                th:value="${animatronic.id}"
-                th:selected="${birthday.animatronic1 != null && birthday.animatronic1.id == animatronic.id}"
-                th:text="${animatronic.toString}"
-              ></option>
-            </select>
-
-            <select name="animatronic2" id="animatronic2">
-              <option value="" th:selected="*{animatronic2Act} == null">
-                Sélectionner un Animatronique
-              </option>
-              <option
-                th:each="animatronic : ${animatronics}"
-                th:value="${animatronic.id}"
-                th:selected="${birthday.animatronic2 != null && birthday.animatronic2.id == animatronic.id}"
-                th:text="${animatronic.toString}"
-              ></option>
-            </select>
-          </div>
+          <label for="birthdayBoy">Enfant Star : </label>
+          <select name="birthdayBoy" id="birthdayBoy" required>
+            <option value="" th:selected="*{birthday.birthdayBoy} == null">
+              Sélectionner un enfant
+            </option>
+            <option
+              th:each="child : ${children}"
+              th:value="${child.id}"
+              th:selected="${birthday.birthdayBoy != null && birthday.birthdayBoy.id == child.id}"
+              th:text="${child.name} + ' ' + ${child.lastName}"
+            ></option>
+          </select>
         </div>
 
         <button type="submit">Valider</button>
