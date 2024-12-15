@@ -32,8 +32,9 @@ public class Birthday {
 	private Set<Child> children = new HashSet<>();
 
 
-	@OneToMany(mappedBy = "birthday")
+	@OneToMany(mappedBy = "birthday", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<PizzaOrder> pizzaOrders;
+
 	
 	@ManyToOne @JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
