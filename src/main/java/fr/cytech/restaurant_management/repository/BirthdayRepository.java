@@ -15,9 +15,10 @@ public interface BirthdayRepository extends JpaRepository<Birthday, Long>{
 
 	List<Birthday> findByDateAfterOrderByDateAsc(LocalDate localDate);
 	List<Birthday> findAllByOrderByDateAsc();
-
 	
 	List<Birthday> findByDate(LocalDate localDate);
+
+	List<Birthday> findByRestaurant(Restaurant restaurant);
 	
 
 }
