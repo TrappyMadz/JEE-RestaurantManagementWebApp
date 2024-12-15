@@ -21,12 +21,10 @@
           <div class="progress">
             <div class="circle prev">1</div>
             <p id="circleLabel1">Choix d'un restaurant</p>
-            <div class="circle act1">2</div>
+            <div class="circle act1 to">2</div>
             <p id="circleLabel2">Choix des participants</p>
-            <div class="circle to">3</div>
+            <div class="circle">3</div>
             <p id="circleLabel3">Commande du repas</p>
-            <div class="circle">4</div>
-            <p id="circleLabel4">Vérification</p>
           </div>
         </div>
       </div>
@@ -78,7 +76,6 @@
         </div>
 
         <div>
-        
           <label for="animatronics">Animatroniques :</label>
           <div id="animatronics">
             <select name="animatronic1" id="animatronic1" required>
@@ -105,7 +102,7 @@
               ></option>
             </select>
           </div>
-          
+
           <label>Enfants participant :</label>
           <ul>
             <li th:each="child : ${childrenList}">
