@@ -41,12 +41,6 @@ http://localhost:8080/
 ```
 
 Vous êtes prêt à profiter du projet !
-# Auteurs :
-
-- [Marco Vanni](https://github.com/MVchara)
-- [Simon Charrier](https://github.com/TrappyMadz)
-
-
 
 
 # Auto-évaluation :
@@ -108,4 +102,10 @@ Mise à part une petite pose pendant les partiels, nous avont constamment mis à
 
 ## Soutenance :
 Nous n'avons pas pu passé la soutenance pour des raisons qui ne dépendent pas de nous, mais je suis sûr que nous aurions pu avoir une discution intéressante et répondre à toutes les questions posées.
+
+
+# Auteurs :
+
+- [Marco Vanni](https://github.com/MVchara)
+- [Simon Charrier](https://github.com/TrappyMadz)
 
