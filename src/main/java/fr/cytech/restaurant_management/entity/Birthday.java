@@ -28,12 +28,13 @@ public class Birthday {
 	@OneToOne(mappedBy = "birthday")
 	private Child birthdayBoy;
 	
-	@ManyToMany
+	@ManyToMany(mappedBy = "birthdays")
 	private Set<Child> children = new HashSet<>();
 
 
-	@OneToMany(mappedBy = "birthday", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "birthday", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<PizzaOrder> pizzaOrders;
+
 	
 	@ManyToOne @JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;

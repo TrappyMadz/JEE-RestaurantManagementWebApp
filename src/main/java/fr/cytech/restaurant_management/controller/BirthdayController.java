@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,7 +31,7 @@ import fr.cytech.restaurant_management.repository.RestaurantRepository;
 @Controller
 @RequestMapping("/birthday")
 public class BirthdayController {
-	
+
 	@Autowired
 	RestaurantRepository restaurantRepository;
 	@Autowired
@@ -45,15 +46,21 @@ public class BirthdayController {
 	PizzaOrderRepository pizzaOrderRepository;
 	@Autowired
 	ChildRepository childrenRepository;
-	
+
 	@GetMapping("/viewEvent")
-	public String thatsWhy(Model model) {
-		List<Birthday> birthdays = birthdayRepository.findAll();
+	public String why(Model model) {
+		List<Birthday> birthdays = birthdayRepository.findByDateAfterOrderByDateAsc(LocalDate.now());
 		model.addAttribute("birthdays", birthdays);
 		return "viewEvent";
 	}
-	
-	
+
+	@GetMapping("/viewAllEvent")
+	public String ohThatsWhy(Model model) {
+		List<Birthday> birthdays = birthdayRepository.findAllByOrderByDateAsc();
+		model.addAttribute("birthdays", birthdays);
+		return "viewEvent";
+	}
+
 	@GetMapping("/add")
 	public String initBirthday(Model model) {
 		Birthday birthday = new Birthday();
@@ -61,11 +68,11 @@ public class BirthdayController {
 		Restaurant restaurantAct = null;
 		Animatronic animatronic1Act = null;
 		Animatronic animatronic2Act = null;
-		
+
 		birthday.setAnimatronic1(animatronic1Act);
 		birthday.setAnimatronic2(animatronic2Act);
 		birthday.setRestaurant(restaurantAct);
-		
+
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		
 		model.addAttribute("birthday",birthday);
@@ -74,8 +81,7 @@ public class BirthdayController {
 		model.addAttribute("children", enfants);
 		return "birthdayForm1";
 	}
-	
-	
+
 	@PostMapping("/add")
 	public String createBirthdayPhase1(Model model, @ModelAttribute Birthday birthday) {
 		List<Restaurant> restaurants = restaurantRepository.findAll();
@@ -103,9 +109,9 @@ public class BirthdayController {
 		model.addAttribute("birthday",birthday);
 		return "birthdayForm2";
 	}
-	
-	
+
 	@PostMapping("/add2")
+
 	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday, 
             @RequestParam(required = false) List<Long> childrenIds) {
 		
@@ -120,9 +126,10 @@ public class BirthdayController {
 		
 		
 		if (childrenIds == null || childrenIds.isEmpty()) {
-	    	model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
+			model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
 			model.addAttribute("birthday", birthday);
 			return "birthdayForm2";
+
 	    }
         List<Child> selectedChildren = childRepository.findAllById(childrenIds);
         for (Child child : selectedChildren) {
@@ -150,37 +157,37 @@ public class BirthdayController {
 		List<Pizza> pizzas = pizzaRepository.findAll();
 		model.addAttribute("birthday",birthday);
 		model.addAttribute("pizzas",pizzas);
+
 		return "birthdayForm3";
 	}
 
-    
 	@PostMapping("/finish")
-	public String finishBirthday(Model model, @ModelAttribute Birthday birthday, @RequestParam("pizzaIds[]") List<Long> pizzaIds,
-			@RequestParam("quantities[]") List<Integer> quantities, @RequestParam("selectedPizzas[]") List<Long> selectedPizzas, 
+	public String finishBirthday(Model model, @ModelAttribute Birthday birthday,
+			@RequestParam("pizzaIds[]") List<Long> pizzaIds, @RequestParam("quantities[]") List<Integer> quantities,
+			@RequestParam("selectedPizzas[]") List<Long> selectedPizzas,
 			@RequestParam("childrenIds") List<Child> selectedChildren) {
-		
+
 		List<PizzaOrder> orders = new ArrayList<>();
-		
-		for (int i = 0 ; i < pizzaIds.size() ; i++) {
+
+		for (int i = 0; i < pizzaIds.size(); i++) {
 			Long pizzaId = pizzaIds.get(i);
 			Integer quantity = quantities.get(i);
 			if (selectedPizzas.contains(pizzaId) && quantity > 0) {
 				Optional<Pizza> pizzaAct = pizzaRepository.findById(pizzaId);
-				PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(),quantity);
+				PizzaOrder order = new PizzaOrder(birthday, pizzaAct.get(), quantity);
 				orders.add(order);
 				order.setBirthday(birthday);
 			}
 		}
-		
-		
+
 		birthday.setPizzaOrders(orders);
 		birthday.getRestaurant().getBirthdays().add(birthday);
 		birthday.getAnimatronic1().getBirthdays1().add(birthday);
-		
+
 		if (birthday.getAnimatronic2() != null) {
 			birthday.getAnimatronic2().getBirthdays2().add(birthday);
 		}
-		
+
 		birthday.getBirthdayBoy().setBirthday(birthday);
 		for (Child child : selectedChildren) {
 			birthday.getChildren().add(child);
@@ -192,5 +199,34 @@ public class BirthdayController {
 		return "redirect:/";
 
 	}
+
+	@PostMapping("/delete/{id}")
+	public String stopFun(@PathVariable("id") Long id) {
+	    Optional<Birthday> optionalBirthday = birthdayRepository.findById(id);
+	    if (optionalBirthday.isPresent()) {
+	        Birthday birthday = optionalBirthday.get();
+	        if (birthday.getBirthdayBoy() != null) {
+	            birthday.getBirthdayBoy().setBirthday(null);
+	            childRepository.save(birthday.getBirthdayBoy());
+	        }
+	        for (Child child : birthday.getChildren()) {
+	            child.getBirthdays().remove(birthday);
+	        }
+	        birthday.getChildren().clear();
+	        if (birthday.getAnimatronic1() != null) {
+	            birthday.getAnimatronic1().getBirthdays1().remove(birthday);
+	        }
+	        if (birthday.getAnimatronic2() != null) {
+	            birthday.getAnimatronic2().getBirthdays2().remove(birthday);
+	        }
+	        if (birthday.getRestaurant() != null) {
+	            birthday.getRestaurant().getBirthdays().remove(birthday);
+	        }
+	        birthdayRepository.save(birthday);
+	        birthdayRepository.delete(birthday);
+	    }
+	    return "redirect:/birthday/viewEvent";
+	}
+
 
 }
