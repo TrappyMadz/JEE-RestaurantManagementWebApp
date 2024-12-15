@@ -14,10 +14,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+/**
+ * Entitée animatronique
+ */
 @Entity
 public class Animatronic {
-  
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
@@ -25,16 +29,19 @@ public class Animatronic {
 	@Enumerated
 	private AnimatronicType type;
 
+	// Chemin vers l'image
 	private String imagePath;
 
 	@ManyToOne
 	@JoinColumn(name = "restaurant_id")
 	@JsonIgnore
 	private Restaurant restaurant;
-	
+
+	// Selon si il est séléctionné en tant qu'animatronic1 ou 2, une table
+	// différente est utilisée
 	@OneToMany(mappedBy = "animatronic1")
 	private List<Birthday> birthdays1;
-	
+
 	@OneToMany(mappedBy = "animatronic2")
 	private List<Birthday> birthdays2;
 
@@ -115,7 +122,5 @@ public class Animatronic {
 	public void setBirthdays2(List<Birthday> birthdays2) {
 		this.birthdays2 = birthdays2;
 	}
-
-
 
 }

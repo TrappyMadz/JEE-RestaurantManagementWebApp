@@ -113,6 +113,7 @@ public class BirthdayController {
 	@PostMapping("/add2")
 	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday,
 			@RequestParam(required = false) List<Long> childrenIds) {
+    
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
 		List<Child> enfants = childRepository.findAll();
@@ -278,6 +279,7 @@ public class BirthdayController {
 			birthdayRepository.delete(birthday);
 		}
 		return "redirect:/birthday/viewEvent";
+
 	}
 
 	@GetMapping("/update/{id}")

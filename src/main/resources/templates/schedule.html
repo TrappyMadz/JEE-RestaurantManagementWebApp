@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Adhérents</title>
+    <script src="/js/header.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/children.css" />
+  </head>
+
+  <body>
+    <header id="header">
+      <!-- C'est ici qu'est chargé le contenu de "header.html" -->
+    </header>
+
+    <main>
+      <div th:if="${error}" class="error">
+        <!-- Si il y a une erreur renvoyée par le controller, on l'affiche ici -->
+        <p th:text="${error}">error</p>
+      </div>
+
+      <h2>Tâches à réaliser :</h2>
+      <p>Voici ce que tu dois faire aujourd'hui :</p>
+
+      <!-- Menu déroulant pour sélectionner un restaurant -->
+      <div>
+        <label for="restaurantSelect">Choisissez un restaurant :</label>
+        <select
+          id="restaurantSelect"
+          name="restaurantId"
+          onchange="filterByRestaurant()"
+        >
+          <option value="">--Sélectionnez un restaurant--</option>
+          <option
+            th:each="restaurant : ${restaurants}"
+            th:value="${restaurant.id}"
+            th:text="${restaurant.name}"
+          ></option>
+        </select>
+      </div>
+
+      <div id="animatronicList" class="list">
+        <h2>Animatroniques à préparer :</h2>
+        <ul th:if="${!#lists.isEmpty(animatronics)}">
+          <li th:each="a : ${animatronics}">
+            <span
+              ><img
+                th:src="@{/animatronic/{imageName}(imageName=${a.imagePath})}"
+                alt="Image de ${a.name}"
+            /></span>
+            <span th:text="${a.toString()}"></span>
+          </li>
+        </ul>
+        <p th:if="${#lists.isEmpty(animatronics)}">
+          Il n'y a aucun animatronique à préparer aujourd'hui.
+        </p>
+      </div>
+
+      <div id="pizzaList" class="list">
+        <h2>Pizzas à préparer :</h2>
+        <ul th:if="${!#lists.isEmpty(orders)}">
+          <li th:each="order : ${orders}">
+            <img
+              th:src="@{/pizza/{imgName}(imgName=${order.pizza.imagePath})}"
+              alt="Image de ${order.pizza.name}"
+            />
+            <span th:text="${order.pizza.name}"></span>
+            <span th:text="${order.pizza.composition}"></span>
+            <span th:text="'À préparer :' + ${order.nbPizza}"></span>
+          </li>
+        </ul>
+        <p th:if="${#lists.isEmpty(orders)}">
+          Il n'y a aucune pizza à préparer aujourd'hui.
+        </p>
+      </div>
+    </main>
+
+    <script>
+      function filterByRestaurant() {
+        const restaurantId = document.getElementById("restaurantSelect").value;
+        const url = `/viewSchedule?restaurantId=${restaurantId}`;
+        window.location.href = url; // Redirige vers la page avec le restaurant sélectionné
+      }
+    </script>
+
+    <footer id="footer">
+      <!-- C'est dans ce bloc que le fichier footer.html est chargé -->
+    </footer>
+  </body>
+</html>

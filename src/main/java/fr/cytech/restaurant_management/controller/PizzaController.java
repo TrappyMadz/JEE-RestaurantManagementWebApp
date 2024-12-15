@@ -37,7 +37,8 @@ import fr.cytech.restaurant_management.repository.PizzaRepository;
 @RequestMapping("/pizza")
 public class PizzaController {
 
-	// Chemin d'upload pour les pizzas. Il est situé à la racine du projet, au même endroit que le dossier src
+	// Chemin d'upload pour les pizzas. Il est situé à la racine du projet, au même
+	// endroit que le dossier src
 	private final String uploadDir = "uploads/img/pizzas";
 
 	@Autowired
@@ -49,6 +50,7 @@ public class PizzaController {
 
 	/**
 	 * Permet d'afficher la liste des pizza
+	 * 
 	 * @param model
 	 * @return la page d'affichage de la liste des pizzas, pizza.html
 	 */
@@ -60,13 +62,16 @@ public class PizzaController {
 	}
 
 	/**
-	 * Initialise l'ajout des pizza en envoyant l'utilisateur sur le form correspondant
+	 * Initialise l'ajout des pizza en envoyant l'utilisateur sur le form
+	 * correspondant
+	 * 
 	 * @param model
 	 * @return la page permettant d'ajouter une nouvelle pizza
 	 */
 	@GetMapping("/add")
 	public String newPizza(Model model) {
-		// On initialise une pizza vide pour que si l'utilisateur fait une erreur, il n'ait pas à tout recommencer.
+		// On initialise une pizza vide pour que si l'utilisateur fait une erreur, il
+		// n'ait pas à tout recommencer.
 		// Ce système requiert qu'un enfant soit initialisé avant le début du form
 		Pizza pizza = new Pizza();
 		pizza.setImagePath("");
@@ -78,10 +83,12 @@ public class PizzaController {
 
 	/**
 	 * Finalise l'ajout d'une pizza à la base de donnée
+	 * 
 	 * @param pizza pizza à ajoutée
 	 * @param image image associée à la pizza
 	 * @param model
-	 * @return si il y a un problème, on reviens sur la page de form, sinon on retourne à la liste des pizzas
+	 * @return si il y a un problème, on reviens sur la page de form, sinon on
+	 *         retourne à la liste des pizzas
 	 */
 	@PostMapping("/show")
 	public String addPizza(@ModelAttribute Pizza pizza, @RequestParam("image") MultipartFile image, Model model) {
@@ -103,7 +110,8 @@ public class PizzaController {
 			// On sauvegarde la pizza une première fois sans imagePath pour generer une id
 			pizzaRepository.save(pizza);
 
-			// On récupère le nom du fichier et on concatène l'id de la pizza au début pour que chaque image soit distincte
+			// On récupère le nom du fichier et on concatène l'id de la pizza au début pour
+			// que chaque image soit distincte
 			String fileName = pizza.getId() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
 
 			// On récupère l'endroit où on doit enregistrer l'image
@@ -128,6 +136,7 @@ public class PizzaController {
 
 	/**
 	 * Permet d'afficher les images
+	 * 
 	 * @param imgName chemin vers l'image (imagePath)
 	 * @return l'image à afficher
 	 */
@@ -151,6 +160,7 @@ public class PizzaController {
 
 	/**
 	 * Suppression d'une pizza
+	 * 
 	 * @param id id de la pizza à supprimer
 	 * @return retour à la liste des pizzas après suppression
 	 */
@@ -163,7 +173,6 @@ public class PizzaController {
 			model.addAttribute("pizzas", pizzas);
 			return "pizza";
 		} else {
-
 			// Si la pizza n'existe pas, Optional sera vide
 			Optional<Pizza> toDelete = pizzaRepository.findById(id);
 
@@ -196,9 +205,11 @@ public class PizzaController {
 
 	/**
 	 * Initialise la modification d'une pizza
-	 * @param id id de la pizza à modifier
+	 * 
+	 * @param id    id de la pizza à modifier
 	 * @param model
-	 * @return au form de modification si la pizza existe, à la liste des pizzas sinon
+	 * @return au form de modification si la pizza existe, à la liste des pizzas
+	 *         sinon
 	 */
 	@GetMapping("/modify/{id}")
 	public String changePizza(@PathVariable("id") Long id, Model model) {
@@ -217,10 +228,11 @@ public class PizzaController {
 
 	/**
 	 * Applique la modification de la pizza dans la bdd
+	 * 
 	 * @param pizza pizza modifiée
 	 * @param model
 	 * @param image nouvelle image
-	 * @param id id de la pizza à modifier
+	 * @param id    id de la pizza à modifier
 	 * @return sur le form si il y a un problème, sur la liste des pizzas sinon
 	 */
 	@PostMapping("/update")
@@ -234,12 +246,14 @@ public class PizzaController {
 		} else {
 			Pizza existingPizza = optionalPizza.get();
 
-			// On actualise les attributs de la pizza existante pour les remplacer par ceux du form
+			// On actualise les attributs de la pizza existante pour les remplacer par ceux
+			// du form
 			existingPizza.setComposition(pizza.getComposition());
 			existingPizza.setName(pizza.getName());
 			existingPizza.setPrice(pizza.getPrice());
 
-			// On vérifie si la pizza est valide. Si elle ne l'est pas, on renvoie sur le form
+			// On vérifie si la pizza est valide. Si elle ne l'est pas, on renvoie sur le
+			// form
 			if (existingPizza.getComposition().isBlank() || existingPizza.getImagePath().isBlank()
 					|| existingPizza.getName().isBlank()) {
 				model.addAttribute("error", "Completez toutes les informations.");
@@ -285,6 +299,7 @@ public class PizzaController {
 
 	/**
 	 * Fonction permettant de chercher une pizza via son nom ou ses ingredients
+	 * 
 	 * @param query recherche
 	 * @return liste de pizzas répondant à la recherche
 	 */
