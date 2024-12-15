@@ -35,7 +35,6 @@ public class Birthday {
 	@OneToMany(mappedBy = "birthday", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<PizzaOrder> pizzaOrders;
 
-	
 	@ManyToOne @JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 	

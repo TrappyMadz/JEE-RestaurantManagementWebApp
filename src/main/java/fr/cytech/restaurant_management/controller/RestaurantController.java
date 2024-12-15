@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fr.cytech.restaurant_management.entity.Animatronic;
+import fr.cytech.restaurant_management.entity.Birthday;
 import fr.cytech.restaurant_management.entity.Restaurant;
 import fr.cytech.restaurant_management.repository.AnimatronicRepository;
+import fr.cytech.restaurant_management.repository.BirthdayRepository;
+import fr.cytech.restaurant_management.repository.PizzaOrderRepository;
 import fr.cytech.restaurant_management.repository.RestaurantRepository;
 
 /**
@@ -30,6 +35,10 @@ public class RestaurantController {
 	RestaurantRepository restaurantRepository;
 	@Autowired
 	AnimatronicRepository animatronicRepository;
+	@Autowired
+	BirthdayRepository birthdayRepository;
+	@Autowired
+	PizzaOrderRepository pizzaOrderRepository;
 
 	/**
 	 * Permet de montrer la liste des restaurants
@@ -100,9 +109,17 @@ public class RestaurantController {
 	 * @return retour à la liste des restaurants
 	 */
 	@PostMapping("/delete/{id}")
-	public String burnTheRestaurant(@PathVariable("id") Long id) {
-		restaurantRepository.deleteById(id);
-		return "redirect:/restaurant/show";
+	public String burnTheRestaurant(@PathVariable("id") Long id,Model model) {
+		try {
+			restaurantRepository.deleteById(id);
+			return "redirect:/restaurant/show";
+		} catch(Exception e) {
+			model.addAttribute("error","Pour supprimer un restaurant, il faudra d'abord le dissocier des animatroniques (en modifiant le restaurant) et des anniversaires (en les supprimant)");
+			List<Restaurant> restaurantList = restaurantRepository.findAll();
+			model.addAttribute("restaurantList", restaurantList);
+			model.addAttribute("ChooseAnimatronic", animatronicRepository.findAll());
+			return "restaurants";
+		}
 	}
 
 	/**
