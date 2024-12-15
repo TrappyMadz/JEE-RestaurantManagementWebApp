@@ -71,7 +71,6 @@ public class BirthdayController {
 		
 		model.addAttribute("birthday",birthday);
 		model.addAttribute("restaurants",restaurants);
-		model.addAttribute("animatronics",animatronics);
 		List<Child> enfants = childRepository.findAll();
 		model.addAttribute("children", enfants);
 		return "birthdayForm1";
@@ -81,10 +80,10 @@ public class BirthdayController {
 	@PostMapping("/add")
 	public String createBirthdayPhase1(Model model, @ModelAttribute Birthday birthday) {
 		List<Restaurant> restaurants = restaurantRepository.findAll();
-		List<Animatronic> animatronics = animatronicRepository.findAll();
-		
 		model.addAttribute("restaurants",restaurants);
-		model.addAttribute("animatronics",animatronics);
+		List<Child> enfants = childRepository.findAll();
+		model.addAttribute("children", enfants);
+		
 		if (birthday.getDate().compareTo(LocalDate.now()) <= 0) {
 			model.addAttribute("error", "Entrez une date valide.");
 			model.addAttribute("birthday",birthday);
@@ -96,9 +95,9 @@ public class BirthdayController {
 			return "birthdayForm1";
 		}
 		
+		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
+		model.addAttribute("animatronics",animatronics);
 		model.addAttribute("birthday",birthday);
-		List<Child> enfants = childRepository.findAll();
-		model.addAttribute("children", enfants);
 		return "birthdayForm2";
 	}
 	
@@ -108,7 +107,7 @@ public class BirthdayController {
             @RequestParam("childrenIds") List<Long> childrenIds) {
 		
 		List<Restaurant> restaurants = restaurantRepository.findAll();
-		List<Animatronic> animatronics = animatronicRepository.findAll();
+		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
 		List<Child> enfants = childRepository.findAll();
 
 		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {

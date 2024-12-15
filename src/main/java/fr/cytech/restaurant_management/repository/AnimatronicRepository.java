@@ -26,9 +26,12 @@ public interface AnimatronicRepository extends JpaRepository<Animatronic, Long> 
 	
 	@Query("SELECT a FROM Animatronic a WHERE a.restaurant IS NULL")
 	List<Animatronic> findThoseWithoutRestaurant();
-	
+
 	@Query("SELECT a FROM Animatronic a WHERE a.restaurant IS NULL OR a.restaurant=:restaurant")
 	List<Animatronic> findThoseWithoutRestaurantOrSameRestaurant(Restaurant restaurant);
+	
+	@Query("SELECT a FROM Animatronic a WHERE a.restaurant=:restaurant")
+	List<Animatronic> findByRestaurant(Restaurant restaurant);
 	
 	
 }
