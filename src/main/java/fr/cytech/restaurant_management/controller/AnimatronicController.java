@@ -29,25 +29,44 @@ import fr.cytech.restaurant_management.entity.Animatronic;
 import fr.cytech.restaurant_management.entity.AnimatronicType;
 import fr.cytech.restaurant_management.repository.AnimatronicRepository;
 
+/**
+ * Controller pour les fonctions concernant les animatroniques
+ */
 @Controller
 @RequestMapping("/animatronic")
 public class AnimatronicController {
 
+	// Endroit où les images sont enregistrées
 	private final String uploadDir = "uploads/img/animatronics";
 
 	@Autowired
 	AnimatronicRepository animatronicRepository;
 
+	/**
+	 * Affichage de la liste des animatroniques
+	 * 
+	 * @param model
+	 * @return la page affichant les animatroniques
+	 */
 	@GetMapping("/show")
 	public String showAnimatronic(Model model) {
 		List<Animatronic> animatronics = animatronicRepository.findAll();
 		model.addAttribute("animatronics", animatronics);
+
+		// On récupère aussi les types d'Animatroniques (une enum)
 		model.addAttribute("AnimatronicType", AnimatronicType.values());
 		return "animatronics";
 	}
 
+	/**
+	 * Initialisation de l'ajoue d'un Animatronique
+	 * 
+	 * @param model
+	 * @return la page permettant d'ajouter un Animatronique
+	 */
 	@GetMapping("/add")
 	public String newAnimatronic(Model model) {
+		// On initialise un animatronique pour la préremplission du form
 		Animatronic animatronic = new Animatronic();
 		animatronic.setName("");
 		animatronic.setImagePath("");
@@ -56,8 +75,19 @@ public class AnimatronicController {
 		return "animatronicForm";
 	}
 
+	/**
+	 * Sauvegarde de l'Animatronique
+	 * 
+	 * @param animatronic Animatronique à sauvegarder
+	 * @param image       Image de l'animatronique
+	 * @param model
+	 * @return La page listant tous les animatronique, après avoir enregistré
+	 *         l'animatronique.
+	 */
 	@PostMapping("/show")
-	public String newAnimatronicResult(@ModelAttribute Animatronic animatronic, @RequestParam("image") MultipartFile image, Model model) {
+	public String newAnimatronicResult(@ModelAttribute Animatronic animatronic,
+			@RequestParam("image") MultipartFile image, Model model) {
+		// On test les cas d'erreurs possibles
 		if (animatronic.getName() == "") {
 			model.addAttribute("animatronic", animatronic);
 			model.addAttribute("AnimatronicType", AnimatronicType.values());
@@ -73,11 +103,14 @@ public class AnimatronicController {
 			return "animatronicForm";
 		}
 
+		// On tente d'enregistrer l'animatronique, en gerant également la sauvegarde de
+		// la photo
 		try {
 			animatronicRepository.save(animatronic);
 
 			String fileName = animatronic.getId() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
 
+			// /uploads/img/animatronics/...
 			Path path = Paths.get(uploadDir, fileName);
 
 			Files.createDirectories(path.getParent());
@@ -95,7 +128,7 @@ public class AnimatronicController {
 	}
 
 	/**
-	 * Permet d'afficher les images
+	 * Permet d'afficher les images (après une demande ThymeLeaf par exemple)
 	 * 
 	 * @param imgName chemin vers l'image (imagePath)
 	 * @return l'image à afficher
@@ -117,12 +150,24 @@ public class AnimatronicController {
 		}
 	}
 
+	/**
+	 * Permet de supprimer un Animatronique
+	 * 
+	 * @param id id de l'animatronique
+	 * @return page listant les animatroniques, après avoir supprimer
+	 *         l'animatronique séléctionné si tout vas bien
+	 */
 	@PostMapping("/delete/{id}")
 	public String DismantleAnimatronic(@PathVariable("id") Long id) {
 		Optional<Animatronic> toDelete = animatronicRepository.findById(id);
+
+		// Si l'id entré en paramètre n'est associé à aucun animatronique, alors on ne
+		// fait rien
 		if (toDelete.isEmpty()) {
 			return "redirect:/animatronic/show";
 		}
+
+		// On suprime l'image
 		try {
 			String imagePathString = toDelete.get().getImagePath();
 
@@ -133,12 +178,20 @@ public class AnimatronicController {
 				Files.deleteIfExists(imagePath);
 			}
 		} catch (IOException e) {
-			System.out.println("oopsie, le site plante, l'abus de supprimer l'image aussi....");
+			System.out.println("La suppression de l'image à échouée");
 		}
 		animatronicRepository.deleteById(id);
 		return "redirect:/animatronic/show";
 	}
 
+	/**
+	 * Modification d'un animatronique
+	 * 
+	 * @param id
+	 * @param model
+	 * @return le form de modification, après l'avoir initialisé avec les infos de
+	 *         l'animatronique séléctionné.
+	 */
 	@GetMapping("/modify/{id}")
 	public String changeAnimatronic(@PathVariable("id") Long id, Model model) {
 		Optional<Animatronic> optionalAnimatronic = animatronicRepository.findById(id);
@@ -153,6 +206,15 @@ public class AnimatronicController {
 		}
 	}
 
+	/**
+	 * Application des modifications d'un annimatronique
+	 * 
+	 * @param animatronic animatronique du form
+	 * @param model
+	 * @param image       image à associée à l'animatronique
+	 * @param id          id de l'animatronique à modifier
+	 * @return sur la liste des animatroniques après l'avoir modifier.
+	 */
 	@PostMapping("/update")
 	public String rebuildTheAnimatronic(@ModelAttribute Animatronic animatronic, Model model,
 			@RequestParam("image") MultipartFile image, @RequestParam("id") Long id) {
@@ -162,18 +224,21 @@ public class AnimatronicController {
 			model.addAttribute("error", "L'animatronique séléctionné n'existe pas.");
 			return "redirect:/animatronic/show";
 		} else {
+			// On récupère les infos de l'animatronique déjà existant
 			Animatronic existingAnimatronic = optionalAnimatronic.get();
 
 			existingAnimatronic.setName(animatronic.getName());
 			existingAnimatronic.setType(animatronic.getType());
+
+			// On vérifie que tout soit bien définie
 			if (existingAnimatronic.getName() == "") {
 				model.addAttribute("error", "Completez toutes les informations.");
 				model.addAttribute("animatronic", existingAnimatronic);
 				model.addAttribute("AnimatronicType", AnimatronicType.values());
 				return "animatronicUpdateForm";
 			}
-			List<Animatronic> searchIfEmpty = animatronicRepository.findByNameAndTypeExcludingId(existingAnimatronic.getName(),
-					existingAnimatronic.getType(), existingAnimatronic.getId());
+			List<Animatronic> searchIfEmpty = animatronicRepository.findByNameAndTypeExcludingId(
+					existingAnimatronic.getName(), existingAnimatronic.getType(), existingAnimatronic.getId());
 			if (!searchIfEmpty.isEmpty()) {
 				model.addAttribute("animatronic", existingAnimatronic);
 				model.addAttribute("AnimatronicType", AnimatronicType.values());
@@ -204,22 +269,32 @@ public class AnimatronicController {
 				model.addAttribute("error", "Erreur de chargement d'image : " + e.getMessage());
 				return "animatronicUpdateForm";
 			}
+			// On sauvegarde le nouvel animatronique
 			animatronicRepository.save(existingAnimatronic);
 			model.addAttribute("AnimatronicType", AnimatronicType.values());
 			return "redirect:/animatronic/show";
 		}
 	}
 
+	/**
+	 * Recherche un animatronique par son nom ou son type (appelée en ajax)
+	 * 
+	 * @param query recherche du nom (peut être vide)
+	 * @param type  recherche du type (menu déroulant, si rien n'est séléctionné,
+	 *              value = "")
+	 * @return
+	 */
 	@GetMapping("/search")
 	@ResponseBody
-	public List<Animatronic> searchAnimatronic(@RequestParam("query") String query, @RequestParam(required = false) String type) {
-	    if (type != null && !type.isEmpty()) {
-	        // Recherche par nom et type
-	        AnimatronicType animatronicType = AnimatronicType.valueOf(type);
-	        return animatronicRepository.findByNameContainingIgnoreCaseAndType(query, animatronicType);
-	    } else {
-	        // Recherche uniquement par nom
-	        return animatronicRepository.findByNameContainingIgnoreCase(query);
-	    }
+	public List<Animatronic> searchAnimatronic(@RequestParam("query") String query,
+			@RequestParam(required = false) String type) {
+		if (type != null && !type.isEmpty()) {
+			// Recherche par nom et type
+			AnimatronicType animatronicType = AnimatronicType.valueOf(type);
+			return animatronicRepository.findByNameContainingIgnoreCaseAndType(query, animatronicType);
+		} else {
+			// Recherche uniquement par nom
+			return animatronicRepository.findByNameContainingIgnoreCase(query);
+		}
 	}
 }

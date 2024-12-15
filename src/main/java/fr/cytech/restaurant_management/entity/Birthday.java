@@ -16,6 +16,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
+/**
+ * Anniversaires, organisé pour un enfant, avec des pizzas et 2 animatroniques
+ * animants l'aniversaire
+ */
 @Entity
 public class Birthday {
 	@Id
@@ -24,24 +28,28 @@ public class Birthday {
 
 	private LocalDate date;
 
-	
+	// L'enfant star de l'aniversaire, celui dont on fête l'anniversaire
 	@OneToOne(mappedBy = "birthday")
 	private Child birthdayBoy;
-	
+
+	// Liste des invités
 	@ManyToMany(mappedBy = "birthdays")
 	private Set<Child> children = new HashSet<>();
 
-
+	// Liste de commandes de pizzas (pizzaA : nbPizzaA, pizzaB : nbPizzaB...)
 	@OneToMany(mappedBy = "birthday", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<PizzaOrder> pizzaOrders;
 
-	@ManyToOne @JoinColumn(name = "restaurant_id")
+	@ManyToOne
+	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
-	
-	@ManyToOne @JoinColumn(name = "animatronic1_id") 
+
+	@ManyToOne
+	@JoinColumn(name = "animatronic1_id")
 	private Animatronic animatronic1;
-	
-	@ManyToOne @JoinColumn(name = "animatronic2_id")
+
+	@ManyToOne
+	@JoinColumn(name = "animatronic2_id")
 	private Animatronic animatronic2;
 
 	public Child getBirthdayBoy() {
@@ -51,9 +59,6 @@ public class Birthday {
 	public void setBirthdayBoy(Child birthdayBoy) {
 		this.birthdayBoy = birthdayBoy;
 	}
-
-
-
 
 	public Long getId() {
 		return id;
@@ -110,7 +115,5 @@ public class Birthday {
 	public void setChildren(Set<Child> children) {
 		this.children = children;
 	}
-
-
 
 }

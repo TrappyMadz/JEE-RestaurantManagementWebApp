@@ -5,9 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fr.cytech.restaurant_management.entity.Animatronic;
-import fr.cytech.restaurant_management.entity.Birthday;
 import fr.cytech.restaurant_management.entity.Restaurant;
 import fr.cytech.restaurant_management.repository.AnimatronicRepository;
 import fr.cytech.restaurant_management.repository.BirthdayRepository;
@@ -80,18 +77,19 @@ public class RestaurantController {
 	 *         des restaurants après avoir geré l'ajout
 	 */
 	@PostMapping("/show")
-	public String openRestaurantResult(@ModelAttribute Restaurant restaurant,  Model model, 
-            @RequestParam(required = false) List<Long> animatronicIds) {
+	public String openRestaurantResult(@ModelAttribute Restaurant restaurant, Model model,
+			@RequestParam(required = false) List<Long> animatronicIds) {
 		// Vérification du nom et de l'adresse
 		if (animatronicIds != null && !animatronicIds.isEmpty()) {
-	        List<Animatronic> selectedAnimatronics = animatronicRepository.findAllById(animatronicIds);
-	        restaurant.setAnimatronics(selectedAnimatronics);
-	        
-	        // Il est important de définir le restaurant pour chaque animatronique sélectionné
-	        for (Animatronic animatronic : selectedAnimatronics) {
-	            animatronic.setRestaurant(restaurant);
-	        }
-	    }
+			List<Animatronic> selectedAnimatronics = animatronicRepository.findAllById(animatronicIds);
+			restaurant.setAnimatronics(selectedAnimatronics);
+
+			// Il est important de définir le restaurant pour chaque animatronique
+			// sélectionné
+			for (Animatronic animatronic : selectedAnimatronics) {
+				animatronic.setRestaurant(restaurant);
+			}
+		}
 		if (restaurant.getName() == "" || restaurant.getAddress() == "") {
 			model.addAttribute("restaurant", restaurant);
 			model.addAttribute("error", "Completez toutes les informations.");
@@ -109,12 +107,13 @@ public class RestaurantController {
 	 * @return retour à la liste des restaurants
 	 */
 	@PostMapping("/delete/{id}")
-	public String burnTheRestaurant(@PathVariable("id") Long id,Model model) {
+	public String burnTheRestaurant(@PathVariable("id") Long id, Model model) {
 		try {
 			restaurantRepository.deleteById(id);
 			return "redirect:/restaurant/show";
-		} catch(Exception e) {
-			model.addAttribute("error","Pour supprimer un restaurant, il faudra d'abord le dissocier des animatroniques (en modifiant le restaurant) et des anniversaires (en les supprimant)");
+		} catch (Exception e) {
+			model.addAttribute("error",
+					"Pour supprimer un restaurant, il faudra d'abord le dissocier des animatroniques (en modifiant le restaurant) et des anniversaires (en les supprimant)");
 			List<Restaurant> restaurantList = restaurantRepository.findAll();
 			model.addAttribute("restaurantList", restaurantList);
 			model.addAttribute("ChooseAnimatronic", animatronicRepository.findAll());
@@ -141,7 +140,8 @@ public class RestaurantController {
 			return "redirect:/restaurant/show";
 		} else {
 			model.addAttribute("restaurant", optionalRestaurant.get());
-			model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(optionalRestaurant.get()));
+			model.addAttribute("animatronics",
+					animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(optionalRestaurant.get()));
 			return "restaurantUpdateForm";
 		}
 
@@ -156,8 +156,8 @@ public class RestaurantController {
 	 *         sinon
 	 */
 	@PostMapping("/update")
-	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant, Model model, 
-            @RequestParam(required = false) List<Long> animatronicIds) {
+	public String relocateRestaurantResult(@ModelAttribute Restaurant restaurant, Model model,
+			@RequestParam(required = false) List<Long> animatronicIds) {
 		// On récupère le restaurant non-modifié
 		Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurant.getId());
 
@@ -176,21 +176,24 @@ public class RestaurantController {
 			if (existingRestaurant.getName() == "" || existingRestaurant.getAddress() == "") {
 				model.addAttribute("error", "Completez toutes les informations.");
 				model.addAttribute("restaurant", existingRestaurant);
-				model.addAttribute("animatronics", animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant));
+				model.addAttribute("animatronics",
+						animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant));
 				return "restaurantUpdateForm";
 			} else {
-				for (Animatronic animatronic : animatronicRepository.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant)) {
+				for (Animatronic animatronic : animatronicRepository
+						.findThoseWithoutRestaurantOrSameRestaurant(existingRestaurant)) {
 					animatronic.setRestaurant(null);
 				}
 				if (animatronicIds != null && !animatronicIds.isEmpty()) {
-			        List<Animatronic> selectedAnimatronics = animatronicRepository.findAllById(animatronicIds);
-			        restaurant.setAnimatronics(selectedAnimatronics);
-			        
-			        // Il est important de définir le restaurant pour chaque animatronique sélectionné
-			        for (Animatronic animatronic : selectedAnimatronics) {
-			            animatronic.setRestaurant(restaurant);
-			        }
-			    }
+					List<Animatronic> selectedAnimatronics = animatronicRepository.findAllById(animatronicIds);
+					restaurant.setAnimatronics(selectedAnimatronics);
+
+					// Il est important de définir le restaurant pour chaque animatronique
+					// sélectionné
+					for (Animatronic animatronic : selectedAnimatronics) {
+						animatronic.setRestaurant(restaurant);
+					}
+				}
 				restaurantRepository.save(existingRestaurant);
 				return "redirect:/restaurant/show";
 			}
@@ -205,15 +208,16 @@ public class RestaurantController {
 	 */
 	@GetMapping("/search")
 	@ResponseBody
-	public List<Restaurant> searchRestaurant(@RequestParam(required = false) String query, @RequestParam(required = false) Long animatronic) {
+	public List<Restaurant> searchRestaurant(@RequestParam(required = false) String query,
+			@RequestParam(required = false) Long animatronic) {
 		if (animatronic != null) {
-			Animatronic ExistingAnimatronic = animatronicRepository.findById(animatronic)
-	                .orElseThrow(() -> new IllegalArgumentException("Animatronic non trouvé pour l'ID : " + animatronic));
-	        return List.of(ExistingAnimatronic.getRestaurant());
-	    } else {
-	        // Recherche uniquement par nom
-	    	return restaurantRepository.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(query, query);
-	    }
+			Animatronic ExistingAnimatronic = animatronicRepository.findById(animatronic).orElseThrow(
+					() -> new IllegalArgumentException("Animatronic non trouvé pour l'ID : " + animatronic));
+			return List.of(ExistingAnimatronic.getRestaurant());
+		} else {
+			// Recherche uniquement par nom
+			return restaurantRepository.findByNameContainingIgnoreCaseOrAddressContainingIgnoreCase(query, query);
+		}
 	}
 
 }

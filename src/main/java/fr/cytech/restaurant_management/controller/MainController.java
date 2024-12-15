@@ -20,76 +20,92 @@ import fr.cytech.restaurant_management.repository.BirthdayRepository;
 import fr.cytech.restaurant_management.repository.PizzaOrderRepository;
 import fr.cytech.restaurant_management.repository.RestaurantRepository;
 
+/**
+ * Controller gerant les fonctions qui appartiennent à plusieurs pages / aucunes
+ */
 @Controller
 public class MainController {
 
-    @Autowired
-    BirthdayRepository birthdayRepository;
-    @Autowired
-    RestaurantRepository restaurantRepository;
-    @Autowired
-    PizzaOrderRepository pizzaOrderRepository;
+	@Autowired
+	BirthdayRepository birthdayRepository;
+	@Autowired
+	RestaurantRepository restaurantRepository;
+	@Autowired
+	PizzaOrderRepository pizzaOrderRepository;
 
-    @GetMapping("/attribution")
-    public String showAttr(Model model) {
-        return "attribution";
-    }
+	/**
+	 * Envoi sur la page des attributions
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/attribution")
+	public String showAttr(Model model) {
+		return "attribution";
+	}
 
-    @GetMapping("/viewSchedule")
-    public String toDo(@RequestParam(value = "restaurantId", required = false) Long restaurantId, Model model) {
-        // Récupérer la liste des restaurants pour l'afficher dans le menu déroulant
-        List<Restaurant> restaurants = restaurantRepository.findAll();
-        model.addAttribute("restaurants", restaurants);
+	/**
+	 * Voir la liste des choses à faire aujourd'hui
+	 * 
+	 * @param restaurantId id du restaurant auxquels les tâches sont associés
+	 * @param model
+	 * @return page sur laquelle les les restaurants sont affichés
+	 */
+	@GetMapping("/viewSchedule")
+	public String toDo(@RequestParam(value = "restaurantId", required = false) Long restaurantId, Model model) {
+		// Récupérer la liste des restaurants pour l'afficher dans le menu déroulant
+		List<Restaurant> restaurants = restaurantRepository.findAll();
+		model.addAttribute("restaurants", restaurants);
 
-        // Si aucun restaurant n'est sélectionné, ne rien afficher
-        if (restaurantId == null) {
-            return "schedule"; // Aucun contenu n'est ajouté au modèle
-        }
+		// Si aucun restaurant n'est sélectionné, ne rien afficher
+		if (restaurantId == null) {
+			return "schedule"; // Aucun contenu n'est ajouté au modèle
+		}
 
-        // Récupérer les anniversaires pour aujourd'hui
-        List<Birthday> birthdays = birthdayRepository.findByDate(LocalDate.now());
-        boolean found = false;
-        List<PizzaOrder> mergedPizzaOrders = new ArrayList<>();
-        Set<Animatronic> mergedAnimatronics = new HashSet<>();
+		// Récupérer les anniversaires pour aujourd'hui
+		List<Birthday> birthdays = birthdayRepository.findByDate(LocalDate.now());
+		boolean found = false;
+		List<PizzaOrder> mergedPizzaOrders = new ArrayList<>();
+		Set<Animatronic> mergedAnimatronics = new HashSet<>();
 
-        for (Birthday b : birthdays) {
-            // Filtrer les anniversaires en fonction du restaurant sélectionné
-            if (!b.getRestaurant().getId().equals(restaurantId)) {
-                continue;  // Ignorer cet anniversaire si le restaurant ne correspond
-            }
+		for (Birthday b : birthdays) {
+			// Filtrer les anniversaires en fonction du restaurant sélectionné
+			if (!b.getRestaurant().getId().equals(restaurantId)) {
+				continue; // Ignorer cet anniversaire si le restaurant ne correspond
+			}
 
-            // Filtrer les commandes de pizzas pour le restaurant sélectionné
-            for (PizzaOrder orders : b.getPizzaOrders()) {
-                if (!orders.getBirthday().getRestaurant().getId().equals(restaurantId)) {
-                    continue;  // Ignorer cette commande si le restaurant ne correspond
-                }
+			// Filtrer les commandes de pizzas pour le restaurant sélectionné
+			for (PizzaOrder orders : b.getPizzaOrders()) {
+				if (!orders.getBirthday().getRestaurant().getId().equals(restaurantId)) {
+					continue; // Ignorer cette commande si le restaurant ne correspond
+				}
 
-                found = false;
-                for (int i = 0; i < mergedPizzaOrders.size(); i++) {
-                    if (mergedPizzaOrders.get(i).getPizza() == orders.getPizza()) {
-                        found = true;
-                        mergedPizzaOrders.get(i).setNbPizza(mergedPizzaOrders.get(i).getNbPizza() + 1);
-                    }
-                }
-                if (!found) {
-                    mergedPizzaOrders.add(orders);
-                }
-            }
+				found = false;
+				for (int i = 0; i < mergedPizzaOrders.size(); i++) {
+					if (mergedPizzaOrders.get(i).getPizza() == orders.getPizza()) {
+						found = true;
+						mergedPizzaOrders.get(i).setNbPizza(mergedPizzaOrders.get(i).getNbPizza() + 1);
+					}
+				}
+				if (!found) {
+					mergedPizzaOrders.add(orders);
+				}
+			}
 
-            // Ajouter les animatroniques associés à ce restaurant
-            if (b.getAnimatronic1() != null && b.getAnimatronic1().getRestaurant().getId().equals(restaurantId)) {
-                mergedAnimatronics.add(b.getAnimatronic1());
-            }
-            if (b.getAnimatronic2() != null && b.getAnimatronic2().getRestaurant().getId().equals(restaurantId)) {
-                mergedAnimatronics.add(b.getAnimatronic2());
-            }
-        }
+			// Ajouter les animatroniques associés à ce restaurant
+			if (b.getAnimatronic1() != null && b.getAnimatronic1().getRestaurant().getId().equals(restaurantId)) {
+				mergedAnimatronics.add(b.getAnimatronic1());
+			}
+			if (b.getAnimatronic2() != null && b.getAnimatronic2().getRestaurant().getId().equals(restaurantId)) {
+				mergedAnimatronics.add(b.getAnimatronic2());
+			}
+		}
 
-        // Ajouter les données filtrées au modèle
-        model.addAttribute("orders", mergedPizzaOrders);
-        model.addAttribute("birthdays", birthdays);
-        model.addAttribute("animatronics", mergedAnimatronics);
+		// Ajouter les données filtrées au modèle
+		model.addAttribute("orders", mergedPizzaOrders);
+		model.addAttribute("birthdays", birthdays);
+		model.addAttribute("animatronics", mergedAnimatronics);
 
-        return "schedule";
-    }
+		return "schedule";
+	}
 }

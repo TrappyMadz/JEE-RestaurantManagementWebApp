@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,11 +19,11 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Child {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	
-	
+
+	// Un enfant n'a qu'un anniversaire
 	@OneToOne
 	@JoinColumn(name = "birthday_id")
 	private Birthday birthday;
@@ -32,13 +31,11 @@ public class Child {
 	private String lastName;
 	private String name;
 	private int age;
-	
+
+	// Un enfant peut être invité à plusieurs anniversaires
 	@ManyToMany
-    @JoinTable(
-            name="child_birthday",
-            joinColumns = @JoinColumn(name = "child_id"),
-            inverseJoinColumns = @JoinColumn(name = "birthday_id"))
-    private Set<Birthday> birthdays = new HashSet<>();
+	@JoinTable(name = "child_birthday", joinColumns = @JoinColumn(name = "child_id"), inverseJoinColumns = @JoinColumn(name = "birthday_id"))
+	private Set<Birthday> birthdays = new HashSet<>();
 
 	@Override
 	public String toString() {
@@ -56,9 +53,6 @@ public class Child {
 		Child other = (Child) obj;
 		return Objects.equals(id, other.id);
 	}
-
-
-
 
 	public String getLastName() {
 		return lastName;
