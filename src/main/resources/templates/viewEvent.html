@@ -38,8 +38,20 @@
       <ul id="eventList" th:unless="${#lists.isEmpty(birthdays)}" class="list">
         <!--Si il y a des enfants, on affiche leur noms et prénoms en appelant la méthode "toString()"-->
         <li th:each="b : ${birthdays}">
+        <p>date :</p>
+          <span th:text="${b.date}"></span>
+        <p>resto :</p>
+          <span th:text="${b.restaurant}"></span>
+        <p>bb :</p>
           <span th:text="${b.birthdayBoy}">XXXX</span>
+        <p>participants :</p>
           <span th:text="${b.children}"></span>
+        <p>ani1 :</p>
+          <span th:text="${b.animatronic1}"></span>
+        <p>ani2 :</p>
+          <span th:text="${b.animatronic2}"></span>
+        <p>pizzas :</p>
+          <span th:text="${b.pizzaOrders}"></span>
         </li>
       </ul>
     </main>
