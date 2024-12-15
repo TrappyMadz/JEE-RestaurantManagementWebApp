@@ -24,4 +24,7 @@ public interface ChildRepository extends JpaRepository<Child, Long>{
 	
 	@Query("SELECT c FROM Child c WHERE c.birthday IS NULL")
 	List<Child> findThoseWhithoutBirthday();
+	
+	@Query("SELECT c FROM Child c WHERE c.birthday IS NULL OR c.birthday.id=:id")
+	List<Child> findThoseWhithoutBirthdayOrThisOne(Long id);
 }

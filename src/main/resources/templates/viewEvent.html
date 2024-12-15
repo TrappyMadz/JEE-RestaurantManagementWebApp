@@ -59,6 +59,9 @@
           <button
             th:text="'Anniversaire de ' + ${b.birthdayBoy.name} + ' ' + ${b.birthdayBoy.lastName}"
           ></button>
+          <form th:action="@{/birthday/update/{id}(id=${b.id})}" method="get">
+            <button type="submit">Modifier</button>
+          </form>
           <form th:action="@{/birthday/delete/{id}(id=${b.id})}" method="post">
             <button type="submit">Supprimer</button>
           </form>
