@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freddy's Organizer - Adhérents</title>
     <script src="/js/header.js" defer></script>
-    <script src="/js/searchChild.js" defer></script>
+    <script src="/js/moreInfo.js" defer></script>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/children.css" />
   </head>
@@ -21,37 +21,47 @@
         <p th:text="${error}">error</p>
       </div>
 
-      <h2>Inscrits :</h2>
-      <p>
-        Ici, tu trouveras la liste de tous les adhérents à notre chaîne de
-        restaurants !
-      </p>
+      <h2>Évènement :</h2>
+      <p>Ici, tu trouveras la liste de tous les évènements à venir !</p>
+      <a href="/birthday/viewAllEvent" class="normalButton"
+        >Afficher les anniversaires passés</a
+      >
 
       <div th:if="${#lists.isEmpty(birthdays)}">
         <!-- Si il n'y a aucun enfant dans la bdd-->
-        <p>
-          Aucun adhérents. Commencez à en ajouter en pressant le bouton
-          correspondant.
-        </p>
+        <p>Aucun évènements, commence par en créer un !</p>
       </div>
 
       <ul id="eventList" th:unless="${#lists.isEmpty(birthdays)}" class="list">
         <!--Si il y a des enfants, on affiche leur noms et prénoms en appelant la méthode "toString()"-->
         <li th:each="b : ${birthdays}">
-        <p>date :</p>
-          <span th:text="${b.date}"></span>
-        <p>resto :</p>
-          <span th:text="${b.restaurant}"></span>
-        <p>bb :</p>
-          <span th:text="${b.birthdayBoy}">XXXX</span>
-        <p>participants :</p>
-          <span th:text="${b.children}"></span>
-        <p>ani1 :</p>
-          <span th:text="${b.animatronic1}"></span>
-        <p>ani2 :</p>
-          <span th:text="${b.animatronic2}"></span>
-        <p>pizzas :</p>
-          <span th:text="${b.pizzaOrders}"></span>
+          <div class="toDevoil" th:id="${b.id}" style="display: none">
+            <button class="closeDetail">Fermer</button>
+            <h2>Détails :</h2>
+            <p>date :</p>
+            <span th:text="${b.date}"></span>
+            <p>resto :</p>
+            <span th:text="${b.restaurant}"></span>
+            <p>bb :</p>
+            <span
+              th:text="${b.birthdayBoy.name != null ? b.birthdayBoy.name : 'Inconnu'}"
+              >XXXX</span
+            >
+            <p>participants :</p>
+            <span th:text="${b.children}"></span>
+            <p>ani1 :</p>
+            <span th:text="${b.animatronic1}"></span>
+            <p>ani2 :</p>
+            <span th:text="${b.animatronic2}"></span>
+            <p>pizzas :</p>
+            <span th:text="${b.pizzaOrders}"></span>
+          </div>
+          <button
+            th:text="'Anniversaire de ' + ${b.birthdayBoy.name} + ' ' + ${b.birthdayBoy.lastName}"
+          ></button>
+          <form th:action="@{/birthday/delete/{id}(id=${b.id})}" method="post">
+            <button type="submit">Supprimer</button>
+          </form>
         </li>
       </ul>
     </main>

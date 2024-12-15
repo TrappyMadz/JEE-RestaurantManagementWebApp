@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,8 +48,15 @@ public class BirthdayController {
 	ChildRepository childrenRepository;
 	
 	@GetMapping("/viewEvent")
-	public String thatsWhy(Model model) {
-		List<Birthday> birthdays = birthdayRepository.findAll();
+	public String why(Model model) {
+		List<Birthday> birthdays = birthdayRepository.findByDateAfterOrderByDateAsc(LocalDate.now());
+		model.addAttribute("birthdays", birthdays);
+		return "viewEvent";
+	}
+	
+	@GetMapping("/viewAllEvent")
+	public String ohThatsWhy(Model model) {
+		List<Birthday> birthdays = birthdayRepository.findAllByOrderByDateAsc();
 		model.addAttribute("birthdays", birthdays);
 		return "viewEvent";
 	}
@@ -174,6 +182,14 @@ public class BirthdayController {
 		childrenRepository.saveAll(selectedChildren);
 		return "redirect:/";
 
+	}
+	
+	@PostMapping("/delete/{id}")
+	public String stopFun(@PathVariable("id") Long id) {
+		Birthday birthday = birthdayRepository.findById(id).get();	
+		birthday.getChildren().clear();
+		birthdayRepository.delete(birthday);
+		return "redirect:/birthday/viewEvent";
 	}
 
 }
