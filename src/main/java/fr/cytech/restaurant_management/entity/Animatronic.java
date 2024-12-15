@@ -1,5 +1,6 @@
 package fr.cytech.restaurant_management.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Animatronic {
@@ -29,6 +31,12 @@ public class Animatronic {
 	@JoinColumn(name = "restaurant_id")
 	@JsonIgnore
 	private Restaurant restaurant;
+	
+	@OneToMany(mappedBy = "animatronic1")
+	private List<Birthday> birthdays1;
+	
+	@OneToMany(mappedBy = "animatronic2")
+	private List<Birthday> birthdays2;
 
 	public Restaurant getRestaurant() {
 		return restaurant;
@@ -91,4 +99,23 @@ public class Animatronic {
 	public String toString() {
 		return type + " " + name;
 	}
+
+	public List<Birthday> getBirthdays1() {
+		return birthdays1;
+	}
+
+	public void setBirthdays1(List<Birthday> birthdays1) {
+		this.birthdays1 = birthdays1;
+	}
+
+	public List<Birthday> getBirthdays2() {
+		return birthdays2;
+	}
+
+	public void setBirthdays2(List<Birthday> birthdays2) {
+		this.birthdays2 = birthdays2;
+	}
+
+
+
 }

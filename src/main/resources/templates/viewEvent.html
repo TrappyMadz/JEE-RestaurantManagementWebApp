@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Adhérents</title>
+    <script src="/js/header.js" defer></script>
+    <script src="/js/searchChild.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/children.css" />
+  </head>
+
+  <body>
+    <header id="header">
+      <!-- C'est ici qu'est chargé le contenu de "header.html" -->
+    </header>
+
+    <main>
+      <div th:if="${error}" class="error">
+        <!-- Si il y a une erreur renvoyée par le controller, on l'affiche ici -->
+        <p th:text="${error}">error</p>
+      </div>
+
+      <h2>Inscrits :</h2>
+      <p>
+        Ici, tu trouveras la liste de tous les adhérents à notre chaîne de
+        restaurants !
+      </p>
+
+      <div th:if="${#lists.isEmpty(birthdays)}">
+        <!-- Si il n'y a aucun enfant dans la bdd-->
+        <p>
+          Aucun adhérents. Commencez à en ajouter en pressant le bouton
+          correspondant.
+        </p>
+      </div>
+
+      <ul id="eventList" th:unless="${#lists.isEmpty(birthdays)}" class="list">
+        <!--Si il y a des enfants, on affiche leur noms et prénoms en appelant la méthode "toString()"-->
+        <li th:each="b : ${birthdays}">
+          <span th:text="${b.birthdayBoy}">XXXX</span>
+          <span th:text="${b.children}"></span>
+        </li>
+      </ul>
+    </main>
+
+    <div class="divider-pattern"><!--Paterne damier--></div>
+
+    <footer id="footer">
+      <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+    </footer>
+  </body>
+</html>
