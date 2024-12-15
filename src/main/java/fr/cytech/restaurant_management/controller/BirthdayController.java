@@ -7,7 +7,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -199,34 +201,43 @@ public class BirthdayController {
 		return "redirect:/";
 
 	}
-
+	
 	@PostMapping("/delete/{id}")
 	public String stopFun(@PathVariable("id") Long id) {
 	    Optional<Birthday> optionalBirthday = birthdayRepository.findById(id);
 	    if (optionalBirthday.isPresent()) {
 	        Birthday birthday = optionalBirthday.get();
+	        
+	        // Dissocier l'enfant principal (OneToOne)
 	        if (birthday.getBirthdayBoy() != null) {
 	            birthday.getBirthdayBoy().setBirthday(null);
 	            childRepository.save(birthday.getBirthdayBoy());
 	        }
+	        
+	        // Dissocier les enfants invités (ManyToMany)
 	        for (Child child : birthday.getChildren()) {
 	            child.getBirthdays().remove(birthday);
 	        }
 	        birthday.getChildren().clear();
+	        
+	        // Dissocier les animatronics (ManyToOne)
 	        if (birthday.getAnimatronic1() != null) {
 	            birthday.getAnimatronic1().getBirthdays1().remove(birthday);
 	        }
 	        if (birthday.getAnimatronic2() != null) {
 	            birthday.getAnimatronic2().getBirthdays2().remove(birthday);
 	        }
+
+	        // Dissocier le restaurant
 	        if (birthday.getRestaurant() != null) {
 	            birthday.getRestaurant().getBirthdays().remove(birthday);
 	        }
+
+	        // Sauvegarder les dissociations avant suppression
 	        birthdayRepository.save(birthday);
 	        birthdayRepository.delete(birthday);
 	    }
 	    return "redirect:/birthday/viewEvent";
 	}
-
 
 }
