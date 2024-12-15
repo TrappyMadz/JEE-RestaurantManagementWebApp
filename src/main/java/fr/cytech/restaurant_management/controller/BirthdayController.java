@@ -107,7 +107,7 @@ public class BirthdayController {
 	
 	@PostMapping("/add2")
 	public String createBirthdayPhase2(Model model, @ModelAttribute Birthday birthday, 
-            @RequestParam("childrenIds") List<Long> childrenIds) {
+            @RequestParam(required = false) List<Long> childrenIds) {
 		
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
@@ -115,25 +115,39 @@ public class BirthdayController {
 		model.addAttribute("children", enfants);
 		enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
 		model.addAttribute("childrenList", enfants);
-
-		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
-			birthday.setAnimatronic2(null);
-		}
+		model.addAttribute("animatronics",animatronics);
+		model.addAttribute("restaurants",restaurants);
+		
+		
 		if (childrenIds == null || childrenIds.isEmpty()) {
 	    	model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
 			model.addAttribute("birthday", birthday);
 			return "birthdayForm2";
 	    }
-		
         List<Child> selectedChildren = childRepository.findAllById(childrenIds);
         for (Child child : selectedChildren) {
         	birthday.getChildren().add(child);
         }
+		model.addAttribute("selectedChildren",selectedChildren);
+
+		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
+			birthday.setAnimatronic2(null);
+		}
+		List<Birthday> sameDayBirthday = birthdayRepository.findByDate(birthday.getDate());
+		for(Birthday b:sameDayBirthday) {
+			if(b.getAnimatronic1().getId() == birthday.getAnimatronic1().getId() || (birthday.getAnimatronic2() != null && b.getAnimatronic1().getId()==birthday.getAnimatronic2().getId())) {
+		    	model.addAttribute("error", "Les animatroniques ne peuvent être utilisés plusieurs fois par jour. "+b.getAnimatronic1()+" doit se recharger cette journée.");
+				model.addAttribute("birthday", birthday);
+				return "birthdayForm2";
+			} else if (b.getAnimatronic2().getId() != null && (b.getAnimatronic2().getId() == birthday.getAnimatronic1().getId() || (birthday.getAnimatronic2() != null && b.getAnimatronic2().getId()==birthday.getAnimatronic2().getId()))) {
+				model.addAttribute("error", "Les animatroniques ne peuvent être utilisés plusieurs fois par jour. "+b.getAnimatronic2()+" doit se recharger cette journée.");
+				model.addAttribute("birthday", birthday);
+				return "birthdayForm2";
+			}
+		}
+		
 		
 		List<Pizza> pizzas = pizzaRepository.findAll();
-		model.addAttribute("selectedChildren",selectedChildren);
-		model.addAttribute("restaurants",restaurants);
-		model.addAttribute("animatronics",animatronics);
 		model.addAttribute("birthday",birthday);
 		model.addAttribute("pizzas",pizzas);
 		return "birthdayForm3";
