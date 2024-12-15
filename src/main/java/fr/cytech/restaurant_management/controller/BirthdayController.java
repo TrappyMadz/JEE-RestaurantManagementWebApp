@@ -67,11 +67,10 @@ public class BirthdayController {
 		birthday.setRestaurant(restaurantAct);
 		
 		List<Restaurant> restaurants = restaurantRepository.findAll();
-		List<Animatronic> animatronics = animatronicRepository.findAll();
 		
 		model.addAttribute("birthday",birthday);
 		model.addAttribute("restaurants",restaurants);
-		List<Child> enfants = childRepository.findAll();
+		List<Child> enfants = childRepository.findThoseWhithoutBirthday();
 		model.addAttribute("children", enfants);
 		return "birthdayForm1";
 	}
@@ -95,8 +94,10 @@ public class BirthdayController {
 			model.addAttribute("children", enfants);
 			return "birthdayForm1";
 		}
-		enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+
 		model.addAttribute("children", enfants);
+		enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+		model.addAttribute("childrenList", enfants);
 		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
 		model.addAttribute("animatronics",animatronics);
 		model.addAttribute("birthday",birthday);
@@ -110,8 +111,10 @@ public class BirthdayController {
 		
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
-		List<Child> enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+		List<Child> enfants = childRepository.findAll();
 		model.addAttribute("children", enfants);
+		enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+		model.addAttribute("childrenList", enfants);
 
 		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
 			birthday.setAnimatronic2(null);

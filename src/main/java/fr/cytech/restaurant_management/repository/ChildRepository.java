@@ -21,4 +21,7 @@ public interface ChildRepository extends JpaRepository<Child, Long>{
 	
 	@Query("SELECT c FROM Child c WHERE c.id != :id")
 	List<Child> findAllExceptThisOne(Long id);
+	
+	@Query("SELECT c FROM Child c WHERE c.birthday IS NULL")
+	List<Child> findThoseWhithoutBirthday();
 }
