@@ -3,6 +3,7 @@ package fr.cytech.restaurant_management.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import fr.cytech.restaurant_management.entity.Child;
 
@@ -17,4 +18,7 @@ public interface ChildRepository extends JpaRepository<Child, Long>{
 	 * @return liste des enfants correspondant à la recherche
 	 */
 	List<Child> findByNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String name, String lastName);
+	
+	@Query("SELECT c FROM Child c WHERE c.id != :id")
+	List<Child> findAllExceptThisOne(Long id);
 }

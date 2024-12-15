@@ -82,19 +82,21 @@ public class BirthdayController {
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		model.addAttribute("restaurants",restaurants);
 		List<Child> enfants = childRepository.findAll();
-		model.addAttribute("children", enfants);
 		
 		if (birthday.getDate().compareTo(LocalDate.now()) <= 0) {
 			model.addAttribute("error", "Entrez une date valide.");
 			model.addAttribute("birthday",birthday);
+			model.addAttribute("children", enfants);
 			return "birthdayForm1";
 		}
 		if (birthday.getRestaurant() == null || birthday.getBirthdayBoy() == null) {
 			model.addAttribute("error", "Complétez tous les champs.");
 			model.addAttribute("birthday", birthday);
+			model.addAttribute("children", enfants);
 			return "birthdayForm1";
 		}
-		
+		enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+		model.addAttribute("children", enfants);
 		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
 		model.addAttribute("animatronics",animatronics);
 		model.addAttribute("birthday",birthday);
@@ -108,7 +110,8 @@ public class BirthdayController {
 		
 		List<Restaurant> restaurants = restaurantRepository.findAll();
 		List<Animatronic> animatronics = animatronicRepository.findByRestaurant(birthday.getRestaurant());
-		List<Child> enfants = childRepository.findAll();
+		List<Child> enfants = childRepository.findAllExceptThisOne(birthday.getBirthdayBoy().getId());
+		model.addAttribute("children", enfants);
 
 		if (birthday.getAnimatronic1() == birthday.getAnimatronic2()) {
 			birthday.setAnimatronic2(null);
@@ -116,7 +119,6 @@ public class BirthdayController {
 		if (childrenIds == null || childrenIds.isEmpty()) {
 	    	model.addAttribute("error", "L'enfant ne doit pas être seul pour son anniversaire.");
 			model.addAttribute("birthday", birthday);
-			model.addAttribute("children", enfants);
 			return "birthdayForm2";
 	    }
 		
@@ -130,7 +132,6 @@ public class BirthdayController {
 		model.addAttribute("restaurants",restaurants);
 		model.addAttribute("animatronics",animatronics);
 		model.addAttribute("birthday",birthday);
-		model.addAttribute("children", enfants);
 		model.addAttribute("pizzas",pizzas);
 		return "birthdayForm3";
 	}
