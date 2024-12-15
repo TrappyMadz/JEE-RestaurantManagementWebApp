@@ -5,3 +5,12 @@
 .importantForm select {
   width: 180px;
 }
+
+.importantForm label {
+  margin-left: 56px;
+}
+
+#image,
+#name {
+  margin-left: 97px;
+}

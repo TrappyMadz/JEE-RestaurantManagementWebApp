@@ -35,30 +35,12 @@
       <ul id="eventList" th:unless="${#lists.isEmpty(birthdays)}" class="list">
         <!--Si il y a des enfants, on affiche leur noms et prénoms en appelant la méthode "toString()"-->
         <li th:each="b : ${birthdays}">
-          <div class="toDevoil" th:id="${b.id}" style="display: none">
-            <button class="closeDetail">Fermer</button>
-            <h2>Détails :</h2>
-            <p>date :</p>
-            <span th:text="${b.date}"></span>
-            <p>resto :</p>
-            <span th:text="${b.restaurant}"></span>
-            <p>bb :</p>
-            <span
-              th:text="${b.birthdayBoy.name != null ? b.birthdayBoy.name : 'Inconnu'}"
-              >XXXX</span
-            >
-            <p>participants :</p>
-            <span th:text="${b.children}"></span>
-            <p>ani1 :</p>
-            <span th:text="${b.animatronic1}"></span>
-            <p>ani2 :</p>
-            <span th:text="${b.animatronic2}"></span>
-            <p>pizzas :</p>
-            <span th:text="${b.pizzaOrders}"></span>
-          </div>
-          <button
-            th:text="'Anniversaire de ' + ${b.birthdayBoy.name} + ' ' + ${b.birthdayBoy.lastName}"
-          ></button>
+          <p>Anniversaire de</p>
+          <span
+            th:text="${b.birthdayBoy.name} + ' ' + ${b.birthdayBoy.lastName}"
+          ></span>
+          <p>date :</p>
+          <span th:text="${b.date}"></span>
           <form th:action="@{/birthday/update/{id}(id=${b.id})}" method="get">
             <button type="submit">Modifier</button>
           </form>

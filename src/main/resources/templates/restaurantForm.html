@@ -6,11 +6,12 @@
     <title>Freddy's Organizer - Ajouter un restaurant</title>
     <script src="/js/header.js" defer></script>
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/restaurantForm.css" />
   </head>
   <body>
     <header id="header"><!--C'est ici que le header est chargé--></header>
 
-    <div th:if="${error}">
+    <div th:if="${error}" class="error">
       <!--Ici s'affichent les erreurs renvoyées par le controller si il y en as-->
       <p th:text="${error}">error</p>
     </div>
@@ -19,10 +20,10 @@
       <!--Ces informations seront renvoyées au controller. Il est donc impératif que l'attribut "name" des input correspondent à la bdd
       Les values servent à préremplir le form avec les infos précédentes si il y a une erreur, pour que l'utilisateur n'ait pas
       à tout refaire.-->
-      <form action="/restaurant/show" method="post">
+      <form action="/restaurant/show" method="post" class="importantForm">
         <h2>Ajout d'un restaurant :</h2>
 
-        <h3>Nom :</h3>
+        <label>Nom :</label>
         <input
           type="text"
           name="name"
@@ -31,7 +32,7 @@
           required
         />
 
-        <h3>Adresse :</h3>
+        <label>Adresse :</label>
         <input
           type="text"
           name="address"
@@ -40,7 +41,7 @@
           required
         />
 
-        <h3>Animatronics :</h3>
+        <label>Animatronics :</label>
         <ul>
           <li th:each="animatronic : ${animatronics}">
             <input
@@ -57,7 +58,7 @@
         <button type="submit">Valider</button>
       </form>
     </main>
-
+    <div class="divider-pattern"><!--Paterne damier--></div>
     <footer id="footer">
       <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
     </footer>

@@ -1,48 +1,68 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Freddy's Organizer - Modifier un animatronic</title>
-<script src="/js/header.js" defer></script>
-<link rel="stylesheet" href="/css/style.css" />
-<link rel="stylesheet" href="/css/animatronicsForm.css" />
-</head>
-<body>
-	<form action="/animatronic/update" method="POST" enctype="multipart/form-data">
-		<header id="header"></header>
-		<main>
-			<div th:if="${error}">
-				<p th:text="${error}">error</p>
-			</div>
-			<h2>Modifier un animatronic :</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freddy's Organizer - Modifier un animatronic</title>
+    <script src="/js/header.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/animatronicsForm.css" />
+  </head>
+  <body>
+    <header id="header"></header>
+    <main>
+      <form
+        action="/animatronic/update"
+        method="POST"
+        enctype="multipart/form-data"
+        class="importantForm"
+      >
+        <div th:if="${error}">
+          <p th:text="${error}" class="error">error</p>
+        </div>
+        <h2>Modifier un animatronique :</h2>
 
-			<input type="hidden" th:value="${animatronic.id}" name="id">
+        <input type="hidden" th:value="${animatronic.id}" name="id" />
 
-			<h3>Image :</h3>
-			<input type="file" name="image" id="image" accept="image/*" required />
+        <label for="image">Image :</label>
+        <input type="file" name="image" id="image" accept="image/*" required />
 
-			<h3>Nom :</h3>
-			<input type="text" name="name" required
-				th:value="${animatronic.name}" />
+        <label for="name">Nom :</label>
+        <input
+          type="text"
+          name="name"
+          required
+          th:value="${animatronic.name}"
+        />
 
-			<h3>Type d'animatronic :</h3>
-			<select name="type" id="type" required>
+        <label for="type">Type d'animatronique :</label>
+        <select name="type" id="type" required>
+          <option value="">--Please choose an option--</option>
+          <option
+            th:each="type : ${AnimatronicType}"
+            th:if="${animatronic.type==type}"
+            selected
+            th:value="${type}"
+            th:text="${type}"
+          >
+            ${type} lol
+          </option>
+          <option
+            th:each="type : ${AnimatronicType}"
+            th:unless="${animatronic.type==type}"
+            th:value="${type}"
+            th:text="${type}"
+          >
+            ${type} lol
+          </option>
+        </select>
 
-				<option value="">--Please choose an option--</option>
-				<option th:each="type : ${AnimatronicType}"
-					th:if="${animatronic.type==type}" selected th:value=${type}
-					th:text="${type}">${type} lol</option>
-				<option th:each="type : ${AnimatronicType}"
-					th:unless="${animatronic.type==type}" th:value=${type}
-					th:text="${type}">${type} lol</option>
-			</select>
-
-			<button type="submit">Modifier</button>
-	</form>
-	</main>
-	<footer id="footer">
-		<!-- C'est dans ce bloque que le fichier footer.html est chargé -->
-	</footer>
-</body>
+        <button type="submit">Modifier</button>
+      </form>
+    </main>
+    <div class="divider-pattern"><!--Paterne damier--></div>
+    <footer id="footer">
+      <!-- C'est dans ce bloque que le fichier footer.html est chargé -->
+    </footer>
+  </body>
 </html>

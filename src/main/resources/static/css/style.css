@@ -2,6 +2,7 @@
 
 body {
   background-color: #e5bb52;
+  cursor: url("/img/cursor.cur"), auto;
 }
 
 body,
@@ -101,7 +102,7 @@ header a:hover {
   text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
     0 0 40px #ff0000, 0 0 60px #ff8d00, 0 0 10px #ff0000, 0 0 98px #fff6a9;
   color: white;
-  cursor: url("/img/cursor.cur"), auto;
+  cursor: pointer;
 }
 
 header a:hover .blink {
@@ -109,7 +110,7 @@ header a:hover .blink {
   text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
     0 0 40px #ff0000, 0 0 60px #ff8d00, 0 0 10px #ff0000, 0 0 98px #fff6a9;
   color: white;
-  cursor: url("/img/cursor.cur"), auto;
+  cursor: pointer;
 }
 
 .blink {
@@ -183,7 +184,7 @@ footer a {
 
 footer a:hover {
   color: yellow;
-  cursor: url("/img/cursor.cur"), auto;
+  cursor: pointer;
 }
 
 #attr {
@@ -196,7 +197,6 @@ footer a:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   border-radius: 5%;
   margin-top: 10px;
 }
@@ -236,7 +236,7 @@ footer a:hover {
 .importantForm select:hover,
 .normalButton:hover {
   background-color: #1c7571;
-  cursor: url("/img/cursor.cur"), auto;
+  cursor: pointer;
 }
 
 .importantForm input[type="file"]::file-selector-button {
@@ -255,7 +255,7 @@ footer a:hover {
 .importantForm button:hover {
   background-color: #934c0d;
   border-radius: 0;
-  cursor: url("/img/cursor.cur"), auto;
+  cursor: pointer;
 }
 
 .importantForm .error {
@@ -269,6 +269,7 @@ footer a:hover {
 
 .importantForm label {
   justify-self: left;
+  text-align: left;
 }
 
 .searchBar {
@@ -305,7 +306,7 @@ footer a:hover {
 .search button:hover,
 .search select:hover {
   background-color: #1c7571;
-  cursor: url("/img/cursor.cur"), auto;
+  cursor: pointer;
 }
 
 .search a {
@@ -340,7 +341,7 @@ footer a:hover {
 }
 
 .list button:hover {
-  cursor: url("/img/cursor.cur"), auto;
+  cursor: pointer;
   background-color: #934c0d;
 }
 
@@ -417,7 +418,7 @@ footer a:hover {
   content: "";
   background-color: #28aea7;
   position: absolute;
-  height: 130px;
+  height: 135px;
   width: 4px;
   z-index: -1;
   top: 0;
