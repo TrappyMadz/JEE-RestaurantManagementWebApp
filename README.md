@@ -2,6 +2,27 @@
 ![Logo](https://i.imgur.com/fr5vab6.png)
 
 
+
+# Freddy's Organizer
+
+Ce projet JEE est un devoir et représente un site de gestion d'une chaîne de restaurants dans le thème de la licence Five Nigths At Freddy's.
+
+En arrivant sur le site, il y a trois boutons : "+ Nouvel Anniversaire", "Liste des Anniversaires" et "Tâches journalières". Les deux premiers boutons sont plutôt explicites et nous reviendrons plus tard pour cette page.
+
+La barre de navigation contient cinq liens :
+- le premier "Accueil" envoie sur la page principale.
+- "Adhérents" envoie sur la page gérant les personnes inscrites. Il y a une barre de recherche pour rechercher selon le nom ou le prénom, un bouton pour ajouter un adhérent, et en dessous s'affichent les adhérents sous forme de nom, prénom et âge. Pour chaque adhérent, il y a un bouton modifier et un bouton supprimer. Ajouter (resp. modifier) envoient sur une page pour ajouter (resp. modifier) un adhérent. Il faut y inscrire un nom, un prénom et un âge (pour la modification, les attribut de l'adhérent non modifié y sont écris à l'avance).
+- "Pizzas" envoie sur la page gérant les pizzas. De même, on peut rechercher des pizza selon le nom ou la composition et ajouter une pizza. Il y a en dessous les pizza déjà présentes, affichées avec leur image, leur nom, leur composition, leur prix puis un bouton modifier et un bouton supprimer. Le bouton pour ajouter et celui pour modifier amènent chacun sur une page pour remplir les informations pour la pizza (image, nom, composition et prix), mais pour la page de modification les informations sont préremplies, sauf l'image.
+- "Restaurant" envoie sur la page gérant les restaurants. On peut rechercher selon le nom du restaurant, son adresse ou un animatronique. De même, il y a un bouton pour jouter un animatronique, les restaurants sont affichés en dessous avec leur nom, adresse, un bouton envoyant sur une page montrant les animatroniques présent dans le restaurant, un bouton pour modifier et un autre pour supprimer le resaturant. Les boutons d'ajout et de modification envoient sur une page permettant de remplir les informations du non et de l'adresse ainsi qu'une checkbox permettant de choisir les animatroniques à y placer (seuls les animatroniques qui ne sont pas déjà dans un restaurant sont présent et décocher lors de la modification permet d'enlever l'animatronique du restaurant).
+- "Animatroniques" envoie sur la page gérant les animatroniques. Il est possible de rechercher des animatroniques selon leur nom et/ou leur type, il y a ensuite de même un bouton pour ajouter un animatronique. En dessous, sont présents les animatroniques déjà créés avec leur image, leur type et leur nom, puis un bouton de modification et un bouton de suppression. Les boutons d'ajout et de modification envoient sur une page permettant de remplir les informations image, nom et type (le type de l'animatronique se trouve parmi une sélection prédéfini par nous, ce sont des types existant dont nous avons repris les noms).
+
+Revenons à la page d'accueil:
+- Le bouton "+ Nouvel Anniversaire" permet la création d'un anniversaire à travers un formulaire en trois étapes :
+    - Dans la première étape on peut choisir la date de l'anniversaire (il ne peut pas être le jour de la création ni avant), le restaurant pour l'anniversaire et l'enfant dont ce sera l'anniversaire (parmi les enfants qui n'ont pas déjà eu d'anniversaire).
+    - Dans la deuxième étape, on choisit les animatroniques présents lors de l'anniversaire parmi les animatronique du resaturant choisi à l'étape 1, puis les enfants participants à l'anniversaire. Les animatroniques ont une limite d'un anniversaire par jour et on ne peut pas ne mettre aucun enfant participant.
+    - Dans l'étape trois on peut choisir les pizzas pour l'anniversaire et le nombre de chaque pizza choisit. Il n'est ni possible de ne pas choisir de pizza ni ne pas mettre un nombre de pizza lorsqu'elle est cochée.
+- Le bouton "Liste des Anniversaires" envoie sur une page contenant les anniversaires déjà créés avec la possibilité de modifier (cela reprend les mêmes étapes que la création) ou de supprimer. il y a aussi un bouton pour afficher les anniversaires passés car les anniversaires passés sont cachés.
+- Le bouton "Tâches journalières" envoie sur une page montrant les animatroniques à préparer ainsi que les pizzas à préparer pour la journée selon le restaurant choisit.
 # Lancer le projet en local
 
 [Télécharger le zip du projet](https://github.com/TrappyMadz/JEE-RestaurantManagementWebApp)
